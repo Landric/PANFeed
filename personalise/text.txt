@@ -1,0 +1,11 @@
+About the Project
+
+Who We Are
+We are a group of researchers based at the University of Southampton, in the Web And Internet Science research group.
+
+What is panFeed?
+panFeed (Personal Academic News Feed) is a system spawned from the CampusROAR project, which is focused around making research more accessible, exciting and interesting, and to enable people to keep up to date on research in their areas of interest.
+The purpose of panFeed is to enable the creation of personalised, adaptive RSS feeds which are based on the news feeds available at your institution.  A crawler is used to find all RSS and Atom feeds under a University domain, which are then catalogued and analysed for keywords.  The panFeed site can then be used to generate a personalised RSS feed based upon any set of keywords you provide.
+
+Contact
+To contact us:  pm5@ecs.soton.ac.uk

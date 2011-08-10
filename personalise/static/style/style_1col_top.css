@@ -1,0 +1,242 @@
+/* global */
+html{height: 100%;}
+
+body
+{ font-family: arial, sans-serif;
+  padding: 0px;
+  margin: 0px;
+  font-size: .78em;
+}
+
+p
+{ margin: 0px;
+  padding: 0px 0px 16px 0px;
+  line-height: 1.7em;
+}
+
+h1, h2, h3, h4
+{ font-family: tahoma, sans-serif;
+  font-size: 110%;
+  letter-spacing: .1em;
+  padding: 7px 0px 5px 0px; 
+  margin: 0px 0px 12px 0px; 
+}
+
+h4
+{ font-family: arial, sans-serif;
+  font-size: 110%;
+}
+
+img
+{ border: 0px; 
+  margin: 0px; 
+  padding: 0px;
+}
+
+a{outline: none;}
+
+form{padding: 0; margin: 0;}
+
+/* image positioning - left, right and center */
+.left
+{ float: left; 
+  border-right: 18px solid;
+}
+
+.right
+{ float: right; 
+  border-left: 18px solid;
+}
+
+.center
+{ display: block;
+  text-align: center;
+  margin: 0 auto;
+}
+
+/* block quote */
+blockquote
+{ margin: 20px 0px 20px 0px; 
+  padding: 10px 20px 0px 20px;
+  border-left: 8px solid;
+}
+
+/* unordered list */
+ul
+{ margin: 2px 0px 18px 16px;
+  padding: 0px;
+}
+
+ul li
+{ list-style-type: square;
+  margin: 0px 0px 6px 0px; 
+  padding: 0px;
+}
+
+/* ordered list */
+ol
+{ margin: 8px 0px 0px 24px;
+  padding: 0px;
+}
+
+ol li
+{ margin: 0px 0px 11px 0px; 
+  padding: 0px;
+}
+
+/* margin lefts / margin rights - to centre content */
+#main, #footer, #logo, #menubar, #site_content
+{ margin-left: auto; 
+  margin-right: auto;
+}
+
+/* main container */
+#main{width: 770px;}
+
+/* logo */
+#logo
+{ width: 760px;
+  height: 200px;
+  border-top: 5px solid;
+}
+
+#logo h1
+{ font-size: 250%;
+  font-weight: normal;
+  padding: 0px 12px 0px 0px;
+  float: right;  
+}
+
+/* navigation menu */
+#menubar
+{ width: 760px;
+  height: 70px;
+} 
+
+ul#menu{margin: 0px;}
+
+ul#menu li
+{ float: left; 
+  margin: 0px 0px 0px 0px; 
+  padding: 0px;
+  list-style: none;
+} 
+
+ul#menu li a 
+{ font-family: verdana, sans-serif;
+  display: block; 
+  float: left; 
+  height: 44px;
+  text-decoration: none; 
+  padding: 26px 18px 0px 18px;
+  text-align: center;
+  border-right: 1px solid;
+} 
+
+#search
+{ float: right; 
+  padding: 22px 15px 0px 0px;
+}
+
+input.searchfield
+{ border: 1px solid; 
+  padding:2px;
+}
+
+input.searchbutton
+{ font-family: verdana, sans-serif;
+  border: 1px solid; 
+  padding: 0px 0px 1px 0px;
+  width: 64px;
+  cursor: pointer;
+}
+
+/* main content */
+#site_content
+{ width: 770px;
+  overflow: hidden;
+  margin: 5px 0px 0px 0px;
+  background: #FFF url(back_full.png) repeat-y;
+} 
+
+/* sidebar */
+.sidebar
+{ float: left;
+  padding: 15px 15px 15px 20px;
+}
+
+/* sidebar items / links */
+.sidebaritem
+{ text-align: left;
+  width: 239px;
+  float: left;
+  margin: 0px 7px 0px 0px;
+}
+
+.sidebaritem h1, .sidebaritem h3, .sidebaritem p{margin: 8px 10px 10px 12px;}
+
+.sidebaritem ul
+{ border-top: 1px solid;
+  width: 209px; 
+  padding-top: 4px; 
+  margin: 4px 0px 15px 14px;
+}
+
+.sidebaritem li
+{ list-style: none; 
+  padding: 0px 0px 4px 0px; 
+  border-bottom: 1px solid;
+}
+
+.sidebaritem li a, .sidebaritem li a:hover
+{ text-decoration: none; 
+  padding: 0px 0px 0px 18px;
+  display: block;
+} 
+
+/* page content */
+#content
+{ text-align: left;
+  width: 728px;
+  float: left;
+  padding: 8px 22px 15px 22px;
+}
+
+#content h1{font-size: 125%;}
+
+#content a, #footer a{border-bottom: 1px dotted;}
+
+#content a:hover, #footer a:hover{border-bottom: 1px solid;}
+
+/* footer */
+#footer
+{ width: 720px;
+  height: 40px;
+  border-top: 1px solid;
+  padding: 28px 20px 4px 20px;
+  text-align: center; 
+}
+
+#content a, #content a:hover, #footer a, #footer a:hover{text-decoration: none;}
+
+/* sNews */
+fieldset, .comment, .commentsbox{margin-bottom: 10px;}
+
+fieldset
+{ border: 1px solid; 
+  padding: 10px 8px;   
+}
+
+input{padding: 2px;}
+
+textarea
+{ width: 95%; 
+  height: 200px;
+  padding: 3px;
+}
+
+.date
+{ border-top: 1px solid; 
+  margin: 15px 0px 5px 0px;
+  font-weight: bold;
+}

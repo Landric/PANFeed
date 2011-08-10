@@ -1,0 +1,22 @@
+#search {
+	display:none;
+}
+
+#feed_demo {
+	width: 90%;
+	margin: auto;
+}
+
+.feed_gear {
+	padding: 10px 0;
+	text-align: center;
+}
+
+.feed_item {
+	border-bottom: 2px solid black;
+	padding:5px;
+}
+
+#keyword_input {
+	width: 250px;
+}
