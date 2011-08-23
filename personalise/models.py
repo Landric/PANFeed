@@ -9,6 +9,11 @@
 
 from django.db import models
 
+class Domains(models.Model):
+    toplevel = models.URLField()
+    class Meta:
+        db_table=u'domains'
+
 class Feeds(models.Model):
     url = models.URLField(primary_key=True,verify_exists=True)
     toplevel = models.URLField()
@@ -16,31 +21,32 @@ class Feeds(models.Model):
         db_table = u'feeds'
 
 class Corpus(models.Model):
-    id = models.IntegerField(primary_key=True)
     title = models.TextField(blank=True)
     description = models.TextField(blank=True)
     url = models.CharField(max_length=6249, blank=True)
     feed = models.CharField(max_length=6249, blank=True)
     length = models.IntegerField(null=True, blank=True)
-    keywords = models.TextField(blank=True)
-    date = models.DateField(null=True, blank=True)
-    toplevel = models.URLField()
+    keywords = models.TextField(blank=True,null=True, default="")
+    date = models.DateTimeField(null=True, blank=True)
+    toplevel = models.URLField(blank=True)
     class Meta:
         db_table = u'corpus'
 
 class Corpuskeywords(models.Model):
-    itemid = models.IntegerField(primary_key=True)
-    word = models.CharField(max_length=90, primary_key=True)
+    itemid = models.IntegerField()
+    word = models.CharField(max_length=90)
     rank = models.IntegerField(null=True, blank=True)
     class Meta:
         db_table = u'corpuskeywords'
+        unique_together = ("itemid","word")
 
 class Tf(models.Model):
-    word = models.CharField(max_length=90, primary_key=True)
+    word = models.CharField(max_length=90)
     itemid = models.IntegerField()
     count = models.IntegerField(null=True, blank=True)
     class Meta:
         db_table = u'tf'
+        unique_together = ("word","itemid")
 
 class Words(models.Model):
     word = models.CharField(max_length=90, primary_key=True)

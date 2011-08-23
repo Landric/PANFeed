@@ -2,64 +2,68 @@ from django.contrib.syndication.views import Feed
 from django.db import connection, transaction
 import datetime
 from operator import itemgetter
+from personalise.models import Feeds,Corpus
 
 class PersonalFeed(Feed):
     title = "Your Feed"
     link = "/find/"
     description = "Your feed personalised from your keywords."
     
-    def items(self,keywords):
+    def items(self,params):
         cursor = connection.cursor()
-        words = keywords.split("_")
+        words = params[0].split("_")
+        urls = params[1].split("_") 
         
         results = []
         unique_results = {}
-        for word in words:
-            print word
-            cursor.execute("SELECT corpus.*, corpuskeywords.rank FROM corpus,corpuskeywords WHERE corpus.id=corpuskeywords.itemid AND corpuskeywords.word LIKE %s", [word])
+        formatstring = ",".join(["%s"] * len(urls))
+        formatwordstring = ",".join(["%s"] * len(words))
+        urls.append(urls[0])#.append(words
+        urls.extend(words)
+        print urls
+        query = "SELECT corpus.*, corpuskeywords.rank FROM corpus,corpuskeywords WHERE corpus.id=corpuskeywords.itemid AND (corpus.toplevel IN (%s) OR %s = 'all') AND corpuskeywords.word IN (%s)" % (formatstring,"%s",formatwordstring)
+        results = Corpus.objects.raw(query,tuple(urls))
 
-            results+=cursor.fetchall()
-            
 
-            for item in results:
-                #print item[0]
-                if unique_results.has_key(item[0]):
-                    unique_results[item[0]][-1]=item[-1]
-                else:
-                    unique_results[item[0]]=list(item)
-                #print "id " + str(item[0])
-                #print unique_results[item[0]][-1]
+        for item in results:
+            print dir(item)
+            if unique_results.has_key(item.id):
+                unique_results[item.id].rank+=item.rank
+            else:
+                unique_results[item.id]=item
+            #print "id " + str(item[0])
+            #print unique_results[item[0]][-1]
 
-        for item in unique_results.items():
-            unique_results[item[0]][-1]=self.get_hot_ranking(unique_results[item[0]])    
+        for item in unique_results.values():
+            item.hot=self.get_hot_ranking(item)    
         #print  unique_results.values()[0]
         #print results[0]
-        sort = sorted(unique_results.values(), key=lambda student: student[-1],reverse=True)
+        sort = sorted(unique_results.values(), key=lambda student: student.hot,reverse=True)
         #print sort
         return sort
         
     def item_title(self,item):
         #print item[-1]
-        return item[1]
+        return item.title
         
     def item_description(self,item):
-        return item[2]
+        return item.description
         
     def item_link(self,item):
-        return item[3]
+        return item.url
     
     def item_pubdate(self,item):
-        return item[7]
+        return item.date
     
-    def get_object(self,request,keywords):
-        return keywords
+    def get_object(self,request,keywords,sources):
+        return (keywords,sources) 
         
     def get_hot_ranking(self,result_item):
         
-        #print result_item[5]
-        static_rank = result_item[-1]/float(result_item[5])
+        print dir(result_item)
+        static_rank = result_item.rank/float(result_item.length)
         #print "Static " + str(static_rank)
-        difference = datetime.datetime.now() - result_item[-2]
+        difference = datetime.datetime.now() - result_item.date
         #print "days old " + str(difference.days)
         if (difference.days>0):
             hot_rank = static_rank/float(difference.days) 
@@ -68,3 +72,5 @@ class PersonalFeed(Feed):
 
         #print "hot rank "+ str(hot_rank)
         return hot_rank
+
+# vi: sw=4 ts=8 sts=4

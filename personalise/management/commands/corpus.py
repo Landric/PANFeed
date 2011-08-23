@@ -1,5 +1,5 @@
-from django.core.management.base import BaseCommand, CommandError
-from personalise.models import Feeds,Corpus
+## A corpus is a body of work consisting of many Documents
+
 import MySQLdb
 import feedparser
 import urllib2
@@ -8,20 +8,11 @@ import unicodedata
 import math
 import re
 import datetime
-import time
 
-class Command(BaseCommand):
-
-    help = 'Grabs new items from feeds in the database.'
-
-    def handle(self, *args, **options):
-        corp = corpus_obj()
-        corp.initDB()
-        corp.build_corpus()
-        corp.count_words_and_store()
-        corp.calculate_keywords_for_all()
-
-class corpus_obj():
+class Corpus():
+    
+    db = None
+    corpussize = None
     
     def initDB(self):
         ### Execute this first to open DB connection.
@@ -30,26 +21,34 @@ class corpus_obj():
         self.db.set_character_set("utf8")
         
     def build_corpus(self):
-    #### Builds a corpus of documents from a set of feeds.
-    
-        c=self.db.cursor()
-	#c.execute("""SELECT url,toplevel FROM feeds""")
-        feeds = Feeds.objects.all()
+        #### Builds a corpus of documents from a set of feeds.
+        
+        feeds = open("newfeed.txt", "r")
         for feedurl in feeds:
-            print feedurl.url
+            print feedurl
             try:
-                page = urllib2.urlopen(feedurl.url)
+                page = urllib2.urlopen(feedurl)
                 feed = feedparser.parse(page)
+                c=self.db.cursor()
                 for item in feed.entries:
-                    if (Corpus.objects.filter(url=item.link).filter(feed=feedurl.url).count()==0):
-                        try:
-                            d = datetime.datetime(*(item.date_parsed[0:6]))
-                        except AttributeError:
-                            d=datetime.datetime.now()
-                        print item.title+" "+item.link
-                        Corpus.objects.create(title=item.title,description=item.description,url=item.link,feed=feedurl.url,length=len(item.description+item.title),date=d,toplevel=feedurl.toplevel)
+		    try:
+                        if (c.execute("""SELECT * FROM corpus WHERE url = %s AND title = %s""",(item.link,item.title))==0):
+                            try:
+                                d = datetime.datetime(*(item.date_parsed[0:6]))
+                            except (AttributeError,TypeError):
+                                d=datetime.datetime.now()
+                            dStr = d.isoformat(' ')
+	         	    try:
+			        itemDesc = item.description
+			    except:
+			        itemDesc = ""
+                            c.execute("""INSERT INTO corpus (title,description,url,feed,length,date) VALUES (%s,%s,%s,%s,%s,%s)""",(item.title,itemDesc,item.link,feedurl,len(itemDesc+item.title),dStr))
+                    except:
+                        print "Bad feed item"
             except urllib2.URLError:
-                print "Error getting page: ", feedurl.url
+                print "Error getting page: ", feedurl
+ 
+        feeds.close()
         
     def count_words_and_store(self):
         ### Performs a wordcount of each document and stores cumulative word count 
@@ -130,3 +129,14 @@ class corpus_obj():
             for listitem in c.fetchall():
                 result.add(listitem)
         print result
+
+#    def  
+        
+                        
+corp = Corpus()
+corp.initDB()
+corp.build_corpus()
+corp.count_words_and_store()
+corp.calculate_keywords_for_all()
+corp.get_keywords_for_item(50)
+corp.find_matching_items(("microsoft","apple","wireless"))

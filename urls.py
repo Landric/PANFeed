@@ -12,8 +12,9 @@ urlpatterns = patterns('',
     url(r'^about/$','personalise.views.about', name='about'),
     url(r'^crawlme/$','personalise.views.crawlme', name='crawlme'),
 
-    url(r'^find/(?P<keywords>\w+)/$', PersonalFeed()),
-    
+    url(r'^find/(?P<keywords>\w+)/(?P<sources>\w+)/$', PersonalFeed()),
+    url(r'submit/$', 'personalise.views.submit', name='submit'),
+    url(r'^password_required/$', 'password_required.views.login'),    
     # Examples:
     # url(r'^$', 'personal.views.home', name='home'),
     # url(r'^personal/', include('personal.foo.urls')),
