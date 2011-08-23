@@ -1,0 +1,50 @@
+INSTALL
+~~~~~~~
+
+1. Install python-2.6.
+
+3. Install Django-1.3 (http://www.djangoproject.com/).
+
+3. Install mysql-server (http://www.mysql.com/).
+
+4. Install mysql-db (http://sourceforge.net/projects/mysql-python/).
+
+5. Install feedparser (http://www.feedparser.org/).
+
+6. Go into mysql and create a database called 'tfidf':
+
+mysql -u <username> -p<password>
+CREATE DATABASE tfidf;
+
+7. Go into settings.py in this directory and set up your database details with your mysql username and password.
+
+
+DATABASES = {
+    'default': {
+        'ENGINE': 'django.db.backends.mysql', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
+        'NAME': 'tfidf',                      # Or path to database file if using sqlite3.
+        'USER': '<username here>',                      # Not used with sqlite3.
+        'PASSWORD': '<password here>',                  # Not used with sqlite3.
+        'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
+        'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
+    }
+}
+
+
+8. Type the following command into the command line (while in the base directory):
+
+python manage.py syncdb
+
+9. Set up a cronjob to update from feeds hourly:
+
+1 * * * * python <your_path_goes_here>/personal/manage.py grabfeeds > /dev/null
+
+10. Run the following command to start the server:
+
+python manage.py runserver 0.0.0.0:80
+
+(This runs on port 80 but you can choose to run on any port.)
+
+11. Done!
+
+If you have any comments or suggestions or you find any bugs please let us know. You can email panfeed.gmail.com or post on our googlecode page at code.google.com/projects/panfeed

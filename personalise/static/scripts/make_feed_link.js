@@ -1,7 +1,7 @@
 function makeFeed()
 {
 	var keywords = $("#keyword_input").val().replace(/[^0-9a-zA-Z]/g,",").split(",");
-	var url = "http://panfeed.ecs.soton.ac.uk/find/" + keywords.join("_");
+	var url = window.location.href + "find/all/" + keywords.join("_");
 	$("#feed_link").attr("href", url);
 	$("#feed_link").text(url);
 	$("#google_link").attr("href", "http://fusion.google.com/add?source=atgs&feedurl="+encodeURI(url));

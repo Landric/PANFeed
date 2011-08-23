@@ -1,6 +1,6 @@
 # Create your views here.
 #from django.core.context_processors import csrf
-from password_required.decorators import password_required
+#from password_required.decorators import password_required
 from django.http import HttpResponse
 from django.db import connection, transaction
 from models import Corpus,Corpuskeywords
@@ -27,7 +27,7 @@ def home(request):
 	     </form>
 		<a id="google_link" href="http://fusion.google.com/add?source=atgs&feedurl=http%3A//panfeed.ecs.soton.ac.uk/find/apple"><img src="http://buttons.googlesyndication.com/fusion/add.gif" border="0" alt="Add to Google"></a>
 		&nbsp;&nbsp;&nbsp;&nbsp;
-		<a id="feed_link" href="http://panfeed.ecs.soton.ac.uk/find/apple" target="_blank">http://panfeed.ecs.soton.ac.uk/find/apple</a> 
+		<a id="feed_link" href="http://panfeed.ecs.soton.ac.uk/find/all/apple" target="_blank">http://panfeed.ecs.soton.ac.uk/find/all/apple</a> 
 
 
 	</div>
@@ -45,15 +45,7 @@ def about(request):
 <h2>Who We Are</h2>
 <p>We are a group of researchers based at the University of Southampton, in the Web And Internet Science research group.</p>
 
-quid´Tyler has started vlogging! This is episode 1 (youtube.com)
-
-submitted 1 hour ago by Krasso
-
-    9 comments
-    share
-    save
-    hide
-    report<h2>What is PANFeed?</h2>
+<h2>What is PANFeed?</h2>
 <p>PANFeed (Personal Academic News Feed) is a system spawned from the CampusROAR project, which is focused around making research more accessible, exciting and interesting, and to enable people to keep up to date on research in their areas of interest.</p>
 <p>The purpose of PANFeed is to enable the creation of personalised, adaptive RSS feeds which are based on the news feeds available at your institution.  A crawler is used to find all RSS and Atom feeds under a University domain, which are then catalogued and analysed for keywords.  The PANFeed site can then be used to generate a personalised RSS feed based upon any set of keywords you provide.</p>
 
@@ -105,7 +97,7 @@ def find(request,keyword,sources):
 #@password_required
 def submit(request):
    
-    feeds = str(request.POST['urls']).split("\\r\\")
+    feeds = str(request.POST['urls']).splitlines()
     print feeds       
     for url in feeds:
         print urlparse(url)

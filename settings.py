@@ -1,4 +1,4 @@
-# Django settings for personal project.
+
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
@@ -86,7 +86,7 @@ STATICFILES_FINDERS = (
 SECRET_KEY = '=szh#4=ly4g2j!n&h@v7e640rex1gpq1@0ukr^ybq))sy(=-dv'
 
 # Password for password_required.
-PASSWORD_REQUIRED_PASSWORD = 'wais'
+#PASSWORD_REQUIRED_PASSWORD = 'wais'
 
 # List of callables that know how to import templates from various sources.
 TEMPLATE_LOADERS = (
@@ -120,7 +120,7 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'personalise',
-    'password_required',
+    #'password_required',
     # Uncomment the next line to enable the admin:
     'django.contrib.admin',
     # Uncomment the next line to enable admin documentation:
