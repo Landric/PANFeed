@@ -4,11 +4,6 @@ import sys
 import urllib2
 import re
 from urlparse import urlparse
-import lxml
-from lxml import etree
-import html5lib
-import re
-from bs4 import BeautifulSoup
 
 
 class ItemMaker():

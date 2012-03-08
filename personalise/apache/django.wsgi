@@ -3,7 +3,7 @@ import sys
 
 os.environ['DJANGO_SETTINGS_MODULE'] = 'settings'
 
-path = '/home/ad10g08/personal'
+path = '/home/pm5/panfeed'
 if path not in sys.path:
     sys.path.append(path)
 
