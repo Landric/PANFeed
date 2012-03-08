@@ -120,12 +120,25 @@ INSTALLED_APPS = (
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'personalise',
-    #'password_required',
     # Uncomment the next line to enable the admin:
     'django.contrib.admin',
     # Uncomment the next line to enable admin documentation:
     'django.contrib.admindocs',
+    'registration',
 )
+
+
+EMAIL_HOST = "smtp.ecs.soton.ac.uk"
+
+
+DEFAULT_FROM_EMAIL = 'panfeed.ecs.soton.ac.uk <noreply@panfeed.ecs.soton.ac.uk>'
+
+ACCOUNT_ACTIVATION_DAYS = 7
+
+LOGIN_REDIRECT_URL = "/account/login_redirect/"
+LOGIN_URL = "/account/login"
+LOGOUT_URL = "/account/logout"
+
 
 # A sample logging configuration. The only tangible logging
 # performed by this configuration is to send an email to

@@ -1,6 +1,5 @@
 # Create your views here.
 from django.core.context_processors import csrf
-#from password_required.decorators import password_required
 from django.http import HttpResponse,HttpResponseRedirect
 from django.db import connection, transaction
 from feed import PersonalFeed
@@ -12,9 +11,10 @@ from urlparse import urlparse
 from personalise.models import Feeds,Journals,JournalFeeds,Corpus,Corpuskeywords,Issue,IssueItem
 from personalise.urltorss2 import ItemMaker
 #import personalise.models
-from django.shortcuts import render_to_response, get_object_or_404
+from django.shortcuts import render_to_response, get_object_or_404, redirect
 from django.template.loader import render_to_string
 import pprint
+from django.contrib.auth.decorators import login_required
 
 def home(request):
     p = { 'title':'PANFeed', 'content':render_to_string('index.html') }
@@ -168,7 +168,6 @@ def urltoitem(request):
     itemmaker.parse_url(request.REQUEST["url"])
     return HttpResponse(json.dumps({ 'title':itemmaker.title, 'description':itemmaker.p, 'img':itemmaker.img }), mimetype="application/json")
 
-#@password_required
 def submit(request):
    
     feeds = str(request.POST['urls']).splitlines()
@@ -183,5 +182,9 @@ def submit(request):
     content = '''Feeds have now been added.'''
     p = {'title':'Submitted', 'content':content}
     return render_to_response('template.html', {'page':p })
+
+@login_required
+def login_redirect(request):
+    return redirect("/about")
 
 

@@ -28,7 +28,7 @@ urlpatterns = patterns('',
 
     url(r'^find/(?P<sources>\w+)/(?P<keywords>\w+)/$', PersonalFeed()),
     url(r'submit/$', 'personalise.views.submit', name='submit'),
-    url(r'^password_required/$', 'password_required.views.login'),    
+#    url(r'^password_required/$', 'password_required.views.login'),    
     # Examples:
     # url(r'^$', 'personal.views.home', name='home'),
     # url(r'^personal/', include('personal.foo.urls')),
@@ -39,4 +39,7 @@ urlpatterns = patterns('',
     # Uncomment the next line to enable the admin:
     url(r'^admin/', include(admin.site.urls)),
     #url(r'^(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.MEDIA_ROOT}),
+    url(r'^account/', include('registration.urls')),
+    url(r'^account/login_redirect', 'personalise.views.login_redirect'),
+
 )
