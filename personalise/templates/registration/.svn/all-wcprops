@@ -1,0 +1,89 @@
+K 25
+svn:wc:ra_dav:version-url
+V 45
+/svn/!svn/ver/18/trunk/templates/registration
+END
+password_change_done.html
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svn/!svn/ver/11/trunk/templates/registration/password_change_done.html
+END
+password_reset_complete.html
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/svn/!svn/ver/11/trunk/templates/registration/password_reset_complete.html
+END
+registration_form.html
+K 25
+svn:wc:ra_dav:version-url
+V 68
+/svn/!svn/ver/11/trunk/templates/registration/registration_form.html
+END
+activate.html
+K 25
+svn:wc:ra_dav:version-url
+V 59
+/svn/!svn/ver/11/trunk/templates/registration/activate.html
+END
+password_reset_confirm.html
+K 25
+svn:wc:ra_dav:version-url
+V 73
+/svn/!svn/ver/11/trunk/templates/registration/password_reset_confirm.html
+END
+activation_email_subject.txt
+K 25
+svn:wc:ra_dav:version-url
+V 74
+/svn/!svn/ver/18/trunk/templates/registration/activation_email_subject.txt
+END
+registration_complete.html
+K 25
+svn:wc:ra_dav:version-url
+V 72
+/svn/!svn/ver/11/trunk/templates/registration/registration_complete.html
+END
+activation_email.txt
+K 25
+svn:wc:ra_dav:version-url
+V 66
+/svn/!svn/ver/18/trunk/templates/registration/activation_email.txt
+END
+password_reset_email.txt
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svn/!svn/ver/11/trunk/templates/registration/password_reset_email.txt
+END
+login.html
+K 25
+svn:wc:ra_dav:version-url
+V 56
+/svn/!svn/ver/11/trunk/templates/registration/login.html
+END
+activation_complete.html
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svn/!svn/ver/11/trunk/templates/registration/activation_complete.html
+END
+logout.html
+K 25
+svn:wc:ra_dav:version-url
+V 57
+/svn/!svn/ver/11/trunk/templates/registration/logout.html
+END
+password_reset_done.html
+K 25
+svn:wc:ra_dav:version-url
+V 70
+/svn/!svn/ver/11/trunk/templates/registration/password_reset_done.html
+END
+password_change_form.html
+K 25
+svn:wc:ra_dav:version-url
+V 71
+/svn/!svn/ver/11/trunk/templates/registration/password_change_form.html
+END

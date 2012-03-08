@@ -1,0 +1,4 @@
+Thanks for registering at {{ site.name }}
+
+Click this link to activate your new account (valid for {{ expiration_days }} days):
+http://{{ site.domain }}{% url registration_activate activation_key %}

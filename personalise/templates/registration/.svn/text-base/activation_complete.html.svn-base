@@ -1,0 +1,6 @@
+{% extends "base.html" %}
+
+{% block content %}
+	<h1>Activation Complete</h1>
+	<p>Your account is now activated.</p>
+{% endblock %}
