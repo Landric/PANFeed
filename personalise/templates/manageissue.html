@@ -1,0 +1,18 @@
+<h2>Create an issue</h2>
+
+<p>A PANFeed issue is a custom feed. You tell it what you want the sources of the news to be and it packages them up for you into one RSS feed. Like other feeds from PANFeed the journal feed is specially tuned up for best compatibility with personalised magazine readers and the like. You might want to have a custom journal for some choice feeds on your university campus which you can then view as a magazine or embed into one of your websites. Maybe you just have some feeds which you like which you want to repackage as a magazine on your iPad. What ever your use PANFeed offers simple way to aggregate and optimize collections of feeds for use anyway you want and of course as time goes on PANFeed will keep updating your journal for you.</p>
+
+<p>Creating a PANFeed journal could not be easier. Simply give your journal a title, add a description if you want and then add a list of feeds you want the journal to aggregate for you. Press save and your journal get created with it's own unique URL for you to use and share.</p>
+
+<form action="/saveissue/" method="POST">
+    <div class="create_issue_form">
+        Title: <br /><input name=title type="text" class="title" value="{{ title }}"/> <br />
+        Description: <textarea name="description" class="description">{{ description }}</textarea> <br />
+        <input type="hidden" name="issueid" value="{{ issueid }}" />
+        Add URLs (one per line): <textarea name="urls" class="urls" id="issue_urls"></textarea><br />
+        <input type="button" onclick="addURLsAsItems('issue_urls', 'items')" value="Add these URLs as items" /><br />
+        <div id="items"> </div>
+        <script type="text/javascript">loadIssueItems("{{ issueid }}", "items");</script>
+        <input type="submit" class="save" value="Save &amp; Finish" />
+    </div>
+</form>
