@@ -1,22 +1,58 @@
 #search {
-	display:none;
+    display:none;
 }
 
 #feed_demo {
-	width: 90%;
-	margin: auto;
+    width: 90%;
+    margin: auto;
 }
 
 .feed_gear {
-	padding: 10px 0;
-	text-align: center;
+    padding: 10px 0;
+    text-align: center;
 }
 
 .feed_item {
-	border-bottom: 2px solid black;
-	padding:5px;
+    border-bottom: 2px solid black;
+    padding:5px;
 }
 
 #keyword_input {
-	width: 250px;
+    width: 250px;
+}
+
+.issue_list li a {
+    margin-left:30px;
+}
+
+.item {
+    margin-top: 50px;
+    padding: 10px;
+    border: 1px solid #898977;
+}
+
+.item input {
+    width: 75%;
+}
+
+.item textarea {
+    height: 130px;
+}
+
+.item .cross {
+    float: right;
+    cursor: pointer;
+}
+
+.item .form-field {
+    padding: 3px 0;
+}
+
+#footer {
+    height:auto;
+}
+
+input.save {
+    display:block;
+    margin: 15px auto;
 }

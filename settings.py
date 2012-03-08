@@ -103,7 +103,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
 )
 
-ROOT_URLCONF = 'personal.urls'
+ROOT_URLCONF = 'urls'
 
 TEMPLATE_DIRS = (
     '/home/ad10g08/personal/personalise'

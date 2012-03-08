@@ -1,14 +1,32 @@
 from django.contrib.syndication.views import Feed
 from django.db import connection, transaction
+from django.shortcuts import get_object_or_404
 import datetime
+import sys
 from operator import itemgetter
-from personalise.models import Feeds,Corpus
+from personalise.models import Feeds,Corpus,Journals,JournalFeeds,Issue, IssueItem
+
+class PANFeed:
+    title = ""
+    description = ""
+    link = ""
+    
+    def reorder(self, fieldname):
+        foo = 1 + 1
+
+    def beautify(self):
+        foo = 1 + 1
+
+    def __items(self):
+        foo = 1 + 1
+
 
 class PersonalFeed(Feed):
     title = "Your Feed"
     link = "/find/"
-    description = "Your feed personalised from your keywords."
-    
+    description = "Your feed Personalised Academic News Feed from your keywords."
+    keywords = [];
+
     def items(self,params):
         cursor = connection.cursor()
         words = params[0].split("_")
@@ -20,28 +38,26 @@ class PersonalFeed(Feed):
         formatwordstring = ",".join(["%s"] * len(words))
         urls.append(urls[0])#.append(words
         urls.extend(words)
-        print urls
         query = "SELECT corpus.*, corpuskeywords.rank FROM corpus,corpuskeywords WHERE corpus.id=corpuskeywords.itemid AND (corpus.toplevel IN (%s) OR %s = 'all') AND corpuskeywords.word IN (%s)" % (formatstring,"%s",formatwordstring)
         results = Corpus.objects.raw(query,tuple(urls))
 
-
         for item in results:
-            print dir(item)
             if unique_results.has_key(item.id):
                 unique_results[item.id].rank+=item.rank
             else:
                 unique_results[item.id]=item
-            #print "id " + str(item[0])
-            #print unique_results[item[0]][-1]
 
         for item in unique_results.values():
             item.hot=self.get_hot_ranking(item)    
-        #print  unique_results.values()[0]
-        #print results[0]
         sort = sorted(unique_results.values(), key=lambda student: student.hot,reverse=True)
-        #print sort
         return sort
-        
+
+    def title(self,obj):
+        return "PANFeed of " + ", ".join(obj[0].split("_")) 
+
+    def link(self, obj):
+        return "http://panfeed.ecs.soton.ac.uk/find/"+obj[1]+"/"+obj[0]
+
     def item_title(self,item):
         #print item[-1]
         return item.title
@@ -57,20 +73,85 @@ class PersonalFeed(Feed):
     
     def get_object(self,request,keywords,sources):
         return (keywords,sources) 
-        
+
     def get_hot_ranking(self,result_item):
         
-        print dir(result_item)
         static_rank = result_item.rank/float(result_item.length)
-        #print "Static " + str(static_rank)
         difference = datetime.datetime.now() - result_item.date
-        #print "days old " + str(difference.days)
         if (difference.days>0):
             hot_rank = static_rank/float(difference.days) 
         else:
             hot_rank = static_rank
 
-        #print "hot rank "+ str(hot_rank)
         return hot_rank
 
-# vi: sw=4 ts=8 sts=4
+class JournalFeed(Feed):
+    title = "Your Feed"
+    link = "/find/"
+    description = "Your feed Personalised Academic News Feed from your keywords."
+    keywords = [];
+
+    def items(self,obj):
+        feeds = JournalFeeds.objects.filter(journalid=obj.journalid)
+        feed_list = []
+        
+        for feed in feeds:
+            feed_list.append(feed.feedurl)
+
+        return Corpus.objects.filter(feed__in=feed_list).order_by("-date")
+
+    def title(self,obj):
+        return obj.title 
+
+    def link(self, obj):
+        return "http://panfeed.ecs.soton.ac.uk/journal/"+str(obj.journalid)
+
+    def item_title(self,item):
+        #print item[-1]
+        return item.title
+        
+    def item_description(self,item):
+        return item.description
+        
+    def item_link(self,item):
+        return item.url
+    
+    def item_pubdate(self,item):
+        return item.date
+    
+    def get_object(self,request,journalid):
+        return get_object_or_404(Journals, journalid=journalid);
+
+class IssueFeed(Feed):
+    title = "Your Feed"
+    link = "/find/"
+    description = "Your feed Personalised Academic News Feed from your keywords."
+    keywords = [];
+
+    def items(self,obj):
+        return IssueItem.objects.filter(issueid=obj.id).order_by("-date")
+
+    def title(self,obj):
+        return obj.title 
+
+    def description(self,obj):
+        return obj.description 
+
+    def link(self, obj):
+        return "http://panfeed.ecs.soton.ac.uk/journal/"+str(obj.id)
+
+    def item_title(self,item):
+        return item.title
+
+    def item_description(self,item):
+        return item.description
+
+    def item_link(self,item):
+        return item.url
+
+    def item_pubdate(self,item):
+        return item.date
+
+    def get_object(self,request,issueid):
+        return get_object_or_404(Issue, id=issueid);
+

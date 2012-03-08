@@ -66,25 +66,6 @@ class AuthUserUserPermissions(models.Model):
     class Meta:
         db_table = u'auth_user_user_permissions'
 
-class Corpus(models.Model):
-    id = models.IntegerField(primary_key=True)
-    title = models.TextField(blank=True)
-    description = models.TextField(blank=True)
-    url = models.CharField(max_length=6249, blank=True)
-    feed = models.CharField(max_length=6249, blank=True)
-    length = models.IntegerField(null=True, blank=True)
-    keywords = models.TextField(blank=True)
-    date = models.DateField(null=True, blank=True)
-    class Meta:
-        db_table = u'corpus'
-
-class Corpuskeywords(models.Model):
-    itemid = models.IntegerField(primary_key=True)
-    word = models.CharField(max_length=90, primary_key=True)
-    rank = models.IntegerField(null=True, blank=True)
-    class Meta:
-        db_table = u'corpuskeywords'
-
 class DjangoContentType(models.Model):
     id = models.IntegerField(primary_key=True)
     name = models.CharField(max_length=300)
@@ -106,17 +87,4 @@ class DjangoSite(models.Model):
     name = models.CharField(max_length=150)
     class Meta:
         db_table = u'django_site'
-
-class Tf(models.Model):
-    word = models.CharField(max_length=90, primary_key=True)
-    itemid = models.IntegerField()
-    count = models.IntegerField(null=True, blank=True)
-    class Meta:
-        db_table = u'tf'
-
-class Words(models.Model):
-    word = models.CharField(max_length=90, primary_key=True)
-    count = models.IntegerField(null=True, blank=True)
-    class Meta:
-        db_table = u'words'
 

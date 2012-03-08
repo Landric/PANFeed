@@ -26,7 +26,7 @@ class corpus_obj():
     def initDB(self):
         ### Execute this first to open DB connection.
         print "Init"
-        self.db=MySQLdb.connect(passwd="",db="tfidf",charset = "utf8",use_unicode=True)
+        self.db=MySQLdb.connect(user="ad10g08",passwd="",db="tfidf",charset = "utf8",use_unicode=True)
         self.db.set_character_set("utf8")
         
     def build_corpus(self):

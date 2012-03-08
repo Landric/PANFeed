@@ -54,3 +54,41 @@ class Words(models.Model):
     class Meta:
         db_table = u'words'
 
+class Journals(models.Model):
+    journalid = models.AutoField(primary_key=True)
+    title = models.TextField()
+    description = models.TextField()
+    class Meta:
+        db_table = u'journals'
+
+class JournalFeeds(models.Model):
+    journalid = models.IntegerField()
+    feedurl = models.URLField(verify_exists=True)
+    class Meta:
+        db_table = u'journal_feeds'
+        unique_together = ("journalid", "feedurl")
+
+class SpiderToDo(models.Model):
+    pageurl=models.URLField(primary_key=True,max_length=255)
+
+class SpiderDone(models.Model):
+    doneurl=models.URLField(primary_key=True,max_length=255)
+
+class SpiderRSS(models.Model):
+    rssurl=models.URLField(primary_key=True,max_length=255)
+
+class IssueItem(models.Model):
+    title = models.TextField(blank=True)
+    description = models.TextField(blank=True)
+    url = models.CharField(max_length=6249, blank=True)
+    img = models.CharField(max_length=6249, blank=True)
+    issueid = models.IntegerField()
+    length = models.IntegerField(null=True, blank=True)
+    keywords = models.TextField(blank=True,null=True, default="")
+    date = models.DateTimeField(null=True, blank=True)
+    toplevel = models.URLField(blank=True)
+
+class Issue(models.Model):
+    title = models.TextField(blank=True)
+    description = models.TextField(blank=True)
+    toplevel = models.URLField()
