@@ -117,8 +117,8 @@ def process_url(url):
                     if (DOMAIN in urlparse.urlparse(item).netloc):
                         SpiderToDo(item).save()
 
-    
+
 if __name__ == "__main__":
     main()
-        
+
 

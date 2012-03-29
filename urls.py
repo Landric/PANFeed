@@ -17,6 +17,7 @@ urlpatterns = patterns('',
     url(r'^savejournal/$','personalise.views.savejournal', name='savejournal'),
     url(r'^managejournal/(?P<journalid>\w+)$','personalise.views.managejournal', name='managejournal'),
     url(r'^journallist/$','personalise.views.journallist', name='journallist'),
+    url(r'^myfeeds/$','personalise.views.myfeeds', name='myfeeds'),
     url(r'^journal/(?P<journalid>\w+)$', JournalFeed()),
 
     url(r'^createissue/$','personalise.views.createissue', name='createissue'),

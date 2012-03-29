@@ -8,6 +8,7 @@
 # into your database.
 
 from django.db import models
+from django.contrib.auth.models import User
 
 class Domains(models.Model):
     toplevel = models.URLField()
@@ -55,6 +56,8 @@ class Words(models.Model):
         db_table = u'words'
 
 class Journals(models.Model):
+    owner = models.ForeignKey(User) 
+    public = models.BooleanField()
     journalid = models.AutoField(primary_key=True)
     title = models.TextField()
     description = models.TextField()
@@ -87,8 +90,11 @@ class IssueItem(models.Model):
     keywords = models.TextField(blank=True,null=True, default="")
     date = models.DateTimeField(null=True, blank=True)
     toplevel = models.URLField(blank=True)
+    public = models.BooleanField()
 
 class Issue(models.Model):
+    public = models.BooleanField()
+    owner = models.ForeignKey(User) 
     title = models.TextField(blank=True)
     description = models.TextField(blank=True)
     toplevel = models.URLField()
