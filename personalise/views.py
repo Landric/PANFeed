@@ -85,7 +85,7 @@ def journallist(request):
         journal_list.append('<li>{1} <a target="_blank" href="/journal/{1}">View</a></li>'.format(journal.journalid, journal.title))
     journal_list.append('</ul>')
 
-    p = { 'title':'PANFeed Journals', 'content':"\n".join(journal_list) }
+    p = { 'title':'Journals', 'content':"\n".join(journal_list) }
     return render_to_response('template.html', { 'page':p }, context_instance=RequestContext(request))
 
 @login_required
@@ -94,6 +94,7 @@ def myfeeds(request):
 
     lists = []
     lists.append('<h2>My PANFeed Journals</h2>')
+    lists.append('<p>A PANFeed Journal allows you to combine a set of existing news feeds from websites, blogs and repositories. The outcome is a rolling news feed that is taylored to your content. You can then add this news feed to your website, feed reader or personalised magazine software.</p>')
     lists.append('<p><a href="/createjournal">Create a new journal</a></p>')
     
     lists.append('<ul class="lists">')
@@ -104,6 +105,7 @@ def myfeeds(request):
 
     issues = Issue.objects.filter(owner=request.user);
     lists.append('<h2>My PANFeed Issues</h2>')
+    lists.append('<p>A PANFeed Issue is a carefully taylored news feed hand curated by you. You select web pages of interest to appear as items on your new feed. Add your own editorials and notes from your blog and customize the titles, descriptions and images which apear in the feed. You have complete control.</p>')
     lists.append('<p><a href="/createissue">Create a new issue</a></p>')
     
     lists.append('<ul class="lists">')
@@ -111,7 +113,7 @@ def myfeeds(request):
         lists.append('<li>{1}<a target="_blank" href="/issue/{0}">View</a><a href="/manageissue/{0}">Edit</a></li>'.format(issue.id, issue.title))
     lists.append('</ul>')
 
-    p = { 'title':'PANFeed Journals', 'content':"\n".join(lists) }
+    p = { 'title':'My Feeds', 'content':"\n".join(lists) }
     return render_to_response('template.html', { 'page':p }, context_instance=RequestContext(request))
 
 def journal(request, journalid):
@@ -189,10 +191,10 @@ def issuelist(request):
     
     issue_list.append('<ul class="issue_list">')
     for issue in issues:
-        issue_list.append('<li>{1}<a target="_blank" href="/issue/{0}">View</a><a href="/manageissue/{0}">Edit</a></li>'.format(issue.id, issue.title))
+        issue_list.append('<li>{1}<a target="_blank" href="/issue/{0}">View</a></li>'.format(issue.id, issue.title))
     issue_list.append('</ul>')
 
-    p = { 'title':'PANFeed Journals', 'content':"\n".join(issue_list) }
+    p = { 'title':'Issues', 'content':"\n".join(issue_list) }
     return render_to_response('template.html', { 'page':p }, context_instance=RequestContext(request))
 
 def urltoitem(request):
