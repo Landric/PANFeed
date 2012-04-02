@@ -148,7 +148,7 @@ def issueitems(request, issueid):
     itemlist = [];
     for item in IssueItem.objects.filter(issueid=issueid):
         itemlist.append({'title':item.title, 'url':item.url, 'description':item.description, 'img':item.img})
-    return HttpResponse(json.dumps(itemlist), mimetype="application/json", context_instance=RequestContext(request))
+    return HttpResponse(json.dumps(itemlist), mimetype="application/json")
 
 @login_required
 def saveissue(request):
