@@ -26,6 +26,7 @@ urlpatterns = patterns('',
     url(r'^saveissue/$','personalise.views.saveissue', name='saveissue'),
     url(r'^issueitems/(?P<issueid>\w+)$','personalise.views.issueitems', name='issueitems'),
     url(r'^issue/(?P<issueid>\w+)$', IssueFeed()),
+    url(r'^issue/(?P<issueid>\w+)/.*$', IssueFeed()),
 
     url(r'^find/(?P<sources>\w+)/(?P<keywords>\w+)/$', PersonalFeed()),
     url(r'submit/$', 'personalise.views.submit', name='submit'),

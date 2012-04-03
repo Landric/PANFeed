@@ -50,7 +50,12 @@ def managejournal(request,journalid):
     for feed in feeds:
         feed_list = "\n".join([feed_list, feed.feedurl])
 
-    p = { 'title':'Manage Journal', 'content':render_to_string('managejournal.html', { 'journalid':journalid, 'title':journal.title, 'description':journal.description, 'source_feeds':feed_list }) }
+    public = ""
+    if journal.public:
+        public = "checked='checked'"
+
+
+    p = { 'title':'Manage Journal', 'content':render_to_string('managejournal.html', { 'journalid':journalid, 'title':journal.title, 'description':journal.description, 'source_feeds':feed_list, 'siteUrl':Site.objects.get_current().domain, "public":public, 'objUrl':journal.get_absolute_url() }) }
     return render_to_response('template.html', { 'page': p }, context_instance=RequestContext(request))
 
 @login_required
@@ -62,6 +67,7 @@ def savejournal(request):
     
     journal.title = request.POST['title']
     journal.description = request.POST['description']
+    journal.public = request.POST['public']
     journal.save();
     
     JournalFeeds.objects.filter(journalid=journal.journalid).delete()
@@ -75,7 +81,7 @@ def savejournal(request):
     return HttpResponseRedirect('/myfeeds')
         
 def journallist(request):
-    journals = Journals.objects.all();
+    journals = Journals.objects.filter(public=True)
 
     journal_list = []
     journal_list.append('<h2>PANFeed Journals</h2>')
@@ -142,7 +148,11 @@ def manageissue(request,issueid):
         p = { 'title':pagetitle, 'content':'This issue does not exist or you do not have permission to edit it.' }
         return render_to_response('template.html', { 'page':p }, context_instance=RequestContext(request))
 
-    p = { 'title':pagetitle, 'content':render_to_string('manageissue.html', { 'issueid':issueid, 'title':issue.title, 'description':issue.description, 'siteUrl':Site.objects.get_current().domain }) }
+    public = ""
+    if issue.public:
+        public = "checked='checked'"
+
+    p = { 'title':pagetitle, 'content':render_to_string('manageissue.html', { 'issueid':issueid, 'title':issue.title, 'description':issue.description, 'siteUrl':Site.objects.get_current().domain, "public":public, 'objUrl':issue.get_absolute_url() } ) }
     return render_to_response('template.html', { 'page': p }, context_instance=RequestContext(request))
 
 def issueitems(request, issueid):
@@ -162,6 +172,7 @@ def saveissue(request):
 
     issue.title = request.REQUEST['title']
     issue.description = request.REQUEST['description']
+    issue.public = request.REQUEST['public']
     issue.save();
 
     IssueItem.objects.filter(issueid=issue.id).delete()
@@ -183,12 +194,11 @@ def saveissue(request):
     return HttpResponseRedirect('/myfeeds')
 
 def issuelist(request):
-    issues = Issue.objects.all();
+    issues = Issue.objects.filter(public=True)
 
     issue_list = []
     issue_list.append('<h2>PANFeed issues</h2>')
     issue_list.append('<p>PANFeed Issues are collections of resources curated by users. They will often have a strong theme and clear purpose. As with all PANFeeds they are customised for personal maganzine readers so issues will always look engaging.</p>')
-    issue_list.append('<p><a href="/createissue">Create a new issue</a></p>')
     
     issue_list.append('<ul class="issue_list">')
     for issue in issues:

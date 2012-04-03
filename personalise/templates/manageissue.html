@@ -6,7 +6,9 @@
 
 <form action="/saveissue/" method="POST">
     <div class="create_issue_form">
-        Title: <br /><input name=title type="text" class="title" value="{{ title }}"/> <br />
+	The URL of this Issue: <strong>http://{{siteUrl}}{{objUrl}}</strong><br /><br />
+        Title: <br /><input name=title type="text" class="title" value="{{ title }}"/> <br /><br />
+	Make this publicly viewable: <input type="checkbox" {{public}} name="public" /> <br /><br />
         Description: <textarea name="description" class="description">{{ description }}</textarea> <br />
         <input type="hidden" name="issueid" value="{{ issueid }}" />
         Add URLs (one per line): <textarea name="urls" class="urls" id="issue_urls"></textarea><br />

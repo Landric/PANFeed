@@ -9,6 +9,7 @@
 
 from django.db import models
 from django.contrib.auth.models import User
+import re
 
 class Domains(models.Model):
     toplevel = models.URLField()
@@ -61,6 +62,10 @@ class Journals(models.Model):
     journalid = models.AutoField(primary_key=True)
     title = models.TextField()
     description = models.TextField()
+
+    def get_absolute_url(self):
+        return "/journal/"+str(self.journalid)+"/"+re.subn(r'[^A-Za-z0-9]+', '-', self.title)[0]
+
     class Meta:
         db_table = u'journals'
 
@@ -98,3 +103,6 @@ class Issue(models.Model):
     title = models.TextField(blank=True)
     description = models.TextField(blank=True)
     toplevel = models.URLField()
+
+    def get_absolute_url(self):
+        return "/issue/"+str(self.id)+"/"+re.subn(r'[^A-Za-z0-9]+', '-', self.title)[0]

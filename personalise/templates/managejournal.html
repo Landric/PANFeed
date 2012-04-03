@@ -6,7 +6,9 @@
 
 <form action="/savejournal/" method="POST">
     <div class="create_journal_form">
-        Title: <br /><input name=title type="text" class="title" value="{{ title }}"/> <br />
+	The URL of this Journal: <strong>http://{{siteUrl}}{{objUrl}}</strong><br /><br />
+        Title: <br /><input name=title type="text" class="title" value="{{ title }}"/> <br /><br />
+	Make this publicly viewable: <input type="checkbox" {{public}} name="public" /> <br /><br />
         Description: <textarea name="description" class="description">{{ description }}</textarea> <br />
         Source feeds: <textarea name="source_feeds" class="source_feeds">{{ source_feeds }}</textarea> <br />
 	<input type="hidden" name="journalid" value="{{ journalid }}" />
