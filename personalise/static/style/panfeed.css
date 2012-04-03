@@ -32,7 +32,11 @@
 }
 
 .item input {
-    width: 75%;
+    width: 65%;
+}
+
+.item input.img-update {
+	width: auto;
 }
 
 .item textarea {

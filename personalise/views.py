@@ -11,6 +11,7 @@ from urlparse import urlparse
 from personalise.models import Feeds,Journals,JournalFeeds,Corpus,Corpuskeywords,Issue,IssueItem
 from django.contrib.auth.models import User
 from personalise.urltorss2 import ItemMaker
+from django.contrib.sites.models import Site
 #import personalise.models
 from django.shortcuts import render_to_response, get_object_or_404, redirect
 from django.template.loader import render_to_string
@@ -141,7 +142,7 @@ def manageissue(request,issueid):
         p = { 'title':pagetitle, 'content':'This issue does not exist or you do not have permission to edit it.' }
         return render_to_response('template.html', { 'page':p }, context_instance=RequestContext(request))
 
-    p = { 'title':pagetitle, 'content':render_to_string('manageissue.html', { 'issueid':issueid, 'title':issue.title, 'description':issue.description }) }
+    p = { 'title':pagetitle, 'content':render_to_string('manageissue.html', { 'issueid':issueid, 'title':issue.title, 'description':issue.description, 'siteUrl':Site.objects.get_current().domain }) }
     return render_to_response('template.html', { 'page': p }, context_instance=RequestContext(request))
 
 def issueitems(request, issueid):

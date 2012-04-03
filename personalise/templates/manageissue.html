@@ -10,7 +10,8 @@
         Description: <textarea name="description" class="description">{{ description }}</textarea> <br />
         <input type="hidden" name="issueid" value="{{ issueid }}" />
         Add URLs (one per line): <textarea name="urls" class="urls" id="issue_urls"></textarea><br />
-        <input type="button" onclick="addURLsAsItems('issue_urls', 'items')" value="Add these URLs as items" /><br />
+        <input type="button" onclick="addURLsAsItems('issue_urls', 'items')" value="Add these URLs as items" /><br /><br />
+	<input type="button" onclick="addEditorial('http://{{siteUrl}}/issue/{{issueid}}', 'items')" value="Add an Editorial" /><br />
         <div id="items"> </div>
         <script type="text/javascript">loadIssueItems("{{ issueid }}", "items");</script>
         <input type="submit" class="save" value="Save &amp; Finish" />

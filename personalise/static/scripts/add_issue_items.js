@@ -59,8 +59,19 @@ function renderIssueItem(data)
     "<div class='form-field'>URL: <input type='text' name='item-url' value='"+data.url+"'/></div>"+
     "<div class='form-field'>Title: <input type='text' name='item-title' value='"+data.title+"'/></div>" + 
     "<div class='form-field'>Description: <textarea name='item-description'>"+data.description + "</textarea></div>" + 
-    "<div class='form-field'>Image URL: <input type='text' id='img-url-"+document.itemCounter+"' onchange='changeImg(\"img-"+document.itemCounter+"\", \"img-url-"+document.itemCounter+"\")' name='item-img' value='" + data.img + "'/></div>" +
+    "<div class='form-field'>Image URL: <input type='text' id='img-url-"+document.itemCounter+"'  name='item-img' value='" + data.img + "'/> <input type='button' class='img-update' value='Update Image' onclick='changeImg(\"img-"+document.itemCounter+"\", \"img-url-"+document.itemCounter+"\")' /></div>" +
     "<img id='img-"+document.itemCounter+"' src='"+data.img+"' alt='URL does not resolve to image.' /><br />";
+}
+
+function addEditorial(url, to_id)
+{
+	var data = {};
+	data.url = url;
+	data.title = "Editorial";
+	data.description = "";
+	data.img = "";
+	var div = "<div class='item'>"+renderIssueItem(data)+"</div>";
+	$('#'+to_id).append(div);
 }
 
 function deleteItem(itemId) 
