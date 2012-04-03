@@ -60,3 +60,7 @@ input.save {
     display:block;
     margin: 15px auto;
 }
+
+.create_journal_form .description, .create_issue_form .description {
+	height: 40px;
+}

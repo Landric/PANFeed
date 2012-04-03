@@ -1,8 +1,9 @@
 <h2>Create an issue</h2>
 
-<p>A PANFeed issue is a custom feed. You tell it what you want the sources of the news to be and it packages them up for you into one RSS feed. Like other feeds from PANFeed the journal feed is specially tuned up for best compatibility with personalised magazine readers and the like. You might want to have a custom journal for some choice feeds on your university campus which you can then view as a magazine or embed into one of your websites. Maybe you just have some feeds which you like which you want to repackage as a magazine on your iPad. What ever your use PANFeed offers simple way to aggregate and optimize collections of feeds for use anyway you want and of course as time goes on PANFeed will keep updating your journal for you.</p>
+<p>A PANFeed issue is a completely custom feed. Each item is normal web link. Copy your links into the Add URLs box, Add these URLs as items and PANFeed try and guess a title description and image for each one. You have control over every single item. You can manually edit the title, description and change the image. You can even add editorial sections either by writing them in your blog or on Google Docs and linking them in or by using our custom "Editorial Item". This allows you put your personal spin on your feed and really tie the whole thing together.</p>
 
-<p>Creating a PANFeed journal could not be easier. Simply give your journal a title, add a description if you want and then add a list of feeds you want the journal to aggregate for you. Press save and your journal get created with it's own unique URL for you to use and share.</p>
+<p>Unlike a PANFeed journal your issue will need you to update it with new links over time but you have complete control of how and when those items are added.</p>
+
 
 <form action="/saveissue/" method="POST">
     <div class="create_issue_form">
@@ -13,7 +14,7 @@
         <input type="hidden" name="issueid" value="{{ issueid }}" />
         Add URLs (one per line): <textarea name="urls" class="urls" id="issue_urls"></textarea><br />
         <input type="button" onclick="addURLsAsItems('issue_urls', 'items')" value="Add these URLs as items" /><br /><br />
-	<input type="button" onclick="addEditorial('http://{{siteUrl}}/issue/{{issueid}}', 'items')" value="Add an Editorial" /><br />
+	<input type="button" onclick="addEditorial('http://{{siteUrl}}/issue/{{issueid}}', 'items')" value="Add an Editorial Item" /><br />
         <div id="items"> </div>
         <script type="text/javascript">loadIssueItems("{{ issueid }}", "items");</script>
         <input type="submit" class="save" value="Save &amp; Finish" />

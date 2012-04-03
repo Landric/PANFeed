@@ -198,7 +198,7 @@ def issuelist(request):
 
     issue_list = []
     issue_list.append('<h2>PANFeed issues</h2>')
-    issue_list.append('<p>PANFeed Issues are collections of resources curated by users. They will often have a strong theme and clear purpose. As with all PANFeeds they are customised for personal maganzine readers so issues will always look engaging.</p>')
+    issue_list.append('<p>PANFeed Issues are collections of resources curated by users. Each item is hand picked for you by the Issue\'s creator. As with all PANFeeds they are customised for personal maganzine readers so issues will always look engaging.</p>')
     
     issue_list.append('<ul class="issue_list">')
     for issue in issues:
