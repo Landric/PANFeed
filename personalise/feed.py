@@ -144,7 +144,7 @@ class IssueFeed(Feed):
         return item.title
 
     def item_description(self,item):
-        return item.description
+        return "<img src='"+item.img+"' /> " + item.description
 
     def item_link(self,item):
         return item.url
