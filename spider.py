@@ -80,7 +80,7 @@ def process_url(url):
     #########################################
 
     try: 
-	    url = url.encode('latin-1') 
+        url = url.encode('latin-1') 
     except UnicodeEncodeError: 
         try: 
             url = url.encode('utf-8') 
@@ -111,6 +111,7 @@ def process_url(url):
        
     if mime in htmlmimetypes:
         for item in parseforURLs(page, address):
+            # URL field is max length 255 - you can't have a text field as PK - so deal with it
             if len(item) < 255 :
                 if SpiderDone.objects.filter(doneurl=item).count() == 0:
         #note that if we start adding URLs anywhere else this check should be removed from here

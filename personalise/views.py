@@ -67,7 +67,8 @@ def savejournal(request):
     
     journal.title = request.POST['title']
     journal.description = request.POST['description']
-    journal.public = request.POST['public']
+    if 'public' in request.REQUEST :
+        journal.public = request.POST['public']
     journal.save();
     
     JournalFeeds.objects.filter(journalid=journal.journalid).delete()
@@ -157,14 +158,18 @@ def manageissue(request,issueid):
 
 def issueitems(request, issueid):
     itemlist = [];
-    for item in IssueItem.objects.filter(issueid=issueid):
+    for item in IssueItem.objects.filter(issueid=issueid).order_by('ordernumber'):
         itemlist.append({'title':item.title, 'url':item.url, 'description':item.description, 'img':item.img})
     return HttpResponse(json.dumps(itemlist), mimetype="application/json")
 
 @login_required
 def saveissue(request):
+    sys.stderr.write("i get here")
     pagetitle = "Save Issue"
-    issue = Issue.objects.get( id=int(request.POST['issueid']), owner=request.user)
+    issue = get_object_or_404( Issue, id=int(request.POST['issueid']) )
+
+    if issue.owner != request.user:
+        return HttpResponseForbidden("You do not have permission to edit this issue.")
 
     if (not issue):
         p = { 'title':pagetitle, 'content':'This issue does not exist or you do not have permission to edit it.' }
@@ -172,7 +177,8 @@ def saveissue(request):
 
     issue.title = request.REQUEST['title']
     issue.description = request.REQUEST['description']
-    issue.public = request.REQUEST['public']
+    if 'public' in request.REQUEST :
+        issue.public = request.REQUEST['public']
     issue.save();
 
     IssueItem.objects.filter(issueid=issue.id).delete()
@@ -189,6 +195,7 @@ def saveissue(request):
         item.title = request.REQUEST.getlist("item-title")[i]
         item.description = request.REQUEST.getlist("item-description")[i]
         item.img = request.REQUEST.getlist("item-img")[i]
+        item.ordernumber = i;
         item.save()
 
     return HttpResponseRedirect('/myfeeds')

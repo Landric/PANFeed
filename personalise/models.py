@@ -95,14 +95,15 @@ class IssueItem(models.Model):
     keywords = models.TextField(blank=True,null=True, default="")
     date = models.DateTimeField(null=True, blank=True)
     toplevel = models.URLField(blank=True)
-    public = models.BooleanField()
+    public = models.BooleanField(default=True)
+    ordernumber = models.IntegerField(null=True, db_index=True)
 
 class Issue(models.Model):
-    public = models.BooleanField()
+    public = models.BooleanField(default=False)
     owner = models.ForeignKey(User) 
     title = models.TextField(blank=True)
     description = models.TextField(blank=True)
-    toplevel = models.URLField()
+    toplevel = models.URLField(blank=True,null=True,default="")
 
     def get_absolute_url(self):
         return "/issue/"+str(self.id)+"/"+re.subn(r'[^A-Za-z0-9]+', '-', self.title)[0]

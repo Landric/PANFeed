@@ -43,9 +43,16 @@
     height: 130px;
 }
 
-.item .cross {
+.item .cross, .item .up, .item .down {
     float: right;
     cursor: pointer;
+    margin-left:10px;
+}
+.item:first-child .up {
+    display: none;
+}
+.item:last-child .down {
+    display: none;
 }
 
 .item .form-field {
