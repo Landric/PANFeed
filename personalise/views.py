@@ -90,7 +90,7 @@ def journallist(request):
     
     journal_list.append('<ul class="journal_list">')
     for journal in journals:
-        journal_list.append('<li>{1} <a target="_blank" href="/journal/{1}">View</a></li>'.format(journal.journalid, journal.title))
+        journal_list.append('<li>{1} <a target="_blank" href="/journal/{0}">View</a></li>'.format(journal.journalid, journal.title))
     journal_list.append('</ul>')
 
     p = { 'title':'Journals', 'content':"\n".join(journal_list) }

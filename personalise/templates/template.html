@@ -4,57 +4,153 @@
 <head>
   <title>{% block title %}{% endblock %}{{ page.title }} - PANFeed</title>
   <meta http-equiv="content-type" content="text/html; charset=iso-8859-1" />
-  <!-- **** layout stylesheet **** -->
-  <link rel="stylesheet" type="text/css" href="/static/style/style_1col_top.css" />
-  <!-- **** colour stylesheet **** -->
-  <link rel="stylesheet" type="text/css" href="/static/style/colour.css" />
-  <link rel="stylesheet" type="text/css" href="/static/style/panfeed.css" />
+  
+  <!-- **** Bootstrap Styles **** -->
+  <link href="{{ STATIC_URL }}style/bootstrap/css/bootstrap.css" rel="stylesheet">
+  <link href="{{ STATIC_URL }}style/bootstrap/css/bootstrap-responsive.css" rel="stylesheet">
+  <style>
+    body
+    {
+      padding-top: 60px;
+    }
+  </style>
+		  <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+		  <!--[if lt IE 9]>
+    <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+  <![endif]-->
+  
   <script type="text/javascript" src="http://code.jquery.com/jquery-1.6.2.min.js"></script>
-  <script type="text/javascript" src="/static/scripts/jquery.jfeed.pack.js"></script>
-  <script type="text/javascript" src="/static/scripts/make_feed_link.js"></script>
-  <script type="text/javascript" src="/static/scripts/add_issue_items.js"></script>
+  <script type="text/javascript" src="{{ STATIC_URL }}scripts/jquery.jfeed.pack.js"></script>
+  <script type="text/javascript" src="{{ STATIC_URL }}scripts/make_feed_link.js"></script>
+  <script type="text/javascript" src="{{ STATIC_URL }}scripts/add_issue_items.js"></script>
 </head>
 
 <body>
-  <div id="main">
-    <div id="logo"><h1>{{ page.title }}</h1></div>
-    <div id="menubar">
-      <ul id="menu">
-        <li><a href="/">Home</a></li>
-        <li><a href="/about/">About</a></li>
-        <li><a href="/crawlme/">Crawl Me!</a></li>
-        <li><a href="/journallist/">Journals</a></li>
-        <li><a href="/issuelist/">Issues</a></li>
-	{% if user.is_authenticated %}
-		<li><a href="/myfeeds">My Feeds</a></li>
-		<li><a href="/account/logout">Logout</a></li>
-	{% else %}
-		<li><a href="/account/register">Register</a></li>
-		<li><a href="/account/login">Login</a></li>
-	{% endif %}
 
-      </ul>
-      <div id="search">
-        <form method="post" action="#">
-          <p><input class="searchfield" type="text" value="" />
-          <input class="searchbutton" name="submit" type="submit" value="search" /></p>
-        </form>
-
+	<!-- Navbar
+	================================================== -->
+    <div class="navbar navbar-fixed-top">
+      <div class="navbar-inner">
+        <div class="container">
+          <button type="button"class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+            <span class="icon-bar"></span>
+          </button>
+          <a class="brand" href="/">PANFeed</a>
+          <div class="nav-collapse collapse">
+            <ul class="nav">
+			  {% if page.title == "PANFeed" %}
+				<li class="active">
+			  {% else %}
+				<li class="">
+			  {% endif %}
+			    <a href="/">Home</a>
+              </li>
+			  {% if page.title == "About" %}
+				<li class="active">
+			  {% else %}
+				<li class="">
+			  {% endif %}
+				<a href="/about/">About</a>
+			  </li>
+			  {% if page.title == "Crawl Me" %}
+				<li class="active">
+			  {% else %}
+				<li class="">
+			  {% endif %}
+				<a href="/crawlme/">Crawl Me!</a>
+			  </li>
+			  {% if page.title == "Journals" %}
+				<li class="active">
+			  {% else %}
+				<li class="">
+			  {% endif %}
+				<a href="/journallist/">Journals</a>
+			  </li>
+			  {% if page.title == "Issues" %}
+				<li class="active">
+			  {% else %}
+				<li class="">
+			  {% endif %}
+				<a href="/issuelist/">Issues</a>
+			  </li>
+			  
+			  {% if user.is_authenticated %}
+				  {% if page.title == "My Feeds" %}
+					<li class="active">
+				  {% else %}
+					<li class="">
+				  {% endif %}
+					<a href="/myfeeds">My Feeds</a>
+				  </li>
+				  <li class="">
+					<a href="/account/logout">Logout</a>
+				  </li>
+			  {% else %}
+				  {% if page.title == "User Registration" %}
+					<li class="active">
+				  {% else %}
+					<li class="">
+				  {% endif %}
+					<a href="/account/register">Register</a>
+				  </li>
+				  {% if page.title == "Login" %}
+					<li class="active">
+				  {% else %}
+					<li class="">
+				  {% endif %}
+					<a href="/account/login">Login</a>
+				  </li>
+			  {% endif %}
+            </ul>
+			<form class="navbar-search pull-left" action="#">
+				<input class="search-query span2" placeholder="Search" type="text">
+				<button type="submit" class="btn btn-primary" style="margin-bottom:14px;">Search</button>
+			</form>
+          </div>
+        </div>
       </div>
     </div>
+
     <div id="site_content">
-	<div id="content">
-		{% block content %} {% endblock %}
-		{{ page.content|safe }}
+    <div id="content">
+		<div class="container">
+		<div class="span8">
+        {% block content %} {% endblock %}
+        {{ page.content|safe }}
+		</div>
+		</div>
+    </div>
+    </div>
+	
+	<hr>
+    <div class="container">
+	<div class="span8">
+      	<footer>
+       		 <p>Copyright &copy; University of Southampton | Made with <a target="_blank" href="http://getbootstrap.com">Bootstrap.</a>
+		 <p>PANFeed is an output of the <a href="http://jisc.ac.uk">JISC</a> funded <a href="http://www.campus-roar.ecs.soton.ac.uk">CampusROAR</a> project.</p>
+	</footer>
 	</div>
     </div>
-    <div id="footer">
-      Copyright &copy; University of Southampton | <a href="http://validator.w3.org/check?uri=referer">XHTML 1.1</a> | <a href="http://jigsaw.w3.org/css-validator/check/referer">CSS</a> | <a href="http://www.dcarter.co.uk">design by dcarter</a> | <a href="#">Login</a><br />
-      PANFeed is an output of the <a href="http://jisc.ac.uk">JISC</a> funded <a href="http://www.campus-roar.ecs.soton.ac.uk">CampusROAR</a> project.<br /><br />
-      <a href="http://www.campus-roar.ecs.soton.ac.uk"><img src="/static/images/panfeediconsmall.png" alt="CampusROAR" /></a>
-
-    </div>
   </div>
+  
+	<!-- Javascript
+    ================================================== -->
+    <!-- Placed at the end of the document so the pages load faster -->
+    <script src="/static/style/bootstrap/js/jquery.js"></script>
+    <script src="/static/style/bootstrap/js/bootstrap-transition.js"></script>
+    <script src="/static/style/bootstrap/js/bootstrap-alert.js"></script>
+    <script src="/static/style/bootstrap/js/bootstrap-modal.js"></script>
+    <script src="/static/style/bootstrap/js/bootstrap-dropdown.js"></script>
+    <script src="/static/style/bootstrap/js/bootstrap-scrollspy.js"></script>
+    <script src="/static/style/bootstrap/js/bootstrap-tab.js"></script>
+    <script src="/static/style/bootstrap/js/bootstrap-tooltip.js"></script>
+    <script src="/static/style/bootstrap/js/bootstrap-popover.js"></script>
+    <script src="/static/style/bootstrap/js/bootstrap-button.js"></script>
+    <script src="/static/style/bootstrap/js/bootstrap-collapse.js"></script>
+    <script src="/static/style/bootstrap/js/bootstrap-carousel.js"></script>
+    <script src="/static/style/bootstrap/js/bootstrap-typeahead.js"></script>  
 </body>
 </html>
 
