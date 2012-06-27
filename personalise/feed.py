@@ -4,7 +4,7 @@ from django.shortcuts import get_object_or_404
 import datetime
 import sys
 from operator import itemgetter
-from personalise.models import Feeds,Corpus,Journals,JournalFeeds,Issue, IssueItem
+from personalise.models import Feeds,Corpus,Digests,DigestFeeds,Issue, IssueItem
 
 class PANFeed:
     title = ""
@@ -85,14 +85,14 @@ class PersonalFeed(Feed):
 
         return hot_rank
 
-class JournalFeed(Feed):
+class DigestFeed(Feed):
     title = "Your Feed"
     link = "/find/"
     description = "Your feed Personalised Academic News Feed from your keywords."
     keywords = [];
 
     def items(self,obj):
-        feeds = JournalFeeds.objects.filter(journalid=obj.journalid)
+        feeds = DigestFeeds.objects.filter(digestid=obj.digestid)
         feed_list = []
         
         for feed in feeds:
@@ -104,7 +104,7 @@ class JournalFeed(Feed):
         return obj.title 
 
     def link(self, obj):
-        return "http://panfeed.ecs.soton.ac.uk/journal/"+str(obj.journalid)
+        return "http://panfeed.ecs.soton.ac.uk/digest/"+str(obj.digestid)
 
     def item_title(self,item):
         #print item[-1]
@@ -119,8 +119,8 @@ class JournalFeed(Feed):
     def item_pubdate(self,item):
         return item.date
     
-    def get_object(self,request,journalid):
-        return get_object_or_404(Journals, journalid=journalid);
+    def get_object(self,request,digestid):
+        return get_object_or_404(Digests, digestid=digestid);
 
 class IssueFeed(Feed):
     title = "Your Feed"
@@ -138,7 +138,7 @@ class IssueFeed(Feed):
         return obj.description 
 
     def link(self, obj):
-        return "http://panfeed.ecs.soton.ac.uk/journal/"+str(obj.id)
+        return "http://panfeed.ecs.soton.ac.uk/digest/"+str(obj.id)
 
     def item_title(self,item):
         return item.title

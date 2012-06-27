@@ -1,5 +1,5 @@
 from django.conf.urls.defaults import patterns, include, url
-from personalise.feed import PersonalFeed, JournalFeed, IssueFeed
+from personalise.feed import PersonalFeed, DigestFeed, IssueFeed
 import settings
 
 # Uncomment the next two lines to enable the admin:
@@ -13,12 +13,12 @@ urlpatterns = patterns('',
     url(r'^crawlme/$','personalise.views.crawlme', name='crawlme'),
     url(r'^urltoitem$','personalise.views.urltoitem', name='urltoitem'),
 
-    url(r'^createjournal/$','personalise.views.createjournal', name='createjournal'),
-    url(r'^savejournal/$','personalise.views.savejournal', name='savejournal'),
-    url(r'^managejournal/(?P<journalid>\w+)$','personalise.views.managejournal', name='managejournal'),
-    url(r'^journallist/$','personalise.views.journallist', name='journallist'),
+    url(r'^createdigest/$','personalise.views.createdigest', name='createdigest'),
+    url(r'^savedigest/$','personalise.views.savedigest', name='savedigest'),
+    url(r'^managedigest/(?P<digestid>\w+)$','personalise.views.managedigest', name='managedigest'),
+    url(r'^digestlist/$','personalise.views.digestlist', name='digestlist'),
     url(r'^myfeeds/$','personalise.views.myfeeds', name='myfeeds'),
-    url(r'^journal/(?P<journalid>\w+)$', JournalFeed()),
+    url(r'^digest/(?P<digestid>\w+)$', DigestFeed()),
 
     url(r'^createissue/$','personalise.views.createissue', name='createissue'),
     url(r'^manageissue/(?P<issueid>\w+)$','personalise.views.manageissue', name='manageissue'),

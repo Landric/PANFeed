@@ -1,7 +1,44 @@
-		<h1>Welcome to PANFeed</h1>
-		<p>PANFeed is a tool to help you take control of news feeds already existing on your university campus. It harvests feeds from university websites and uses them to build custom feeds of news you are actually interested in. The tool has a range of applications including personal custom news feeds, custom feeds for use in department websites or simply taking an inventory of your university feeds. Try out and take control of your news!</p>
+{% extends "template.html" %}
+{% block title %}Home{% endblock title%}
+{% block content %}
+<div class="hero-unit">		
+	<h1>Welcome to PANFeed</h1>
+	<p>PANFeed is a tool to help you take control of news feeds already existing on your university campus. It harvests feeds from university websites and uses them to build custom feeds of news you are actually interested in. The tool has a range of applications including personal custom news feeds, custom feeds for use in department websites or simply taking an inventory of your university feeds. Try out and take control of your news!</p>
 
-		<h1>Try it out!</h1>
+	{% if not user.is_authenticated %}
+		<form class="form-horizontal">
+		<fieldset>
+        		<input class="span3" placeholder="Username" type="text">
+	        	<input class="span3" placeholder="Password" type="password">
+        		<button type="submit" class="btn">Login</button>&nbsp;&nbsp;
+			<a href="#">Register</a>&nbsp;&nbsp;
+			<a href="#">I've forgotten my password!</a>
+		</fieldset>
+		</form>
+	{% endif %}
+</div>
+
+<div class="row">
+	<!--
+	<div class="span4">
+		<h2>Create</h2>
+		<p>Use PANFeed to search for news directly related to your academic interests. Just enter some keywords and PANFeed will search it's vast store of academic news feeds to create your own personalised </p>
+		<p><a class="btn" href="#">View details &raquo;</a></p>
+	</div>
+	-->
+	<div class="span6">
+		<h2>Read</h2>
+		<p>Use PANFeed to create personalised news Digests - a collection of academic news feeds chosen by you, to read where you want, when you want.</p>
+		<p><a class="btn" href="/digestlist/">View details &raquo;</a></p>
+	</div>
+	<div class="span6">
+		<h2>Publish</h2>
+		<p>Use PANFeed to create and publish Issues - resources that you want to share with the community, student projects, editorials and more! </p>
+		<p><a class="btn" href="/issuelist/">View details &raquo;</a></p>
+	</div>
+</div>
+
+<!--		<h1>Try it out!</h1>
 		<h4>PANFeed is in continuous development, and functionality may change or break without warning!  If you would like to give any feedback, please email panfeed[at]gmail[dot]com.  Thanks!</h4>
 		<p>Enter some keywords separated by commas into the box below to create a custom news feed.</p>
 
@@ -10,14 +47,8 @@
 			<div class="input-append">
                 		<input class="span2" id="keyword_input" size="16" type="text"><button class="btn" type="button" onclick="makeFeed()">Feed me!</button>
               		</div>
-			<!--
-			<form onsubmit="return false;">
-			<input type="text" id="keyword_input"><button type="submit" id="submit_keys" onclick="makeFeed()">Feed Me!</button><br /><br />
-			</form>
-			-->
 			<a id="google_link" href="http://fusion.google.com/add?source=atgs&feedurl=http%3A//panfeed.ecs.soton.ac.uk/find/apple"><img src="http://buttons.googlesyndication.com/fusion/add.gif" border="0" alt="Add to Google"></a>
 			&nbsp;&nbsp;&nbsp;&nbsp;
 			<a id="feed_link" href="http://panfeed.ecs.soton.ac.uk/find/all/apple" target="_blank">http://panfeed.ecs.soton.ac.uk/find/all/apple</a> 
-		</div>
-		<div id="feed_demo">
-		</div>
+		</div>-->
+{% endblock content %}

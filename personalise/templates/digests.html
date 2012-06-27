@@ -1,0 +1,45 @@
+{% extends "template.html" %}
+{% block title %}Read{% endblock title %}
+{% block read_nav %}active{% endblock read_nav %}
+{% block content %}
+<div class="row">
+	<div class="span8">
+		<h1>PANFeed Digests</h1>
+			<p>PANFeed Digests are mash-ups of other feeds created by users. They will often have a strong theme and clear purpose. As with all PANFeeds they are customised for personal maganzine readers so digests will always look engaging.</p>
+	</div>
+</div>
+<div class="row">
+	<div class="span4">
+		<h2>Public Digests</h2>
+		<p>These Digests have been created by other members of the community and are free for you to use:</p>
+			<ul>
+				{% for digest in digests %}
+					{% if digest.public %}
+						{% if not user.is_authorised or digest.owner_id != user.id %}
+							<li>{{digest.title}} <a target="_blank" href="/digest/{{digest.digestid}}">View</a></li>
+						{% endif %}
+					{% endif %}
+				{% endfor %}
+			</ul>
+	</div>
+	<div class="span4">
+		<h2>My Digests</h2>
+			{% if user.is_authenticated %}
+				<p>These are the Digests you have created:</p>
+				<ul>
+					{% for digest in digests %}
+						{% if digest.owner_id == user.id %}
+						       	<li>{{digest.title}} <a target="_blank" href="/digest/{{digest.digestid}}">View</a></li>
+						{% endif %}
+					{% endfor %}
+				</ul>
+			{% else %}
+				<p><a href="/account/login/">Log in</a> to view your Digests.</p>
+				<p>Don't have an account? <a href="/account/register/">Create one!</a></p>
+			{% endif %}		
+	</div>
+	<div class="span4">
+		<h2>Other Digests</h2>
+	</div>
+</div>
+{% endblock content %}

@@ -56,25 +56,25 @@ class Words(models.Model):
     class Meta:
         db_table = u'words'
 
-class Journals(models.Model):
+class Digests(models.Model):
     owner = models.ForeignKey(User) 
     public = models.BooleanField()
-    journalid = models.AutoField(primary_key=True)
+    digestid = models.AutoField(primary_key=True)
     title = models.TextField()
     description = models.TextField()
 
     def get_absolute_url(self):
-        return "/journal/"+str(self.journalid)+"/"+re.subn(r'[^A-Za-z0-9]+', '-', self.title)[0]
+        return "/digest/"+str(self.digestid)+"/"+re.subn(r'[^A-Za-z0-9]+', '-', self.title)[0]
 
     class Meta:
-        db_table = u'journals'
+        db_table = u'digests'
 
-class JournalFeeds(models.Model):
-    journalid = models.IntegerField()
+class DigestFeeds(models.Model):
+    digestid = models.IntegerField()
     feedurl = models.URLField(verify_exists=True)
     class Meta:
-        db_table = u'journal_feeds'
-        unique_together = ("journalid", "feedurl")
+        db_table = u'digest_feeds'
+        unique_together = ("digestid", "feedurl")
 
 class SpiderToDo(models.Model):
     pageurl=models.URLField(primary_key=True,max_length=255)

@@ -3,7 +3,7 @@
 {% block title %}User Registration{% endblock %}
 
 {% block content %}
-	<p>Registering to use the PANFeed service allows you to create PANFeed Journals and Issues. You can embed these on you website or use them with services like Flipboard and Pulse to make your news into an attractive magazine.</p>
+	<p>Registering to use the PANFeed service allows you to create PANFeed Digests and Issues. You can embed these on you website or use them with services like Flipboard and Pulse to make your news into an attractive magazine.</p>
 	<form action="." method="post">{% csrf_token %}
 	{{ form.as_p }}
 	<input type="submit" value="Submit" />

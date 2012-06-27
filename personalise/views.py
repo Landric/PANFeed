@@ -8,7 +8,7 @@ import feedparser
 import json
 import sys
 from urlparse import urlparse
-from personalise.models import Feeds,Journals,JournalFeeds,Corpus,Corpuskeywords,Issue,IssueItem
+from personalise.models import Feeds,Digests,DigestFeeds,Corpus,Corpuskeywords,Issue,IssueItem
 from django.contrib.auth.models import User
 from personalise.urltorss2 import ItemMaker
 from django.contrib.sites.models import Site
@@ -20,94 +20,81 @@ import pprint
 from django.contrib.auth.decorators import login_required
 
 def home(request):
-    p = { 'title':'PANFeed', 'content':render_to_string('index.html') }
-    return render_to_response('template.html', { 'page': p }, context_instance=RequestContext(request))
+    return render_to_response('index.html', context_instance=RequestContext(request))
 
 def about(request):
-    p = { 'title':'About', 'content':render_to_string('about.html') }
-    return render_to_response('template.html', { 'page': p }, context_instance=RequestContext(request))
+    return render_to_response('about.html', context_instance=RequestContext(request))
 
 def crawlme(request):
-    p = { 'title':'Crawl Me', 'content':render_to_string('crawlme.html') }
-    return render_to_response('template.html', { 'page': p }, context_instance=RequestContext(request))
+    return render_to_response('template.html', context_instance=RequestContext(request))
     
 @login_required
-def createjournal(request):
-    journal = Journals.objects.create(title="", owner=request.user)
-    return HttpResponseRedirect("".join(['/managejournal/',str(journal.journalid)]))
+def createdigest(request):
+    digest = Digests.objects.create(title="", owner=request.user)
+    return HttpResponseRedirect("".join(['/managedigest/',str(digest.digestid)]))
 
 @login_required
-def managejournal(request,journalid):
-    journal = Journals.objects.get(journalid=journalid, owner=request.user)
+def managedigest(request,digestid):
+    digest = Digests.objects.get(digestid=digestid, owner=request.user)
 
-    if (not journal):
-        p = { 'title':'Manage Journal', 'content':'This journal does not exist or you do not have permission to edit it.' }
+    if (not digest):
+        p = { 'title':'Manage Digest', 'content':'This digest does not exist or you do not have permission to edit it.' }
         return render_to_response('template.html', { 'page':p }, context_instance=RequestContext(request))
 
-    feeds = JournalFeeds.objects.filter(journalid=journalid)
+    feeds = DigestFeeds.objects.filter(digestid=digestid)
     feed_list = ""
 
     for feed in feeds:
         feed_list = "\n".join([feed_list, feed.feedurl])
 
     public = ""
-    if journal.public:
+    if digest.public:
         public = "checked='checked'"
 
 
-    p = { 'title':'Manage Journal', 'content':render_to_string('managejournal.html', { 'journalid':journalid, 'title':journal.title, 'description':journal.description, 'source_feeds':feed_list, 'siteUrl':Site.objects.get_current().domain, "public":public, 'objUrl':journal.get_absolute_url() }) }
+    p = { 'title':'Manage Digest', 'content':render_to_string('managedigest.html', { 'digestid':digestid, 'title':digest.title, 'description':digest.description, 'source_feeds':feed_list, 'siteUrl':Site.objects.get_current().domain, "public":public, 'objUrl':digest.get_absolute_url() }) }
     return render_to_response('template.html', { 'page': p }, context_instance=RequestContext(request))
 
 @login_required
-def savejournal(request):
-    journal = get_object_or_404( Journals, journalid=int(request.POST['journalid']) )
+def savedigest(request):
+    digest = get_object_or_404( Digests, digestid=int(request.POST['digestid']) )
 
-    if journal.owner != request.user:
+    if digest.owner != request.user:
         return HttpResponseForbidden("You do not have permission to edit this jounral.")
     
-    journal.title = request.POST['title']
-    journal.description = request.POST['description']
+    digest.title = request.POST['title']
+    digest.description = request.POST['description']
     if 'public' in request.REQUEST :
-        journal.public = request.POST['public']
-    journal.save();
+        digest.public = request.POST['public']
+    digest.save();
     
-    JournalFeeds.objects.filter(journalid=journal.journalid).delete()
+    DigestFeeds.objects.filter(digestid=digest.digestid).delete()
     feeds = str(request.POST['source_feeds']).splitlines()
     for url in feeds:
         hostname = urlparse(url).hostname 
         if (hostname.endswith(".ac.uk") or hostname.endswith(".edu")):
             if (Feeds.objects.filter(url=url).count()==0):
                     Feeds.objects.create(url=url,toplevel=hostname)
-        JournalFeeds.objects.create(journalid=journal.journalid, feedurl=url)
+        DigestFeeds.objects.create(digestid=digest.digestid, feedurl=url)
     return HttpResponseRedirect('/myfeeds')
         
-def journallist(request):
-    journals = Journals.objects.filter(public=True)
-
-    journal_list = []
-    journal_list.append('<h2>PANFeed Journals</h2>')
-    journal_list.append('<p>PANFeed Journals are mash-ups of other feeds created by users. They will often have a strong theme and clear purpose. As with all PANFeeds they are customised for personal maganzine readers so journals will always look engaging.</p>')
-    
-    journal_list.append('<ul class="journal_list">')
-    for journal in journals:
-        journal_list.append('<li>{1} <a target="_blank" href="/journal/{0}">View</a></li>'.format(journal.journalid, journal.title))
-    journal_list.append('</ul>')
-
-    p = { 'title':'Journals', 'content':"\n".join(journal_list) }
-    return render_to_response('template.html', { 'page':p }, context_instance=RequestContext(request))
+def digestlist(request):
+    d = Digests.objects.filter(public=True)
+        
+    return render_to_response('digests.html', {'digests' : d}, context_instance=RequestContext(request))
 
 @login_required
 def myfeeds(request):
-    journals = Journals.objects.filter(owner=request.user);
+    digests = Digests.objects.filter(owner=request.user);
 
     lists = []
-    lists.append('<h2>My PANFeed Journals</h2>')
-    lists.append('<p>A PANFeed Journal allows you to combine a set of existing news feeds from websites, blogs and repositories. The outcome is a rolling news feed that is taylored to your content. You can then add this news feed to your website, feed reader or personalised magazine software.</p>')
-    lists.append('<p><a href="/createjournal">Create a new journal</a></p>')
+    lists.append('<h2>My PANFeed Digests</h2>')
+    lists.append('<p>A PANFeed Digest allows you to combine a set of existing news feeds from websites, blogs and repositories. The outcome is a rolling news feed that is taylored to your content. You can then add this news feed to your website, feed reader or personalised magazine software.</p>')
+    lists.append('<p><a href="/createdigest">Create a new digest</a></p>')
     
     lists.append('<ul class="lists">')
-    for journal in journals:
-        lists.append('<li>{1} <a target="_blank" href="/journal/{0}">View</a> <a href="/managejournal/{0}">Edit</a></li>'.format(journal.journalid, journal.title))
+    for digest in digests:
+        lists.append('<li>{1} <a target="_blank" href="/digest/{0}">View</a> <a href="/managedigest/{0}">Edit</a></li>'.format(digest.digestid, digest.title))
     lists.append('</ul>')
 
 
@@ -124,13 +111,13 @@ def myfeeds(request):
     p = { 'title':'My Feeds', 'content':"\n".join(lists) }
     return render_to_response('template.html', { 'page':p }, context_instance=RequestContext(request))
 
-def journal(request, journalid):
-    journal = Journals.objects.get( journalid=journalid )
+def digest(request, digestid):
+    digest = Digests.objects.get( digestid=digestid )
     
-    if (not journal):
-        return HttpResponse("Journal not found")
+    if (not digest):
+        return HttpResponse("Digest not found")
 
-    feeds = JournalFeeds.objects.filter(journalid=journal.journalid)
+    feeds = DigestFeeds.objects.filter(digestid=digest.digestid)
     items = Corpus.objects.filter(feed__in=feeds.values_list("feedurl", flat=True)).order_by("-date")[:3]
         
     return HttpResponse("".join(str(items.values_list("date", flat=True))), context_instance=RequestContext(request))

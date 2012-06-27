@@ -1,12 +1,27 @@
+{% extends "template.html" %}
+{% block title %}About{% endblock title %}
+{% block about_nav %}active{% endblock about_nav %}
+{% block content %}
 <h1>About the Project</h1>
 
-<h2>Who We Are</h2>
-<p>We are a group of researchers based at the University of Southampton, in the Web And Internet Science research group.</p>
-
-<h2>What is PANFeed?</h2>
-<p>PANFeed (Personal Academic News Feed) is a system spawned from the CampusROAR project, which is focused around making research more accessible, exciting and interesting, and to enable people to keep up to date on research in their areas of interest.</p>
-<p>The purpose of PANFeed is to enable the creation of personalised, adaptive RSS feeds which are based on the news feeds available at your institution.  A crawler is used to find all RSS and Atom feeds under a University domain, which are then catalogued and analysed for keywords.  The PANFeed site can then be used to generate a personalised RSS feed based upon any set of keywords you provide.</p>
-
-<h2>Contact</h2>
-<p>To contact us:  <a href="mailto:pm5@ecs.soton.ac.uk">pm5@ecs.soton.ac.uk</a></p>
-
+<div class="row">
+	<div class="span4">
+		<h2>What is PANFeed?</h2>
+		<p>The purpose of PANFeed is to enable the creation of personalised, adaptive RSS feeds which are based on the news feeds available at your institution.  A crawler is used to find all RSS and Atom feeds under a University domain, which are then catalogued and analysed for keywords.  The PANFeed site can then be used to generate a personalised RSS feed based upon any set of keywords you provide.</p>
+	</div>
+	<div class="span4">
+		<h2>Who We Are</h2>
+		<p>We are a group of researchers based at the <a href="http://www.southampton.ac.uk/">University of Southampton</a>, in the <a href=http://www.wais.ecs.soton.ac.uk/">Web And Internet Science research group</a>. We created PANFeed as a part of the <a href="http://www.campus-roar.ecs.soton.ac.uk">CampusROAR</a> project, which is focused around making research more accessible, exciting and interesting, and to enable people to keep up to date on research in their areas of interest.</p>
+		<br/>
+		<p style="text-align:center;"><a href="http://www.campus-roar.ecs.soton.ac.uk"><img src="/static/images/panfeediconsmall.png" alt="CampusROAR"/></a></p>
+	</div>
+	<div class="span4">
+		<h2>Contact</h2>
+			<p>PANFeed is in continuous development, and functionality may change or break without warning! If you would like to give any feedback, please email us at:
+		<address>
+		        <strong>PANFeed Support</strong><br>
+	        	<a href="mailto:#">panfeed@gmail.com</a>
+        	</address>
+	</div>
+</div>
+{% endblock content %}
