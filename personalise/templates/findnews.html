@@ -1,0 +1,25 @@
+{% extends "template.html" %}
+{% block title %}Find News{% endblock title%}
+{% block findnews_nav %}active{% endblock findnews_nav %}
+{% block content %}
+<h1>Find News</h1>
+<p>You can use PANFeed to search a vast store of academic news feeds to create a tailored stream of news </p>
+<br/>
+<br/>
+
+<div class="well row">
+	<div class="span6 offset3">
+		<p>Enter some keywords separated by commas into the box below to create a custom news feed.</p>
+
+		<div class="input-append">
+        		<input class="span2" id="keyword_input" size="16" type="text"><button class="btn" type="button" onclick="makeFeed()">Feed me!</button></br>
+			<p>Popular searches: <a href="javascript:example('eprints')">eprints</a>, <a href="javascript:example('ecs')">ecs</a>, <a href="javascript:example('security')">security</a></p>
+		</div>
+		
+		<a id="google_link" href="http://fusion.google.com/add?source=atgs&feedurl=http%3A//panfeed.ecs.soton.ac.uk/find/apple"><img src="http://buttons.googlesyndication.com/fusion/add.gif" border="0" alt="Add to Google"></a>&nbsp;&nbsp;&nbsp;&nbsp;
+		<a id="feed_link" href="http://panfeed.ecs.soton.ac.uk/find/all/apple" target="_blank">View Preview</a>
+	</div>
+</div>
+
+<p>If you represent an institution and want to see your feeds appearing in this search, <a href="/crawlme/">click here to find out how to get your feeds added</a>.</p>
+{% endblock content %}

@@ -1,0 +1,52 @@
+{% extends "template.html" %}
+{% block title %}Publish{% endblock title %}
+{% block publish_nav %}active{% endblock publish_nav %}
+{% block content %}
+<div class="row">
+	<div class="span8">
+		<h1>PANFeed Issues</h1>
+    		<p>A PANFeed Issue is a carefully tailored news feed hand curated by you. You select web pages of interest to appear as items on your new feed. Add your own editorials and notes from your blog and customize the titles, descriptions and images which apear in the feed. You have complete control.</p>
+	</div>
+</div>
+<div class="row">
+	<div class="span4">
+		<h2>Public Issues</h2>
+		{% if public %}
+			<p>These Issues have been created by other members of the community and are free for you to use:</p>
+			<ul>
+				{% for issue in public %}
+					<li>{{issue.title}} <a target="_blank" href="/issue/{{issue.issueid}}">View</a></li>
+				{% endfor %}
+			</ul>
+		{% else %}
+			<p>There are currently no public Issues. Why not create one?</p>
+		{% endif %}
+	</div>
+	{% if user.is_authenticated %}
+		<div class="span4">
+			<h2>My Issues</h2>
+			{% if personal %}
+				<p>These are the Issues you have created:</p>
+				<ul>
+					{% for issue in personal %}
+						<li>{{issue.title}} <a target="_blank" href="/issue/{{issue.issueid}}">View</a> <a href="/manageissue/{{issue.issueid}}">Edit</a></li>
+					{% endfor %}
+				</ul>
+			{% else %}
+				<p>You currently have no Issues. Why not create one?</p>
+			{% endif %}
+		</div>
+		<div class="span4">
+			<h2>Create an Issue</h2>
+			<p>Creating an Issue is quick and easy. Press the button below to get started!</p>
+			<a href="/createissue/" class="btn">Create an Issue</a>
+		</div>
+	{% else %}
+		<div class="span8">
+			<h2>Manage Issues</h2>
+			<p>You must <a href="/account/login/">log in</a> to be able to manage your Issues, or to create a new one.</p>
+			<p>Not a member? <a href="/account/register/">Create an account!</a></p>
+		</div>
+	{% endif %}		
+</div>
+{% endblock content %}
