@@ -1,6 +1,6 @@
 # Create your views here.
 from django.core.context_processors import csrf
-from django.http import HttpResponse,HttpResponseRedirect,HttpResponseForbidden
+from django.http import HttpResponse,HttpResponseRedirect,HttpResponseForbidden, Http404
 from django.db import connection, transaction
 from feed import PersonalFeed
 import urllib2
@@ -8,16 +8,16 @@ import feedparser
 import json
 import sys
 from urlparse import urlparse
-from personalise.models import Feeds,Digests,DigestFeeds,Corpus,Corpuskeywords,Issue,IssueItem
+from personalise.models import Feeds,Digest,Corpus,Corpuskeywords,Issue,IssueItem
 from django.contrib.auth.models import User
 from personalise.urltorss2 import ItemMaker
 from django.contrib.sites.models import Site
-#import personalise.models
 from django.shortcuts import render_to_response, get_object_or_404, redirect
 from django.template.loader import render_to_string
 from django.template import RequestContext
 import pprint
 from django.contrib.auth.decorators import login_required
+from forms import DigestForm, IssueForm
 
 def home(request):
     return render_to_response('index.html', context_instance=RequestContext(request))
@@ -26,98 +26,79 @@ def about(request):
     return render_to_response('about.html', context_instance=RequestContext(request))
 
 def crawlme(request):
-    return render_to_response('template.html', context_instance=RequestContext(request))
+    return render_to_response('crawlme.html', context_instance=RequestContext(request))
     
-@login_required
-def createdigest(request):
-    digest = Digests.objects.create(title="", owner=request.user)
-    return HttpResponseRedirect("".join(['/managedigest/',str(digest.digestid)]))
+def faq(request):
+    return render_to_response('faq.html', context_instance=RequestContext(request))
 
-@login_required
-def managedigest(request,digestid):
-    digest = Digests.objects.get(digestid=digestid, owner=request.user)
-
-    if (not digest):
-        p = { 'title':'Manage Digest', 'content':'This digest does not exist or you do not have permission to edit it.' }
-        return render_to_response('template.html', { 'page':p }, context_instance=RequestContext(request))
-
-    feeds = DigestFeeds.objects.filter(digestid=digestid)
-    feed_list = ""
-
-    for feed in feeds:
-        feed_list = "\n".join([feed_list, feed.feedurl])
-
-    public = ""
-    if digest.public:
-        public = "checked='checked'"
-
-
-    p = { 'title':'Manage Digest', 'content':render_to_string('managedigest.html', { 'digestid':digestid, 'title':digest.title, 'description':digest.description, 'source_feeds':feed_list, 'siteUrl':Site.objects.get_current().domain, "public":public, 'objUrl':digest.get_absolute_url() }) }
-    return render_to_response('template.html', { 'page': p }, context_instance=RequestContext(request))
+def findnews(request):
+    return render_to_response('findnews.html', context_instance=RequestContext(request))
 
 @login_required
-def savedigest(request):
-    digest = get_object_or_404( Digests, digestid=int(request.POST['digestid']) )
+def managedigest(request,digestid=None):
+    if request.method == 'POST':
+        form = DigestForm(request.POST)
+        if form.is_valid():
+            if digestid is None:
+                digest = form.save(commit=False)
+                digest.owner = request.user
+                digest.save()
+            else:
+		if Digest.objects.filter(digestid=int(digestid), owner = request.user).exists():
+                    digest = form.save(commit=False)
+                    digest.owner = request.user
+		    digest.digestid = digestid
+                    digest.save(force_update=True)
+            
+                else:
+                    return HttpResponseForbidden("You do not have permission to edit this journal.")
+            return HttpResponseRedirect('/digestlist/')
 
-    if digest.owner != request.user:
-        return HttpResponseForbidden("You do not have permission to edit this jounral.")
-    
-    digest.title = request.POST['title']
-    digest.description = request.POST['description']
-    if 'public' in request.REQUEST :
-        digest.public = request.POST['public']
-    digest.save();
-    
-    DigestFeeds.objects.filter(digestid=digest.digestid).delete()
-    feeds = str(request.POST['source_feeds']).splitlines()
-    for url in feeds:
-        hostname = urlparse(url).hostname 
-        if (hostname.endswith(".ac.uk") or hostname.endswith(".edu")):
-            if (Feeds.objects.filter(url=url).count()==0):
-                    Feeds.objects.create(url=url,toplevel=hostname)
-        DigestFeeds.objects.create(digestid=digest.digestid, feedurl=url)
-    return HttpResponseRedirect('/myfeeds')
-        
+        else:
+            pass #Inform user form was invalid
+
+    elif request.method == 'DELETE':
+        digest = get_object_or_404( Digest, digestid=int(digestid) )
+
+        if digest.owner != request.user:
+            return HttpResponseForbidden("You do not have permission to edit this journal.")
+
+        else:
+            digest.delete()
+ 
+    else:
+        if digestid is None:
+            form = DigestForm()
+        else:
+            digest = Digest.objects.get(digestid=digestid, owner=request.user)
+            form = DigestForm(instance=digest)
+
+    return render_to_response('managedigest.html', {'form': form,}, context_instance=RequestContext(request))
+
 def digestlist(request):
-    d = Digests.objects.filter(public=True)
+    if request.user.is_authenticated():
+        all_digests = Digest.objects.all()
+        public = []
+	personal = []
+	for digest in all_digests:
+            if digest.owner_id == request.user.id:
+                personal.append(digest)
+            
+            if digest.public:
+                public.append(digest)
+    else:
+        public = Digest.objects.filter(public=True)
+	personal = None
         
-    return render_to_response('digests.html', {'digests' : d}, context_instance=RequestContext(request))
-
-@login_required
-def myfeeds(request):
-    digests = Digests.objects.filter(owner=request.user);
-
-    lists = []
-    lists.append('<h2>My PANFeed Digests</h2>')
-    lists.append('<p>A PANFeed Digest allows you to combine a set of existing news feeds from websites, blogs and repositories. The outcome is a rolling news feed that is taylored to your content. You can then add this news feed to your website, feed reader or personalised magazine software.</p>')
-    lists.append('<p><a href="/createdigest">Create a new digest</a></p>')
-    
-    lists.append('<ul class="lists">')
-    for digest in digests:
-        lists.append('<li>{1} <a target="_blank" href="/digest/{0}">View</a> <a href="/managedigest/{0}">Edit</a></li>'.format(digest.digestid, digest.title))
-    lists.append('</ul>')
-
-
-    issues = Issue.objects.filter(owner=request.user);
-    lists.append('<h2>My PANFeed Issues</h2>')
-    lists.append('<p>A PANFeed Issue is a carefully taylored news feed hand curated by you. You select web pages of interest to appear as items on your new feed. Add your own editorials and notes from your blog and customize the titles, descriptions and images which apear in the feed. You have complete control.</p>')
-    lists.append('<p><a href="/createissue">Create a new issue</a></p>')
-    
-    lists.append('<ul class="lists">')
-    for issue in issues:
-        lists.append('<li>{1}<a target="_blank" href="/issue/{0}">View</a><a href="/manageissue/{0}">Edit</a></li>'.format(issue.id, issue.title))
-    lists.append('</ul>')
-
-    p = { 'title':'My Feeds', 'content':"\n".join(lists) }
-    return render_to_response('template.html', { 'page':p }, context_instance=RequestContext(request))
+    return render_to_response('digests.html', {'public' : public, 'personal' : personal}, context_instance=RequestContext(request))
 
 def digest(request, digestid):
-    digest = Digests.objects.get( digestid=digestid )
+    digest = Digest.objects.get( digestid=digestid )
     
     if (not digest):
         return HttpResponse("Digest not found")
 
-    feeds = DigestFeeds.objects.filter(digestid=digest.digestid)
+    feeds = digest.feeds
     items = Corpus.objects.filter(feed__in=feeds.values_list("feedurl", flat=True)).order_by("-date")[:3]
         
     return HttpResponse("".join(str(items.values_list("date", flat=True))), context_instance=RequestContext(request))
@@ -151,7 +132,6 @@ def issueitems(request, issueid):
 
 @login_required
 def saveissue(request):
-    sys.stderr.write("i get here")
     pagetitle = "Save Issue"
     issue = get_object_or_404( Issue, id=int(request.POST['issueid']) )
 
@@ -185,22 +165,24 @@ def saveissue(request):
         item.ordernumber = i;
         item.save()
 
-    return HttpResponseRedirect('/myfeeds')
+    return HttpResponseRedirect('/issuelist')
 
 def issuelist(request):
-    issues = Issue.objects.filter(public=True)
-
-    issue_list = []
-    issue_list.append('<h2>PANFeed issues</h2>')
-    issue_list.append('<p>PANFeed Issues are collections of resources curated by users. Each item is hand picked for you by the Issue\'s creator. As with all PANFeeds they are customised for personal maganzine readers so issues will always look engaging.</p>')
-    
-    issue_list.append('<ul class="issue_list">')
-    for issue in issues:
-        issue_list.append('<li>{1}<a target="_blank" href="/issue/{0}">View</a></li>'.format(issue.id, issue.title))
-    issue_list.append('</ul>')
-
-    p = { 'title':'Issues', 'content':"\n".join(issue_list) }
-    return render_to_response('template.html', { 'page':p }, context_instance=RequestContext(request))
+    if request.user.is_authenticated():
+        all_issues = Issue.objects.all()
+        public = []
+	personal = []
+	for issue in all_issues:
+            if issue.owner_id == request.user.id:
+                personal.append(issue)
+            
+            if issue.public:
+                public.append(issue)
+    else:
+        public = Issue.objects.filter(public=True)
+	personal = None
+        
+    return render_to_response('issues.html', {'public' : public, 'personal' : personal}, context_instance=RequestContext(request))
 
 def urltoitem(request):
     itemmaker = ItemMaker()
@@ -224,6 +206,6 @@ def submit(request):
 
 @login_required
 def login_redirect(request):
-    return redirect("/myfeeds")
+    return redirect("/")
 
 

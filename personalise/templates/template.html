@@ -40,19 +40,22 @@
           <a class="brand" href="/">PANFeed</a>
           <div class="nav-collapse collapse">
             <ul class="nav">
+		<li class="{% block findnews_nav %}{% endblock %}">
+			<a href="/findnews/">Find News</a>
+		</li>
+
 		<li class="{% block read_nav %}{% endblock %}">
 			<a href="/digestlist/">Read</a>
 	        </li>
+
 		<li class="{% block publish_nav %}{% endblock %}">
 			<a href="/issuelist/">Publish</a>
 		</li>
-			  
-		{% if user.is_authenticated %}
-			<li class="{% block myfeeds_nav %}{% endblock %}">
-				<a href="/myfeeds">My Feeds</a>
-			</li>
-		{% endif %}
-	  
+
+		<li class="{% block faq_nav %}{% endblock %}">
+			<a href="/faq/">FAQ</a>
+		</li>
+
 		<li class="{% block about_nav %}{% endblock %}">
 			<a href="/about/">About</a>
 		</li>
@@ -78,16 +81,14 @@
     <div class="container" id="content">
         {% block content %}
 	{% endblock content %}
-	{{ page.content|safe }}
     </div>
     </div>
 	
 	<hr>
     <div class="container">
-	<div class="span8">
+	<div class="span12">
       	<footer>
-       		 <p>Copyright &copy; University of Southampton | Made with <a target="_blank" href="http://getbootstrap.com">Bootstrap.</a>
-		 <p>PANFeed is an output of the <a href="http://jisc.ac.uk">JISC</a> funded <a href="http://www.campus-roar.ecs.soton.ac.uk">CampusROAR</a> project.</p>
+       		 <p>Copyright &copy; University of Southampton | Made with <a target="_blank" href="http://getbootstrap.com">Bootstrap</a> | PANFeed is an output of the <a href="http://jisc.ac.uk">JISC</a> funded <a href="http://www.campus-roar.ecs.soton.ac.uk">CampusROAR</a> project | View more <a href="http://www.wais.ecs.soton.ac.uk/">WAIS</a> projects at our <a href="http://blogs.ecs.soton.ac.uk/oneshare/">OneShare Blog</a></p>
 	</footer>
 	</div>
     </div>

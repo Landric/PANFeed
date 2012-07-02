@@ -1,9 +1,17 @@
 function makeFeed()
 {
 	var keywords = $("#keyword_input").val().replace(/[^0-9a-zA-Z]/g,",").split(",");
-	var url = window.location.href + "find/all/" + keywords.join("_");
+	var url = "/find/all/" + keywords.join("_");
 	$("#feed_link").attr("href", url);
-	$("#feed_link").text(url);
+	$("#google_link").attr("href", "http://fusion.google.com/add?source=atgs&feedurl="+encodeURI(url));
+	addRSS(url,"feed_demo");
+}
+
+function example(search)
+{
+	var keywords = search.replace(/[^0-9a-zA-Z]/g,",").split(",");
+	var url = "/find/all/" + keywords.join("_");
+	$("#feed_link").attr("href", url);
 	$("#google_link").attr("href", "http://fusion.google.com/add?source=atgs&feedurl="+encodeURI(url));
 	addRSS(url,"feed_demo");
 }

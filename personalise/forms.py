@@ -1,13 +1,11 @@
 from django.forms import ModelForm, HiddenInput
-from models import Digest, DigestFeeds, Issue
+from models import Digest, Issue
 
 class DigestForm(ModelForm):
     class Meta:
        model = Digest
        exclude = ('owner')
-       fields = ('title', 'public', 'description', 'digestid')
-       #widgets = {'digestid' : HiddenInput()}
-       
+       required_css_class = 'error'
 
 class IssueForm(ModelForm):
     class Meta:

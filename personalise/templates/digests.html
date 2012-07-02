@@ -5,41 +5,68 @@
 <div class="row">
 	<div class="span8">
 		<h1>PANFeed Digests</h1>
-			<p>PANFeed Digests are mash-ups of other feeds created by users. They will often have a strong theme and clear purpose. As with all PANFeeds they are customised for personal maganzine readers so digests will always look engaging.</p>
+		<p>A PANFeed digest is a custom news feed. You tell it what you want the sources of the news to be and it packages them up for you. Like other feeds from PANFeed, the digest feed is specially tuned up for best compatibility with personalised magazine readers so you can view them on your mobile device, wherever you are.</p>
+		<p>You might want to have a custom Digest for some choice feeds on your university campus which you can then view as a magazine or embed into one of your websites. Maybe you just have some feeds which you like which you want to repackage as a magazine on your iPad. Whatever your use, PANFeed offers a simple way to aggregate and optimize collections of feeds and, of course, as time goes on PANFeed will keep updating your Digest for you!</p>
 	</div>
 </div>
+<br/>
 <div class="row">
 	<div class="span4">
 		<h2>Public Digests</h2>
-		<p>These Digests have been created by other members of the community and are free for you to use:</p>
+		{% if public %}
+			<p>These Digests have been created by other members of the community and are free for you to use:</p>
 			<ul>
-				{% for digest in digests %}
-					{% if digest.public %}
-						{% if not user.is_authorised or digest.owner_id != user.id %}
-							<li>{{digest.title}} <a target="_blank" href="/digest/{{digest.digestid}}">View</a></li>
-						{% endif %}
-					{% endif %}
+				{% for digest in public %}
+					<li>{{digest.title}} <a target="_blank" href="/digest/{{digest.digestid}}">View</a></li>
 				{% endfor %}
 			</ul>
+		{% else %}
+			<p>There are currently no public Digests. Why not create one?</p>
+		{% endif %}
 	</div>
-	<div class="span4">
-		<h2>My Digests</h2>
-			{% if user.is_authenticated %}
+	
+	{% if user.is_authenticated %}
+		<div class="span4">
+			<h2>My Digests</h2>
+			{% if personal %}
 				<p>These are the Digests you have created:</p>
 				<ul>
-					{% for digest in digests %}
-						{% if digest.owner_id == user.id %}
-						       	<li>{{digest.title}} <a target="_blank" href="/digest/{{digest.digestid}}">View</a></li>
-						{% endif %}
+					{% for digest in personal %}
+
+					<!-- Using "Nice" buttons-->
+					<!--	<li>{{digest.title}} 
+						<div class="btn-group">
+							<a target="_blank" href="/digest/{{digest.digestid}}" class="btn btn-mini"><i class="icon-eye-open"></i>View</a> <a href="/managedigest/{{digest.digestid}}" class="btn btn-mini"><i class="icon-edit"></i>Edit</a> <a href="#" class="btn btn-mini"><i class="icon-trash"></i>Delete</a>
+						</div>
+						</li>-->
+						<li>
+						{{digest.title}} 
+						<a target="_blank" href="/digest/{{digest.digestid}}">View</a> 
+						<a href="/managedigest/{{digest.digestid}}">Edit</a> 
+						<!--
+						<form action="/managedigest/{{digest.digestid}}" method="delete">
+							{% csrf_token %}
+							<input type="submit" value="Delete" class="btn btn-mini"/>
+						</form>
+						-->
+						<a href="#">Delete</a></li>
 					{% endfor %}
 				</ul>
 			{% else %}
-				<p><a href="/account/login/">Log in</a> to view your Digests.</p>
-				<p>Don't have an account? <a href="/account/register/">Create one!</a></p>
-			{% endif %}		
-	</div>
-	<div class="span4">
-		<h2>Other Digests</h2>
-	</div>
+				<p>You currently have no Digests. Why not create one?</p>
+			{% endif %}
+		</div>
+		<div class="span4">
+			<h2>Create a Digest</h2>
+			<p>Creating a Digest is quick and easy. Press the button below to get started!</p>
+			<a href="/managedigest/new/" class="btn">Create a Digest</a>
+		</div>
+	{% else %}
+		<div class="span8">
+			<h2>Manage Digests</h2>
+			<p>You must <a href="/account/login/">log in</a> to be able to manage your Digests, or to create new a one.</p>
+			<p>Not a member? <a href="/account/register/">Create an account!</a></p>
+		</div>
+	{% endif %}		
 </div>
 {% endblock content %}

@@ -19,8 +19,13 @@ class Domains(models.Model):
 class Feeds(models.Model):
     url = models.URLField(primary_key=True,verify_exists=True)
     toplevel = models.URLField()
+
+    def __unicode__(self):
+        return self.url;
+
     class Meta:
         db_table = u'feeds'
+
 
 class Corpus(models.Model):
     title = models.TextField(blank=True)
@@ -55,26 +60,26 @@ class Words(models.Model):
     count = models.IntegerField(null=True, blank=True)
     class Meta:
         db_table = u'words'
-
-class Digests(models.Model):
+'''
+class DigestFeeds(models.Model):
+    #digestid = models.ForeignKey(Digest)
+    feedurl = models.URLField(verify_exists=True)
+    class Meta:
+        db_table = u'digest_feeds'
+	#unique_together = ("feedurl", "digestid")
+'''
+class Digest(models.Model):
     owner = models.ForeignKey(User) 
     public = models.BooleanField()
     digestid = models.AutoField(primary_key=True)
     title = models.TextField()
     description = models.TextField()
-
+    feeds = models.ManyToManyField(Feeds, blank=True)
     def get_absolute_url(self):
         return "/digest/"+str(self.digestid)+"/"+re.subn(r'[^A-Za-z0-9]+', '-', self.title)[0]
 
     class Meta:
-        db_table = u'digests'
-
-class DigestFeeds(models.Model):
-    digestid = models.IntegerField()
-    feedurl = models.URLField(verify_exists=True)
-    class Meta:
-        db_table = u'digest_feeds'
-        unique_together = ("digestid", "feedurl")
+        db_table = u'digest'
 
 class SpiderToDo(models.Model):
     pageurl=models.URLField(primary_key=True,max_length=255)
