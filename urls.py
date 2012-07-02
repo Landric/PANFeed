@@ -13,11 +13,10 @@ urlpatterns = patterns('',
     url(r'^crawlme/$','personalise.views.crawlme', name='crawlme'),
     url(r'^urltoitem$','personalise.views.urltoitem', name='urltoitem'),
 
-    url(r'^createdigest/$','personalise.views.createdigest', name='createdigest'),
-    url(r'^savedigest/$','personalise.views.savedigest', name='savedigest'),
-    url(r'^managedigest/(?P<digestid>\w+)$','personalise.views.managedigest', name='managedigest'),
+    url(r'^managedigest/$','personalise.views.managedigest', name='savedigest'),
+    url(r'^managedigest/new/$','personalise.views.managedigest', name='newdigest'),
+    url(r'^managedigest/(?P<digestid>\d+)$','personalise.views.managedigest', name='managedigest'),
     url(r'^digestlist/$','personalise.views.digestlist', name='digestlist'),
-    url(r'^myfeeds/$','personalise.views.myfeeds', name='myfeeds'),
     url(r'^digest/(?P<digestid>\w+)$', DigestFeed()),
 
     url(r'^createissue/$','personalise.views.createissue', name='createissue'),
@@ -30,6 +29,9 @@ urlpatterns = patterns('',
 
     url(r'^find/(?P<sources>\w+)/(?P<keywords>\w+)/$', PersonalFeed()),
     url(r'submit/$', 'personalise.views.submit', name='submit'),
+
+    url(r'^findnews/$','personalise.views.findnews', name='findnews'),
+    url(r'^faq/$','personalise.views.faq', name='faq'),
 #    url(r'^password_required/$', 'password_required.views.login'),    
     # Examples:
     # url(r'^$', 'personal.views.home', name='home'),

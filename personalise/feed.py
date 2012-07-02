@@ -4,7 +4,7 @@ from django.shortcuts import get_object_or_404
 import datetime
 import sys
 from operator import itemgetter
-from personalise.models import Feeds,Corpus,Digests,DigestFeeds,Issue, IssueItem
+from personalise.models import Feeds,Corpus,Digest,Issue, IssueItem
 
 class PANFeed:
     title = ""
@@ -92,10 +92,9 @@ class DigestFeed(Feed):
     keywords = [];
 
     def items(self,obj):
-        feeds = DigestFeeds.objects.filter(digestid=obj.digestid)
+        #feeds = DigestFeeds.objects.filter(digestid=obj.digestid)
         feed_list = []
-        
-        for feed in feeds:
+        for feed in obj.feeds.all():
             feed_list.append(feed.feedurl)
 
         return Corpus.objects.filter(feed__in=feed_list).order_by("-date")
@@ -120,7 +119,7 @@ class DigestFeed(Feed):
         return item.date
     
     def get_object(self,request,digestid):
-        return get_object_or_404(Digests, digestid=digestid);
+        return get_object_or_404(Digest, digestid=digestid);
 
 class IssueFeed(Feed):
     title = "Your Feed"
