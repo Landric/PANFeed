@@ -68,7 +68,7 @@ def managedigest(request,digestid=None):
 			    invalid_feeds.append(feed)
 
             if invalid_feeds:
-                content = 'The following feeds are invalud and could not be added to your digest. Please check they exist, and try again.'
+                content = 'The following feeds are invalid and could not be added to your digest. Please check they exist, and try again.'
                 p = {'title':'Error', 'header':'Invalid Feeds', 'content':content, 'data':invalid_feeds}
                 return render_to_response('error.html', {'page':p }, context_instance=RequestContext(request))
 
