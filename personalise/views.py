@@ -66,7 +66,7 @@ def managedigest(request,digestid=None):
 			    validate(feed)
 			except ValidationError, e:
 			    invalid_feeds.append(feed)
-
+        
             if invalid_feeds:
                 content = 'The following feeds are invalid and could not be added to your digest. Please check they exist, and try again.'
                 p = {'title':'Error', 'header':'Invalid Feeds', 'content':content, 'data':invalid_feeds}
@@ -86,8 +86,9 @@ def managedigest(request,digestid=None):
 
                 return HttpResponseRedirect('/digestlist/')
 
-        else:
-            pass
+        elif not (digestid is None):
+            digest = get_object_or_404( Digest, digestid=int(digestid) )
+            feeds = digest.feeds.all()
 
     elif request.method == 'DELETE':
         digest = get_object_or_404( Digest, digestid=int(digestid) )
