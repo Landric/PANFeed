@@ -20,7 +20,6 @@ from forms import DigestForm, IssueForm
 from django.core.validators import URLValidator
 from django.core.exceptions import ValidationError
 
-
 def home(request):
     return render_to_response('index.html', context_instance=RequestContext(request))
 

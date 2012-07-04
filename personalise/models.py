@@ -26,7 +26,6 @@ class AcademicFeeds(models.Model):
     class Meta:
         db_table = u'academic_feeds'
 
-
 class Corpus(models.Model):
     title = models.TextField(blank=True)
     description = models.TextField(blank=True)
@@ -77,7 +76,6 @@ class Digest(models.Model):
     title = models.CharField(max_length=60)
     description = models.TextField()
     feeds = models.ManyToManyField(UserFeeds, blank=True)
-
     def get_absolute_url(self):
         return "/digest/"+str(self.digestid)+"/"+re.subn(r'[^A-Za-z0-9]+', '-', self.title)[0]
 
