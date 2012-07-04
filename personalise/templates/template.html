@@ -19,10 +19,6 @@
     <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
   <![endif]-->
   
-  <script type="text/javascript" src="http://code.jquery.com/jquery-1.6.2.min.js"></script>
-  <script type="text/javascript" src="{{ STATIC_URL }}scripts/jquery.jfeed.pack.js"></script>
-  <script type="text/javascript" src="{{ STATIC_URL }}scripts/make_feed_link.js"></script>
-  <script type="text/javascript" src="{{ STATIC_URL }}scripts/add_issue_items.js"></script>
 </head>
 
 <body>
@@ -88,7 +84,7 @@
     <div class="container">
 	<div class="span12">
       	<footer>
-       		 <p>Copyright &copy; University of Southampton | Made with <a target="_blank" href="http://getbootstrap.com">Bootstrap</a> | PANFeed is an output of the <a href="http://jisc.ac.uk">JISC</a> funded <a href="http://www.campus-roar.ecs.soton.ac.uk">CampusROAR</a> project | View more <a href="http://www.wais.ecs.soton.ac.uk/">WAIS</a> projects at our <a href="http://blogs.ecs.soton.ac.uk/oneshare/">OneShare Blog</a></p>
+       		 <p>Copyright &copy; <a href="http://www.southampton.ac.uk/">University of Southampton</a> | Made with <a target="_blank" href="http://getbootstrap.com">Bootstrap</a> | PANFeed is an output of the <a href="http://jisc.ac.uk">JISC</a> funded <a href="http://www.campus-roar.ecs.soton.ac.uk">CampusROAR</a> project | View more <a href="http://www.wais.ecs.soton.ac.uk/">WAIS</a> projects at our <a href="http://blogs.ecs.soton.ac.uk/oneshare/">OneShare Blog</a></p>
 	</footer>
 	</div>
     </div>
@@ -97,19 +93,25 @@
 	<!-- Javascript
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
-    <script src="/static/style/bootstrap/js/jquery.js"></script>
-    <script src="/static/style/bootstrap/js/bootstrap-transition.js"></script>
-    <script src="/static/style/bootstrap/js/bootstrap-alert.js"></script>
-    <script src="/static/style/bootstrap/js/bootstrap-modal.js"></script>
-    <script src="/static/style/bootstrap/js/bootstrap-dropdown.js"></script>
-    <script src="/static/style/bootstrap/js/bootstrap-scrollspy.js"></script>
-    <script src="/static/style/bootstrap/js/bootstrap-tab.js"></script>
-    <script src="/static/style/bootstrap/js/bootstrap-tooltip.js"></script>
-    <script src="/static/style/bootstrap/js/bootstrap-popover.js"></script>
-    <script src="/static/style/bootstrap/js/bootstrap-button.js"></script>
-    <script src="/static/style/bootstrap/js/bootstrap-collapse.js"></script>
-    <script src="/static/style/bootstrap/js/bootstrap-carousel.js"></script>
-    <script src="/static/style/bootstrap/js/bootstrap-typeahead.js"></script>  
+    <script type="text/javascript" src="{{ STATIC_URL }}js/jquery.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}scripts/jquery.jfeed.pack.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}scripts/make_feed_link.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}scripts/add_issue_items.js"></script>
+    <!--<script src="{{ STATIC_URL }}style/bootstrap/js/jquery.js"></script>-->
+    <script src="{{ STATIC_URL }}style/bootstrap/js/bootstrap-transition.js"></script>
+    <script src="{{ STATIC_URL }}style/bootstrap/js/bootstrap-alert.js"></script>
+    <script src="{{ STATIC_URL }}style/bootstrap/js/bootstrap-modal.js"></script>
+    <script src="{{ STATIC_URL }}style/bootstrap/js/bootstrap-dropdown.js"></script>
+    <script src="{{ STATIC_URL }}style/bootstrap/js/bootstrap-scrollspy.js"></script>
+    <script src="{{ STATIC_URL }}style/bootstrap/js/bootstrap-tab.js"></script>
+    <script src="{{ STATIC_URL }}style/bootstrap/js/bootstrap-tooltip.js"></script>
+    <script src="{{ STATIC_URL }}style/bootstrap/js/bootstrap-popover.js"></script>
+    <script src="{{ STATIC_URL }}style/bootstrap/js/bootstrap-button.js"></script>
+    <script src="{{ STATIC_URL }}style/bootstrap/js/bootstrap-collapse.js"></script>
+    <script src="{{ STATIC_URL }}style/bootstrap/js/bootstrap-carousel.js"></script>
+    <script src="{{ STATIC_URL }}style/bootstrap/js/bootstrap-typeahead.js"></script>  
+    {% block scripts %}
+    {% endblock scripts %}
 </body>
 </html>
 

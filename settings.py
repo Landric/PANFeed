@@ -56,7 +56,7 @@ MEDIA_URL = ''
 # Don't put anything in this directory yourself; store your static files
 # in apps' "static/" subdirectories and in STATICFILES_DIRS.
 # Example: "/home/media/media.lawrence.com/static/"
-STATIC_ROOT = ''
+STATIC_ROOT = '/home/ad10g08/personal/personalise/staticfiles/'
 
 # URL prefix for static files.
 # Example: "http://media.lawrence.com/static/"
@@ -83,7 +83,7 @@ STATICFILES_FINDERS = (
 )
 
 # Make this unique, and don't share it with anybody.
-SECRET_KEY = '=szh#4=ly4g2j!n&h@v7e640rex1gpq1@0ukr^ybq))sy(=-dv'
+#Secret key replaced in local_settings
 
 # Password for password_required.
 #PASSWORD_REQUIRED_PASSWORD = 'wais'
@@ -98,9 +98,12 @@ TEMPLATE_LOADERS = (
 MIDDLEWARE_CLASSES = (
     'django.middleware.common.CommonMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
-    #'django.middleware.csrf.CsrfViewMiddleware',
+    'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
+    'respite.middleware.HttpMethodOverrideMiddleware',
+    'respite.middleware.HttpPutMiddleware',
+    'respite.middleware.HttpPatchMiddleware',
 )
 
 ROOT_URLCONF = 'urls'
@@ -119,7 +122,9 @@ INSTALLED_APPS = (
     'django.contrib.sites',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'jquery',   
     'personalise',
+    'respite',
     # Uncomment the next line to enable the admin:
     'django.contrib.admin',
     # Uncomment the next line to enable admin documentation:
@@ -162,3 +167,7 @@ LOGGING = {
         },
     }
 }
+try:
+    from local_settings import *
+except ImportError as e:
+    pass

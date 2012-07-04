@@ -17,7 +17,7 @@
 			<p>These Digests have been created by other members of the community and are free for you to use:</p>
 			<ul>
 				{% for digest in public %}
-					<li>{{digest.title}} <a target="_blank" href="/digest/{{digest.digestid}}">View</a></li>
+					<li>{{digest.title}} <a target="_blank" href="/digest/{{digest.digestid}}" class="btn btn-mini"><i class="icon-eye-open"></i></a></li>
 				{% endfor %}
 			</ul>
 		{% else %}
@@ -32,24 +32,23 @@
 				<p>These are the Digests you have created:</p>
 				<ul>
 					{% for digest in personal %}
-
-					<!-- Using "Nice" buttons-->
-					<!--	<li>{{digest.title}} 
-						<div class="btn-group">
-							<a target="_blank" href="/digest/{{digest.digestid}}" class="btn btn-mini"><i class="icon-eye-open"></i>View</a> <a href="/managedigest/{{digest.digestid}}" class="btn btn-mini"><i class="icon-edit"></i>Edit</a> <a href="#" class="btn btn-mini"><i class="icon-trash"></i>Delete</a>
-						</div>
-						</li>-->
 						<li>
-						{{digest.title}} 
+						<!--
 						<a target="_blank" href="/digest/{{digest.digestid}}">View</a> 
 						<a href="/managedigest/{{digest.digestid}}">Edit</a> 
-						<!--
-						<form action="/managedigest/{{digest.digestid}}" method="delete">
-							{% csrf_token %}
-							<input type="submit" value="Delete" class="btn btn-mini"/>
-						</form>
-						-->
 						<a href="#">Delete</a></li>
+						-->
+						<form action="/managedigest/{{digest.digestid}}" method="post">
+						{{digest.title}} 
+							{% csrf_token %}
+							<div class="btn-group">
+						        	<a class="btn btn-mini" href="/digest/{{digest.digestid}}"><i class="icon-eye-open"></i></a>
+								<a class="btn btn-mini" href="/managedigest/{{digest.digestid}}"><i class="icon-edit"></i></a>
+								<input name="_method" value="DELETE" type="hidden"/>
+								<button type="submit" class="btn btn-mini"><i class="icon-trash"></i></button>
+        						</div>
+						</form>
+						
 					{% endfor %}
 				</ul>
 			{% else %}

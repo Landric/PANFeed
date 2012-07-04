@@ -2,13 +2,12 @@
 from django.core.context_processors import csrf
 from django.http import HttpResponse,HttpResponseRedirect,HttpResponseForbidden, Http404
 from django.db import connection, transaction
-from feed import PersonalFeed
 import urllib2
 import feedparser
 import json
 import sys
 from urlparse import urlparse
-from personalise.models import Feeds,Digest,Corpus,Corpuskeywords,Issue,IssueItem
+from personalise.models import AcademicFeeds,UserFeeds,Digest,Corpus,Corpuskeywords,Issue,IssueItem
 from django.contrib.auth.models import User
 from personalise.urltorss2 import ItemMaker
 from django.contrib.sites.models import Site
@@ -18,6 +17,9 @@ from django.template import RequestContext
 import pprint
 from django.contrib.auth.decorators import login_required
 from forms import DigestForm, IssueForm
+from django.core.validators import URLValidator
+from django.core.exceptions import ValidationError
+
 
 def home(request):
     return render_to_response('index.html', context_instance=RequestContext(request))
@@ -36,9 +38,11 @@ def findnews(request):
 
 @login_required
 def managedigest(request,digestid=None):
+    feeds = []
     if request.method == 'POST':
         form = DigestForm(request.POST)
         if form.is_valid():
+
             if digestid is None:
                 digest = form.save(commit=False)
                 digest.owner = request.user
@@ -48,14 +52,43 @@ def managedigest(request,digestid=None):
                     digest = form.save(commit=False)
                     digest.owner = request.user
 		    digest.digestid = digestid
-                    digest.save(force_update=True)
             
                 else:
                     return HttpResponseForbidden("You do not have permission to edit this journal.")
-            return HttpResponseRedirect('/digestlist/')
+
+            digest.feeds.clear()
+            feeds = request.POST.getlist('url')
+            invalid_feeds = []
+            if not (feeds is None):
+                for feed in feeds:
+                    if feed.strip() != '':
+                        validate = URLValidator(verify_exists=True)
+			try:
+			    validate(feed)
+			except ValidationError, e:
+			    invalid_feeds.append(feed)
+
+            if invalid_feeds:
+                content = 'The following feeds are invalud and could not be added to your digest. Please check they exist, and try again.'
+                p = {'title':'Error', 'header':'Invalid Feeds', 'content':content, 'data':invalid_feeds}
+                return render_to_response('error.html', {'page':p }, context_instance=RequestContext(request))
+
+            else:
+		for feed in feeds:
+                    if feed != '':
+   		        if UserFeeds.objects.filter(url=feed).exists():
+                            digest.feeds.add(UserFeeds.objects.get(url=feed))
+                        else:
+                            digest.feeds.create(url=feed)           
+                digest.save(force_update=True)
+
+		unusedFeeds = UserFeeds.objects.exclude(pk__in=Digest.feeds.through.objects.values('userfeeds'))
+		unusedFeeds.delete()
+
+                return HttpResponseRedirect('/digestlist/')
 
         else:
-            pass #Inform user form was invalid
+            pass
 
     elif request.method == 'DELETE':
         digest = get_object_or_404( Digest, digestid=int(digestid) )
@@ -65,6 +98,10 @@ def managedigest(request,digestid=None):
 
         else:
             digest.delete()
+            unusedFeeds = UserFeeds.objects.exclude(pk__in=Digest.feeds.through.objects.values('userfeeds'))
+	    unusedFeeds.delete()
+
+            return HttpResponseRedirect('/digestlist/')
  
     else:
         if digestid is None:
@@ -72,8 +109,9 @@ def managedigest(request,digestid=None):
         else:
             digest = Digest.objects.get(digestid=digestid, owner=request.user)
             form = DigestForm(instance=digest)
+            feeds = digest.feeds.all()
 
-    return render_to_response('managedigest.html', {'form': form,}, context_instance=RequestContext(request))
+    return render_to_response('managedigest.html', {'form': form, 'feeds' : feeds}, context_instance=RequestContext(request))
 
 def digestlist(request):
     if request.user.is_authenticated():
@@ -190,19 +228,24 @@ def urltoitem(request):
     return HttpResponse(json.dumps({ 'title':itemmaker.title, 'description':itemmaker.p, 'img':itemmaker.img }), mimetype="application/json")
 
 def submit(request):
-   
-    feeds = str(request.POST['urls']).splitlines()
+    if request.method == 'POST':
+        feeds = str(request.POST['urls']).splitlines()
 
-    for url in feeds:
-        hostname = urlparse(url).hostname 
-        if (hostname.endswith(".ac.uk") or hostname.endswith(".edu")):
-            if (feedparser.parse(url).version):
-                if (Feeds.objects.filter(url=url).count()==0):
-                   Feeds.objects.create(url=url,toplevel=hostname)
+        for url in feeds:
+            hostname = urlparse(url).hostname 
+            if (hostname.endswith(".ac.uk") or hostname.endswith(".edu")):
+                if (feedparser.parse(url).version):
+                    if (not AcademicFeeds.objects.filter(url=url).exists()):
+                        AcademicFeeds.objects.create(url=url,toplevel=hostname)
 
-    content = '''Feeds have now been added.'''
-    p = {'title':'Submitted', 'content':content}
-    return render_to_response('template.html', {'page':p }, context_instance=RequestContext(request))
+        content = 'Your feeds have been sucessfully added to PANFeed!'
+        p = {'title':'Crawl Me', 'header':'Success!', 'content':content}
+        return render_to_response('success.html', {'page':p }, context_instance=RequestContext(request))
+
+    else:
+        content = 'Your data was not submitted - please retry sending the form. If you have reached this page in error, please go back and try again. If the problem persists, inform an administrator.'
+        p = {'title':'Error', 'header':'No data recieved', 'content':content}
+        return render_to_response('error.html', {'page':p }, context_instance=RequestContext(request))
 
 @login_required
 def login_redirect(request):

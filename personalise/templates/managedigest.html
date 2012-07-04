@@ -1,5 +1,6 @@
 {% extends "template.html" %}
 {% block title %}Manage Digests{% endblock title %}
+{% block scripts %}<script type="text/javascript" src="{{ STATIC_URL }}scripts/manage_digest.js"></script>{% endblock scripts %}
 {% block read_nav %}active{% endblock read_nav %}
 {% block content %}
 <h2>Manage Your Digest</h2>
@@ -8,30 +9,57 @@
 		<p>Creating a PANFeed digest could not be easier. Simply give your digest a title, add a description if you want and then add a list of feeds you want the digest to aggregate for you. Press save and your digest will be created with it's own unique URL for you to use and share.</p>
 	</div>
 </div>
-<div class="row">
-	<div class="span8">
 		<form action="#" method="post" class="form-horizontal">
 		{% csrf_token %}
-		{% if form.subject.errors %}
-			<ol>
-			{% for error in form.subject.errors %}
-				<li><strong>{{ error|escape }}</strong></li>
-			{% endfor %}
-			</ol>
-		{% endif %}
-
 			<fieldset>
 				{% for field in form %}
-					<div class="control-group">
+					{% if field.errors %}
+						<div class="control-group error">
+					{% else %}
+						<div class="control-group">
+					{% endif%}
 						<label class="control-label">{{ field.label }}:</label>
 						<div class="controls">
-							 {{ field }}
+							{{ field }}
+							{% if field.errors %}
+								{% for error in field.errors %}
+									<span class="help-inline">{{ error }}</span>
+								{% endfor %}
+							{% endif%}
+							{% if field.help_text %}
+								<span class="help-inline">{{field.help_text }}</span>
+							{% endif%}
 						</div>
 					</div>
 				{% endfor %}
-				<input type="submit" value="Submit" class="btn"/>
+				<div id="feed_urls">
+				<label class="control-label">Feeds:</label>		
+				{% if feeds %}				
+					{% for feed in feeds %}
+						<div class="control-group">
+							<div class="controls">
+								<div class="input-append">
+									<input type="text" name="url" value="{{feed.url}}"><button class="btn remove" type="button">Remove</button><button class="btn add" type="button">Add another</button>
+								</div>
+							</div>
+						</div>
+					{% endfor %}
+				{% endif %}
+				<div class="control-group">
+					<div class="controls">
+						<div class="input-append">
+							<input type="text" name="url"><button class="btn remove" type="button">Remove</button><button class="btn add" type="button">Add another</button>
+						</div>
+					</div>
+				</div>
+				</div>
+
+				<div class="control-group">
+					<div class="controls">
+						<input type="submit" value="Submit" class="btn btn-primary"/>&nbsp;&nbsp;
+						<a href="/digestlist/" class="btn">Cancel</a>
+					</div>
+				</div>
 			</fieldset>
 		</form>
-	</div>
-</div>
 {% endblock content %}

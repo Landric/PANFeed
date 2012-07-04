@@ -1,5 +1,5 @@
 from django.core.management.base import BaseCommand, CommandError
-from personalise.models import Feeds,Corpus
+from personalise.models import AcademicFeeds,Corpus
 import MySQLdb
 import feedparser
 import urllib2
@@ -34,7 +34,7 @@ class corpus_obj():
     
         c=self.db.cursor()
 	#c.execute("""SELECT url,toplevel FROM feeds""")
-        feeds = Feeds.objects.all()
+        feeds = AcademicFeeds.objects.all()
         for feedurl in feeds:
             print feedurl.url
             try:

@@ -5,4 +5,10 @@
 	<h1>{{ page.header }}</h1>
 	<br/>
 	<p>{{ page.content }}</p>
+	{% if page.data %}
+		<ul>
+		{% for datum in page.data %}
+			<li>{{datum}}</li>
+		{% endfor %}
+	{% endif %}
 {% endblock content %}

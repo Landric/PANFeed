@@ -1,5 +1,4 @@
 from django.core.management.base import BaseCommand, CommandError
-from personalise.models import Feeds
 import MySQLdb
 import feedparser
 import urllib2
