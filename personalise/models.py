@@ -107,7 +107,7 @@ class IssueItem(models.Model):
 class Issue(models.Model):
     public = models.BooleanField(default=False)
     owner = models.ForeignKey(User) 
-    title = models.TextField(blank=True)
+    title = models.CharField(max_length=60)
     description = models.TextField(blank=True)
     toplevel = models.URLField(blank=True,null=True,default="")
 

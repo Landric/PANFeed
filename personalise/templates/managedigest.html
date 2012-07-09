@@ -9,57 +9,57 @@
 		<p>Creating a PANFeed digest could not be easier. Simply give your digest a title, add a description if you want and then add a list of feeds you want the digest to aggregate for you. Press save and your digest will be created with it's own unique URL for you to use and share.</p>
 	</div>
 </div>
-		<form action="#" method="post" class="form-horizontal">
-		{% csrf_token %}
-			<fieldset>
-				{% for field in form %}
-					{% if field.errors %}
-						<div class="control-group error">
-					{% else %}
-						<div class="control-group">
-					{% endif%}
-						<label class="control-label">{{ field.label }}:</label>
+<form action="#" method="post" class="form-horizontal">
+	{% csrf_token %}
+	<fieldset>
+		{% for field in form %}
+			{% if field.errors %}
+				<div class="control-group error">
+			{% else %}
+				<div class="control-group">
+			{% endif%}
+					<label class="control-label">{{ field.label }}:</label>
+					<div class="controls">
+						{{ field }}
+						{% if field.errors %}
+							{% for error in field.errors %}
+								<span class="help-inline">{{ error }}</span>
+							{% endfor %}
+						{% endif%}
+						{% if field.help_text %}
+							<span class="help-inline">{{field.help_text }}</span>
+						{% endif%}
+					</div>
+				</div>
+		{% endfor %}
+		<div id="feed_urls">
+			<label class="control-label">Feeds:</label>		
+			{% if feeds %}				
+				{% for feed in feeds %}
+					<div class="control-group">
 						<div class="controls">
-							{{ field }}
-							{% if field.errors %}
-								{% for error in field.errors %}
-									<span class="help-inline">{{ error }}</span>
-								{% endfor %}
-							{% endif%}
-							{% if field.help_text %}
-								<span class="help-inline">{{field.help_text }}</span>
-							{% endif%}
+							<div class="input-append">
+								<input type="text" name="url" value="{{feed.url}}"><button class="btn remove" type="button">Remove</button><button class="btn add" type="button">Add another</button>
+							</div>
 						</div>
 					</div>
 				{% endfor %}
-				<div id="feed_urls">
-				<label class="control-label">Feeds:</label>		
-				{% if feeds %}				
-					{% for feed in feeds %}
-						<div class="control-group">
-							<div class="controls">
-								<div class="input-append">
-									<input type="text" name="url" value="{{feed.url}}"><button class="btn remove" type="button">Remove</button><button class="btn add" type="button">Add another</button>
-								</div>
-							</div>
-						</div>
-					{% endfor %}
-				{% endif %}
-				<div class="control-group">
-					<div class="controls">
-						<div class="input-append">
-							<input type="text" name="url"><button class="btn remove" type="button">Remove</button><button class="btn add" type="button">Add another</button>
-						</div>
+			{% endif %}
+			<div class="control-group">
+				<div class="controls">
+					<div class="input-append">
+						<input type="text" name="url"><button class="btn remove" type="button">Remove</button><button class="btn add" type="button">Add another</button>
 					</div>
 				</div>
-				</div>
+			</div>
+		</div>
 
-				<div class="control-group">
-					<div class="controls">
-						<input type="submit" value="Submit" class="btn btn-primary"/>&nbsp;&nbsp;
-						<a href="/digestlist/" class="btn">Cancel</a>
-					</div>
-				</div>
-			</fieldset>
-		</form>
+		<div class="control-group">
+			<div class="controls">
+				<input type="submit" value="Submit" class="btn btn-primary"/>&nbsp;&nbsp;
+				<a href="/digestlist/" class="btn">Cancel</a>
+			</div>
+		</div>
+	</fieldset>
+</form>
 {% endblock content %}

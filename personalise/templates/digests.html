@@ -19,7 +19,7 @@
 				{% for digest in public %}
 					<li class="feed-list">
 						<span class="pull-left">{{digest.title}}</span>
-						<a target="_blank" href="/digest/{{digest.digestid}}" class="btn btn-mini pull-right"><i class="icon-eye-open"></i></a>
+						<a target="_blank" href="/digest/{{digest.digestid}}" class="btn btn-mini pull-right" title="View this Digest" alt="View this Digest"><i class="icon-eye-open"></i></a>
 					</li>
 				{% endfor %}
 			</ul>
@@ -40,10 +40,10 @@
 							<form action="/managedigest/{{digest.digestid}}" method="post">
 								{% csrf_token %}
 								<div class="btn-group pull-right">
-							        	<a class="btn btn-mini" target="_blank" href="/digest/{{digest.digestid}}"><i class="icon-eye-open"></i></a>
-									<a class="btn btn-mini" href="/managedigest/{{digest.digestid}}"><i class="icon-edit"></i></a>
+							        	<a class="btn btn-mini" target="_blank" href="/digest/{{digest.digestid}}" title="View this Digest" alt="View this Digest"><i class="icon-eye-open"></i></a>
+									<a class="btn btn-mini" href="/managedigest/{{digest.digestid}}" title="Edit this Digest" alt="Edit this Digest"><i class="icon-edit"></i></a>
 									<input name="_method" value="DELETE" type="hidden"/>
-									<button type="submit" class="btn btn-mini"><i class="icon-trash"></i></button>
+									<button type="submit" class="btn btn-mini" title="Delete this Digest" alt="Delete this Digest"><i class="icon-trash"></i></button>
         							</div>
 							</form>
 						</li>

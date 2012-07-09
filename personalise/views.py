@@ -94,7 +94,7 @@ def managedigest(request,digestid=None):
         digest = get_object_or_404( Digest, digestid=int(digestid) )
 
         if digest.owner != request.user:
-            return HttpResponseForbidden("You do not have permission to edit this journal.")
+            return HttpResponseForbidden("You do not have permission to edit this Digest.")
 
         else:
             digest.delete()
@@ -143,6 +143,27 @@ def digest(request, digestid):
 
 @login_required
 def manageissue(request,issueid=None):
+    if request.method == "POST":
+        pass
+    elif request.method == 'DELETE':
+        issue = get_object_or_404( Issue, id=int(issueid) )
+
+        if issue.owner != request.user:
+            return HttpResponseForbidden("You do not have permission to edit this Issue.")
+
+        else:
+            issue.delete()
+            return HttpResponseRedirect('/issuelist/')
+    else:
+        if issueid is None:
+            form = IssueForm()
+        else:
+            issue = Issue.objects.get(id=issueid, owner=request.user)
+            form = IssueForm(instance=issue)
+
+    return render_to_response('manageissue.html', {'form': form}, context_instance=RequestContext(request))
+
+    '''
     pagetitle = "Manage Issue"
     issue = Issue.objects.get(id=issueid, owner=request.user)
 
@@ -156,7 +177,7 @@ def manageissue(request,issueid=None):
 
     p = { 'title':pagetitle, 'content':render_to_string('manageissue.html', { 'issueid':issueid, 'title':issue.title, 'description':issue.description, 'siteUrl':Site.objects.get_current().domain, "public":public, 'objUrl':issue.get_absolute_url() } ) }
     return render_to_response('template.html', { 'page': p }, context_instance=RequestContext(request))
-
+    '''
 def issueitems(request, issueid):
     itemlist = [];
     for item in IssueItem.objects.filter(issueid=issueid).order_by('ordernumber'):

@@ -6,6 +6,7 @@
 	<p>PANFeed is a tool to help you take control of news feeds already existing on your university campus. It harvests feeds from university websites and uses them to build custom feeds of news you are actually interested in. The tool has a range of applications including personal custom news feeds, custom feeds for use in department websites or simply taking an inventory of your university feeds. Try out and take control of your news!</p>
 
 	{% if not user.is_authenticated %}
+		<!--
 		<form class="form-horizontal">
 		<fieldset>
         		<input class="span3" placeholder="Username" type="text">
@@ -15,6 +16,8 @@
 			<a href="#">I've forgotten my password!</a>
 		</fieldset>
 		</form>
+		-->
+		<a href="/account/login/"class="btn btn-large btn-primary">Login to start &raquo;</a>
 	{% endif %}
 </div>
 

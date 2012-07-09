@@ -20,7 +20,7 @@ urlpatterns = patterns('',
     url(r'^digest/(?P<digestid>\d+)$', DigestFeed()),
 
     url(r'^manageissue/$','personalise.views.manageissue', name='saveissue'),
-    url(r'^manageissue/new$','personalise.views.manageissue', name='newissue'),
+    url(r'^manageissue/new/$','personalise.views.manageissue', name='newissue'),
     url(r'^manageissue/(?P<issueid>\d+)$','personalise.views.manageissue', name='manageissue'),
     url(r'^issuelist/$','personalise.views.issuelist', name='issuelist'),
     url(r'^issueitems/(?P<issueid>\d+)$','personalise.views.issueitems', name='issueitems'),
