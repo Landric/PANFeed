@@ -2,9 +2,11 @@ from django.contrib.syndication.views import Feed
 from django.db import connection, transaction
 from django.shortcuts import get_object_or_404
 import datetime
+import time
 import sys
 from operator import itemgetter
 from personalise.models import Corpus,Digest,Issue, IssueItem
+import feedparser
 
 class PANFeed:
     title = ""
@@ -59,7 +61,6 @@ class PersonalFeed(Feed):
         return "http://panfeed.ecs.soton.ac.uk/find/"+obj[1]+"/"+obj[0]
 
     def item_title(self,item):
-        #print item[-1]
         return item.title
         
     def item_description(self,item):
@@ -86,17 +87,16 @@ class PersonalFeed(Feed):
         return hot_rank
 
 class DigestFeed(Feed):
-    title = "Your Feed"
-    link = "/find/"
-    description = "Your feed Personalised Academic News Feed from your keywords."
-    keywords = [];
-
+    
     def items(self,obj):
-        feed_list = []
+        digest_items = []
         for feed in obj.feeds.all():
-            feed_list.append(feed.url)
+            feed = feedparser.parse(feed.url)
+            for item in feed[ "items" ]:
+                item.title = item.title + " - " + feed.channel.title
+                digest_items.append(item)
 
-        return Corpus.objects.filter(feed__in=feed_list).order_by("-date")
+        return sorted(digest_items, key=lambda item: item.date_parsed,reverse=True)
 
     def title(self,obj):
         return obj.title 
@@ -104,27 +104,25 @@ class DigestFeed(Feed):
     def link(self, obj):
         return "http://panfeed.ecs.soton.ac.uk/digest/"+str(obj.digestid)
 
+    def description(self, obj):
+        return obj.description
+
     def item_title(self,item):
-        #print item[-1]
         return item.title
         
     def item_description(self,item):
-        return item.description
+        return item.summary
         
     def item_link(self,item):
-        return item.url
+        return item.link
     
     def item_pubdate(self,item):
-        return item.date
+        return datetime.datetime.fromtimestamp(time.mktime(item.date_parsed))
     
     def get_object(self,request,digestid):
         return get_object_or_404(Digest, digestid=digestid);
 
 class IssueFeed(Feed):
-    title = "Your Feed"
-    link = "/find/"
-    description = "Your feed Personalised Academic News Feed from your keywords."
-    keywords = [];
 
     def items(self,obj):
         return IssueItem.objects.filter(issueid=obj.id).order_by("-date")

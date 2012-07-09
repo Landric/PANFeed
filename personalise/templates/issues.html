@@ -15,7 +15,10 @@
 			<p>These Issues have been created by other members of the community and are free for you to use:</p>
 			<ul>
 				{% for issue in public %}
-					<li>{{issue.title}} <a target="_blank" href="/issue/{{issue.issueid}}">View</a></li>
+					<li class="feed-list">
+						<span class="pull-left">{{issue.title}}</span>
+						<a target="_blank" href="/issue/{{issue.issueid}}" class="btn btn-mini pull-right"><i class="icon-eye-open"></i></a>
+					</li>
 				{% endfor %}
 			</ul>
 		{% else %}
@@ -29,7 +32,14 @@
 				<p>These are the Issues you have created:</p>
 				<ul>
 					{% for issue in personal %}
-						<li>{{issue.title}} <a target="_blank" href="/issue/{{issue.issueid}}">View</a> <a href="/manageissue/{{issue.issueid}}">Edit</a></li>
+						<li class="feed-list">
+							<span class="pull-left">{{issue.title}}</span>
+							<div class="btn-group pull-right">
+								<a target="_blank" href="/issue/{{issue.issueid}}" class="btn btn-mini"><i class="icon-eye-open"></i></a>
+								<a href="/manageissue/{{issue.issueid}}" class="btn btn-mini"><i class="icon-edit"></i></a>
+								<a target="_blanK" href="#" class="btn btn-mini"><i class="icon-trash"></i></a>
+							</div>
+						</li>
 					{% endfor %}
 				</ul>
 			{% else %}

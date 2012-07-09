@@ -142,12 +142,7 @@ def digest(request, digestid):
     return HttpResponse("".join(str(items.values_list("date", flat=True))), context_instance=RequestContext(request))
 
 @login_required
-def createissue(request):
-    issue = Issue.objects.create(title="", owner=request.user)
-    return HttpResponseRedirect('/manageissue/' + str(issue.id))
-
-@login_required
-def manageissue(request,issueid):
+def manageissue(request,issueid=None):
     pagetitle = "Manage Issue"
     issue = Issue.objects.get(id=issueid, owner=request.user)
 
