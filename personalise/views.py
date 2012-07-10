@@ -59,9 +59,9 @@ def managedigest(request,digestid=None):
             feeds = request.POST.getlist('url')
             invalid_feeds = []
             if not (feeds is None):
+                validate = URLValidator(verify_exists=True)
                 for feed in feeds:
                     if feed.strip() != '':
-                        validate = URLValidator(verify_exists=True)
 			try:
 			    validate(feed)
 			except ValidationError, e:
@@ -69,8 +69,7 @@ def managedigest(request,digestid=None):
         
             if invalid_feeds:
                 content = 'The following feeds are invalid and could not be added to your digest. Please check they exist, and try again.'
-                p = {'title':'Error', 'header':'Invalid Feeds', 'content':content, 'data':invalid_feeds}
-                return render_to_response('error.html', {'page':p }, context_instance=RequestContext(request))
+                return render_to_response('error.html', {'title':'Error', 'header':'Invalid Feeds', 'content':content, 'data':invalid_feeds}, context_instance=RequestContext(request))
 
             else:
 		for feed in feeds:
@@ -265,22 +264,33 @@ def urltoitem(request):
 def submit(request):
     if request.method == 'POST':
         feeds = str(request.POST['urls']).splitlines()
-
+        invalid_feeds = []
+        validate = URLValidator(verify_exists=True)
         for url in feeds:
-            hostname = urlparse(url).hostname 
-            if (hostname.endswith(".ac.uk") or hostname.endswith(".edu")):
-                if (feedparser.parse(url).version):
-                    if (not AcademicFeeds.objects.filter(url=url).exists()):
-                        AcademicFeeds.objects.create(url=url,toplevel=hostname)
+	    try:
+	        validate(url)
+                hostname = urlparse(url).hostname
+                if (hostname.endswith(".ac.uk") or hostname.endswith(".edu")):
+                    if (feedparser.parse(url).version):
+                        if (not AcademicFeeds.objects.filter(url=url).exists()):
+                            AcademicFeeds.objects.create(url=url,toplevel=hostname)
+		else:
+	            invalid_feeds.append(url)
+	    except ValidationError, e:
+	        invalid_feeds.append(url)
+        
 
-        content = 'Your feeds have been sucessfully added to PANFeed!'
-        p = {'title':'Crawl Me', 'header':'Success!', 'content':content}
-        return render_to_response('success.html', {'page':p }, context_instance=RequestContext(request))
+        if invalid_feeds:
+            content = 'The following feeds are invalid, or do not resolve to an academic domain, and could not be added to the PANFeed database. Please check they exist, and try again.'
+            return render_to_response('error.html', {'title':'Error', 'header':'Invalid Feeds', 'content':content, 'data':invalid_feeds}, context_instance=RequestContext(request))
+        else:
+            content = 'Your feeds have been sucessfully added to PANFeed!'
+            return render_to_response('success.html', {'title':'Crawl Me', 'header':'Success!', 'content':content}, context_instance=RequestContext(request))
 
     else:
         content = 'Your data was not submitted - please retry sending the form. If you have reached this page in error, please go back and try again. If the problem persists, inform an administrator.'
-        p = {'title':'Error', 'header':'No data recieved', 'content':content}
-        return render_to_response('error.html', {'page':p }, context_instance=RequestContext(request))
+        
+        return render_to_response('error.html', {'title':'Error', 'header':'No data recieved', 'content':content}, context_instance=RequestContext(request))
 
 @login_required
 def login_redirect(request):
