@@ -32,6 +32,7 @@ urlpatterns = patterns('',
 
     url(r'^findnews/$','personalise.views.findnews', name='findnews'),
     url(r'^faq/$','personalise.views.faq', name='faq'),
+
 #    url(r'^password_required/$', 'password_required.views.login'),    
     # Examples:
     # url(r'^$', 'personal.views.home', name='home'),

@@ -48,10 +48,8 @@
 				<input class="btn" type="button" onclick="addEditorial('http://{{siteUrl}}/issue/{{issueid}}', 'items')" value="Add an Editorial Item" /><br />
 			</div>
 		</div>
-	<div id="items">
-	</div>
-		
-
+		<div id="items">
+		</div>
 		<div class="control-group">
 			<div class="controls">
 				<input type="submit" value="Submit" class="btn btn-primary"/>&nbsp;&nbsp;
@@ -60,21 +58,4 @@
 		</div>
 	</fieldset>
 </form>
-<!--
-<form action="/saveissue/" method="POST">
-    <div class="create_issue_form">
-	The URL of this Issue: <strong>http://{{siteUrl}}{{objUrl}}</strong><br /><br />
-        Title: <br /><input name=title type="text" class="title" value="{{ title }}"/> <br /><br />
-	Make this publicly viewable: <input type="checkbox" {{public}} name="public" /> <br /><br />
-        Description: <textarea name="description" class="description">{{ description }}</textarea> <br />
-        <input type="hidden" name="issueid" value="{{ issueid }}" />
-        Add URLs (one per line): <textarea name="urls" class="urls" id="issue_urls"></textarea><br />
-        <input type="button" onclick="addURLsAsItems('issue_urls', 'items')" value="Add these URLs as items" /><br /><br />
-	<input type="button" onclick="addEditorial('http://{{siteUrl}}/issue/{{issueid}}', 'items')" value="Add an Editorial Item" /><br />
-        <div id="items"> </div>
-        <script type="text/javascript">loadIssueItems("{{ issueid }}", "items");</script>
-        <input type="submit" class="save" value="Save &amp; Finish" />
-    </div>
-</form>
--->
 {% endblock content %}

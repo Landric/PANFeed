@@ -58,9 +58,9 @@ function renderIssueItem(data)
     var buttons = "<div class='control-group'>"+
 			"<div class='controls'>"+
 				"<div class='btn-group'>"+
-					"<button class='btn' id='item-"+document.itemCounter+"' title='Move this item up' alt='Move this item up' onclick='moveItemUp('item-"+document.itemCounter+"')><i class='icon-arrow-up'></i></button>"+
-					"<button class='btn' id='item-"+document.itemCounter+"' title='Move this item down' alt='Move this item down' onclick='moveDownItem('item-"+document.itemCounter+"')><i class='icon-arrow-down'></i></button>"+
-					"<button class='btn' id='item-"+document.itemCounter+"' title='Delete this item' alt='Delete this item' onclick='deleteItem('item-"+document.itemCounter+"')><i class='icon-trash'></i></button>"+
+					"<button type='button' class='btn' id='item-"+document.itemCounter+"' title='Move this item up' alt='Move this item up' onclick='moveUpItem(\"item-"+document.itemCounter+"\")'><i class='icon-arrow-up'></i></button>"+
+					"<button type='button' class='btn' id='item-"+document.itemCounter+"' title='Move this item down' alt='Move this item down' onclick='moveDownItem(\"item-"+document.itemCounter+"\")'><i class='icon-arrow-down'></i></button>"+
+					"<button type='button' class='btn' id='item-"+document.itemCounter+"' title='Delete this item' alt='Delete this item' onclick='deleteItem(\"item-"+document.itemCounter+"\")'><i class='icon-trash'></i></button>"+
 				"</div>"+
 			"</div>"+
 		"</div>";
@@ -120,28 +120,34 @@ function addEditorial(url, to_id)
 
 function moveUpItem(itemId) 
 {
-    var boxToMove = $('#'+itemId).parent();
+    var boxToMove = $('#'+itemId).closest('.item');
     var prevBox = boxToMove.prev();
-    boxToMove.detach();
-    boxToMove.insertBefore(prevBox);
-    $(window).scrollTop(boxToMove.offset().top);
+
+    if(prevBox.length != 0)
+    {
+        boxToMove.detach();
+        boxToMove.insertBefore(prevBox);
+        $(window).scrollTop(boxToMove.offset().top);
+    }
 }
 
 function moveDownItem(itemId)
 {
-    var boxToMove = $('#'+itemId).parent();
+    var boxToMove = $('#'+itemId).closest('.item');
     var nextBox = boxToMove.next();
-    boxToMove.detach();
-    boxToMove.insertAfter(nextBox);
-    $(window).scrollTop(boxToMove.offset().top);
 
-
+    if(nextBox.length != 0)
+    {
+        boxToMove.detach();
+        boxToMove.insertAfter(nextBox);
+        $(window).scrollTop(boxToMove.offset().top);
+    }
 }
 
 function deleteItem(itemId) 
 {
-    $("#"+itemId).parent().slideUp('400', function() {
-        $("#"+itemId).parent().remove();
+    $('#'+itemId).closest(".item").slideUp('400', function() {
+        $('#'+itemId).closest(".item").remove();
     });
 }
 
