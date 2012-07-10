@@ -104,6 +104,9 @@ class IssueItem(models.Model):
     public = models.BooleanField(default=True)
     ordernumber = models.IntegerField(null=True, db_index=True)
 
+    class Meta:
+        db_table = u'issue_item'
+
 class Issue(models.Model):
     public = models.BooleanField(default=False)
     owner = models.ForeignKey(User) 
@@ -113,3 +116,6 @@ class Issue(models.Model):
 
     def get_absolute_url(self):
         return "/issue/"+str(self.id)+"/"+re.subn(r'[^A-Za-z0-9]+', '-', self.title)[0]
+
+    class Meta:
+        db_table = u'issue'
