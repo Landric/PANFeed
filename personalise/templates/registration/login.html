@@ -1,7 +1,6 @@
 {% extends "template.html" %}
-
 {% block title %}Login{% endblock %}
-
+{% block login_nav %}active{% endblock login_nav %}
 {% block content %}
 <form method="post" action=".">
   {% csrf_token %}
@@ -10,5 +9,7 @@
   <input class="btn" type="submit" value="Log in" />
   <input type="hidden" name="next" value="{{ next }}" />
 </form>
+<p><a href="#">Forgotten your password?</a></p>
+<p>Not a member? <a href="/account/register/">Create an account!</a></p>
 
 {% endblock %}

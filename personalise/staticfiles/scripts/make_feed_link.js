@@ -2,10 +2,11 @@ function makeFeed()
 {
 	var keywords = $("#keyword_input").val().replace(/[^0-9a-zA-Z]/g,",").split(",");
 	var url = "http://panfeed.ecs.soton.ac.uk/find/all/" + keywords.join("_");
-	$("#feed_link").attr("href", url);
-	$("#feed_link").text(url);
+	$("#feed_link").attr("value", url);
 	$("#view_more").attr("href", url);
 	$("#google_link").attr("href", "http://fusion.google.com/add?source=atgs&feedurl="+encodeURI(url));
+	$("#feedshow_link").attr("href", "http://www.feedshow.com/subscribe.php?url="+encodeURI(url));
+	$("#newsalloy_link").attr("href", "http://www.newsalloy.com/?rss="+encodeURI(url));
 	addRSS(url,"feed_demo");
 }
 
@@ -13,10 +14,11 @@ function example(search)
 {
 	var keywords = search.replace(/[^0-9a-zA-Z]/g,",").split(",");
 	var url = "http://panfeed.ecs.soton.ac.uk/find/all/" + keywords.join("_");
-	$("#feed_link").attr("href", url);
-	$("#feed_link").text(url);
+	$("#feed_link").attr("value", url);
 	$("#view_more").attr("href", url);
 	$("#google_link").attr("href", "http://fusion.google.com/add?source=atgs&feedurl="+encodeURI(url));
+	$("#feedshow_link").attr("href", "http://www.feedshow.com/subscribe.php?url="+encodeURI(url));
+	$("#newsalloy_link").attr("href", "http://www.newsalloy.com/?rss="+encodeURI(url));
 	addRSS(url,"feed_demo");
 }
 
