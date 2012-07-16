@@ -15,7 +15,10 @@
 			<p>These Issues have been created by other members of the community and are free for you to use:</p>
 			<ul>
 				{% for issue in public %}
-					<li>{{issue.title}} <a target="_blank" href="/issue/{{issue.issueid}}">View</a></li>
+					<li class="feed-list">
+						<span class="pull-left">{{issue.title}}</span>
+						<a target="_blank" href="/issue/{{issue.id}}" class="btn btn-mini pull-right" title="View this Issue" alt="View this Issue"><i class="icon-eye-open"></i></a>
+					</li>
 				{% endfor %}
 			</ul>
 		{% else %}
@@ -29,7 +32,17 @@
 				<p>These are the Issues you have created:</p>
 				<ul>
 					{% for issue in personal %}
-						<li>{{issue.title}} <a target="_blank" href="/issue/{{issue.issueid}}">View</a> <a href="/manageissue/{{issue.issueid}}">Edit</a></li>
+						<li class="feed-list">
+							<span class="pull-left">{{issue.title}}</span>
+							<form action="/manageissue/{{issue.id}}" method="post">
+								<div class="btn-group pull-right">
+						        		<a class="btn btn-mini" target="_blank" href="/issue/{{issue.id}}" title="View this Issue" alt="View this Issue"><i class="icon-eye-open"></i></a>
+									<a class="btn btn-mini" href="/manageissue/{{issue.id}}" title="Edit this Issue" alt="Edit this Issue"><i class="icon-edit"></i></a>
+									<input name="_method" value="DELETE" type="hidden"/>
+									<button type="submit" class="btn btn-mini" title="Delete this Issue" alt="Delete this Issue"><i class="icon-trash"></i></button>
+        							</div>
+							</form>
+						</li>
 					{% endfor %}
 				</ul>
 			{% else %}
@@ -39,7 +52,7 @@
 		<div class="span4">
 			<h2>Create an Issue</h2>
 			<p>Creating an Issue is quick and easy. Press the button below to get started!</p>
-			<a href="/createissue/" class="btn">Create an Issue</a>
+			<a href="/manageissue/new/" class="btn">Create an Issue</a>
 		</div>
 	{% else %}
 		<div class="span8">

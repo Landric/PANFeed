@@ -53,15 +53,15 @@ def managedigest(request,digestid=None):
 		    digest.digestid = digestid
             
                 else:
-                    return HttpResponseForbidden("You do not have permission to edit this journal.")
+                    return HttpResponseForbidden("You do not have permission to edit this Digest.")
 
             digest.feeds.clear()
             feeds = request.POST.getlist('url')
             invalid_feeds = []
             if not (feeds is None):
+                validate = URLValidator(verify_exists=True)
                 for feed in feeds:
                     if feed.strip() != '':
-                        validate = URLValidator(verify_exists=True)
 			try:
 			    validate(feed)
 			except ValidationError, e:
@@ -69,8 +69,7 @@ def managedigest(request,digestid=None):
         
             if invalid_feeds:
                 content = 'The following feeds are invalid and could not be added to your digest. Please check they exist, and try again.'
-                p = {'title':'Error', 'header':'Invalid Feeds', 'content':content, 'data':invalid_feeds}
-                return render_to_response('error.html', {'page':p }, context_instance=RequestContext(request))
+                return render_to_response('error.html', {'title':'Error', 'header':'Invalid Feeds', 'content':content, 'data':invalid_feeds}, context_instance=RequestContext(request))
 
             else:
 		for feed in feeds:
@@ -94,7 +93,7 @@ def managedigest(request,digestid=None):
         digest = get_object_or_404( Digest, digestid=int(digestid) )
 
         if digest.owner != request.user:
-            return HttpResponseForbidden("You do not have permission to edit this journal.")
+            return HttpResponseForbidden("You do not have permission to edit this Digest.")
 
         else:
             digest.delete()
@@ -142,25 +141,60 @@ def digest(request, digestid):
     return HttpResponse("".join(str(items.values_list("date", flat=True))), context_instance=RequestContext(request))
 
 @login_required
-def createissue(request):
-    issue = Issue.objects.create(title="", owner=request.user)
-    return HttpResponseRedirect('/manageissue/' + str(issue.id))
+def manageissue(request,issueid=None):
+    if request.method == "POST":
+        form = IssueForm(request.POST)
+        if form.is_valid():
 
-@login_required
-def manageissue(request,issueid):
-    pagetitle = "Manage Issue"
-    issue = Issue.objects.get(id=issueid, owner=request.user)
+            if issueid is None:
+                issue = form.save(commit=False)
+                issue.owner = request.user
+                issue.save()
+            else:
+		if Issue.objects.filter(id=int(issueid), owner = request.user).exists():
+                    issue = form.save(commit=False)
+                    issue.owner = request.user
+		    issue.id = issueid
+                    issue.save(force_update=True)
+                    IssueItem.objects.filter(issueid=issue.id).delete()
+            
+                else:
+                    return HttpResponseForbidden("You do not have permission to edit this Issue.")
 
-    if (not issue):
-        p = { 'title':pagetitle, 'content':'This issue does not exist or you do not have permission to edit it.' }
-        return render_to_response('template.html', { 'page':p }, context_instance=RequestContext(request))
+            for i, val in enumerate(request.REQUEST.getlist("item-title")) :
+        
+                if IssueItem.objects.filter(issueid=issue.id, url=request.REQUEST.getlist("item-url")[i]).count() > 0:
+                    item = IssueItem.objects.filter(issueid=issue.id, url=request.REQUEST.getlist("item-url")[i])[0]
+                else:
+                    item = IssueItem.objects.create(issueid=issue.id)
 
-    public = ""
-    if issue.public:
-        public = "checked='checked'"
+                item.url = request.REQUEST.getlist("item-url")[i]
+                item.title = request.REQUEST.getlist("item-title")[i]
+                item.description = request.REQUEST.getlist("item-description")[i]
+                item.img = request.REQUEST.getlist("item-img")[i]
+                item.ordernumber = i;
+                item.save()
 
-    p = { 'title':pagetitle, 'content':render_to_string('manageissue.html', { 'issueid':issueid, 'title':issue.title, 'description':issue.description, 'siteUrl':Site.objects.get_current().domain, "public":public, 'objUrl':issue.get_absolute_url() } ) }
-    return render_to_response('template.html', { 'page': p }, context_instance=RequestContext(request))
+            return HttpResponseRedirect('/issuelist/')
+
+    elif request.method == 'DELETE':
+        issue = get_object_or_404( Issue, id=int(issueid) )
+
+        if issue.owner != request.user:
+            return HttpResponseForbidden("You do not have permission to edit this Issue.")
+
+        else:
+            issue.delete()
+            return HttpResponseRedirect('/issuelist/')
+    else:
+        if issueid is None:
+            form = IssueForm()
+        else:
+            issue = Issue.objects.get(id=issueid, owner=request.user)
+
+            form = IssueForm(instance=issue)
+
+    return render_to_response('manageissue.html', {'form': form, 'issueid': issueid}, context_instance=RequestContext(request))
 
 def issueitems(request, issueid):
     itemlist = [];
@@ -230,22 +264,33 @@ def urltoitem(request):
 def submit(request):
     if request.method == 'POST':
         feeds = str(request.POST['urls']).splitlines()
-
+        invalid_feeds = []
+        validate = URLValidator(verify_exists=True)
         for url in feeds:
-            hostname = urlparse(url).hostname 
-            if (hostname.endswith(".ac.uk") or hostname.endswith(".edu")):
-                if (feedparser.parse(url).version):
-                    if (not AcademicFeeds.objects.filter(url=url).exists()):
-                        AcademicFeeds.objects.create(url=url,toplevel=hostname)
+	    try:
+	        validate(url)
+                hostname = urlparse(url).hostname
+                if (hostname.endswith(".ac.uk") or hostname.endswith(".edu")):
+                    if (feedparser.parse(url).version):
+                        if (not AcademicFeeds.objects.filter(url=url).exists()):
+                            AcademicFeeds.objects.create(url=url,toplevel=hostname)
+		else:
+	            invalid_feeds.append(url)
+	    except ValidationError, e:
+	        invalid_feeds.append(url)
+        
 
-        content = 'Your feeds have been sucessfully added to PANFeed!'
-        p = {'title':'Crawl Me', 'header':'Success!', 'content':content}
-        return render_to_response('success.html', {'page':p }, context_instance=RequestContext(request))
+        if invalid_feeds:
+            content = 'The following feeds are invalid, or do not resolve to an academic domain, and could not be added to the PANFeed database. Please check they exist, and try again.'
+            return render_to_response('error.html', {'title':'Error', 'header':'Invalid Feeds', 'content':content, 'data':invalid_feeds}, context_instance=RequestContext(request))
+        else:
+            content = 'Your feeds have been sucessfully added to PANFeed!'
+            return render_to_response('success.html', {'title':'Crawl Me', 'header':'Success!', 'content':content}, context_instance=RequestContext(request))
 
     else:
         content = 'Your data was not submitted - please retry sending the form. If you have reached this page in error, please go back and try again. If the problem persists, inform an administrator.'
-        p = {'title':'Error', 'header':'No data recieved', 'content':content}
-        return render_to_response('error.html', {'page':p }, context_instance=RequestContext(request))
+        
+        return render_to_response('error.html', {'title':'Error', 'header':'No data recieved', 'content':content}, context_instance=RequestContext(request))
 
 @login_required
 def login_redirect(request):

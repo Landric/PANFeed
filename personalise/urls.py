@@ -13,11 +13,11 @@ urlpatterns = patterns('personalise.views',
     url(r'^managedigest/(?P<digestid>\d+)$','managedigest', name='managedigest'),
     url(r'^digestlist/$','digestlist', name='digestlist'),
 
-    url(r'^createissue/$','createissue', name='createissue'),
-    url(r'^manageissue/(?P<issueid>\w+)$','manageissue', name='manageissue'),
+    url(r'^manageissue/$','manageissue', name='saveissue'),
+    url(r'^manageissue/new/$','manageissue', name='newissue'),
+    url(r'^manageissue/(?P<issueid>\d+)$','manageissue', name='manageissue'),
     url(r'^issuelist/$','issuelist', name='issuelist'),
-    url(r'^saveissue/$','saveissue', name='saveissue'),
-    url(r'^issueitems/(?P<issueid>\w+)$','issueitems', name='issueitems'),
+    url(r'^issueitems/(?P<issueid>\d+)$','issueitems', name='issueitems'),
 
     url(r'submit/$', 'submit', name='submit'),
 
@@ -26,8 +26,8 @@ urlpatterns = patterns('personalise.views',
 )
 
 urlpatterns += patterns('',
-    url(r'^digest/(?P<digestid>\w+)$', DigestFeed()),
-    url(r'^issue/(?P<issueid>\w+)$', IssueFeed()),
-    url(r'^issue/(?P<issueid>\w+)/.*$', IssueFeed()),
+    url(r'^digest/(?P<digestid>\d+)$', DigestFeed()),
+    url(r'^issue/(?P<issueid>\d+)$', IssueFeed()),
+    url(r'^issue/(?P<issueid>\d+)/.*$', IssueFeed()),
     url(r'^find/(?P<sources>\w+)/(?P<keywords>\w+)/$', PersonalFeed()),
 )
