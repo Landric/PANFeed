@@ -10,7 +10,7 @@ except IOError:
 
 setup(
     name='django-panfeed',
-    version='0.0.1',
+    version='2.0.0',
     url="http://panfeed.ecs.soton.ac.uk/",
     description='PANFeed is a tool to help you take control of news feeds already existing on your university campus. It harvests feeds from university websites and uses them to build custom feeds of news you are actually interested in. The tool has a range of applications including personal custom news feeds, custom feeds for use in department websites or simply taking an inventory of your university feeds. Try out and take control of your news!',
     long_description=long_description,
