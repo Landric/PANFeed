@@ -150,7 +150,7 @@ CSP_REPORT_URI = '/csp/report'
 CSP_POLICY_URI = '/csp/policy'
 
 CSP_IMG_SRC = ['*',]
-CSP_SCRIPT_SRC = ['html5shim.googlecode.com',]
+CSP_SCRIPT_SRC = ['cdnjs.cloudflare.com',]
 CSP_EXCLUDE_URL_PREFIXES = ('/admin',)
 
 # A sample logging configuration. The only tangible logging
