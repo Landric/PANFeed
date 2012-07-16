@@ -101,6 +101,7 @@ MIDDLEWARE_CLASSES = (
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
+    'csp.middleware.CSPMiddleware',
     'respite.middleware.HttpMethodOverrideMiddleware',
     'respite.middleware.HttpPutMiddleware',
     'respite.middleware.HttpPatchMiddleware',
@@ -122,7 +123,8 @@ INSTALLED_APPS = (
     'django.contrib.sites',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'jquery',   
+    'csp',
+    'jquery',
     'personalise',
     'respite',
     # Uncomment the next line to enable the admin:
@@ -144,6 +146,12 @@ LOGIN_REDIRECT_URL = "/account/login_redirect/"
 LOGIN_URL = "/account/login"
 LOGOUT_URL = "/account/logout"
 
+CSP_REPORT_URI = '/csp/report'
+CSP_POLICY_URI = '/csp/policy'
+
+CSP_IMG_SRC = ['*',]
+CSP_SCRIPT_SRC = ['html5shim.googlecode.com',]
+CSP_EXCLUDE_URL_PREFIXES = ('/admin',)
 
 # A sample logging configuration. The only tangible logging
 # performed by this configuration is to send an email to

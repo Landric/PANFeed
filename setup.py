@@ -26,6 +26,7 @@ setup(
         "django-jquery",
         "django-respite",
         "django-registration",
+        "django-csp",
     ],
     package_data={'personalise': [
         'text.txt',
