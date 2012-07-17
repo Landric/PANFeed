@@ -144,7 +144,7 @@ TEMPLATE_CONTEXT_PROCESSORS =(
 )
 
 TEMPLATE_CONTEXT_PROCESSORS += (
-    'django.core.context_processors.request'
+    'django.core.context_processors.request',
 )
 
 
@@ -162,7 +162,7 @@ LOGOUT_URL = "/account/logout"
 CSP_REPORT_URI = '/csp/report'
 
 CSP_IMG_SRC = ('*',)
-CSP_SCRIPT_SRC = ("'self'","cdnjs.cloudflare.com",)
+CSP_SCRIPT_SRC = ("'self'","https://cdnjs.cloudflare.com",)
 CSP_EXCLUDE_URL_PREFIXES = ('/admin',)
 
 # A sample logging configuration. The only tangible logging
