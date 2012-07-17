@@ -7,7 +7,7 @@ import feedparser
 import json
 import sys
 from urlparse import urlparse
-from personalise.models import AcademicFeeds,UserFeeds,Digest,Corpus,Corpuskeywords,Issue,IssueItem
+from personalise.models import AcademicFeeds,Corpus,Corpuskeywords,Issue,IssueItem
 from django.contrib.auth.models import User
 from personalise.urltorss2 import ItemMaker
 from django.contrib.sites.models import Site
@@ -16,7 +16,7 @@ from django.template.loader import render_to_string
 from django.template import RequestContext
 import pprint
 from django.contrib.auth.decorators import login_required
-from forms import DigestForm, IssueForm
+from forms import IssueForm
 from django.core.validators import URLValidator
 from django.core.exceptions import ValidationError
 
@@ -34,111 +34,6 @@ def faq(request):
 
 def findnews(request):
     return render_to_response('findnews.html', context_instance=RequestContext(request))
-
-@login_required
-def managedigest(request,digestid=None):
-    feeds = []
-    if request.method == 'POST':
-        form = DigestForm(request.POST)
-        if form.is_valid():
-
-            if digestid is None:
-                digest = form.save(commit=False)
-                digest.owner = request.user
-                digest.save()
-            else:
-		if Digest.objects.filter(digestid=int(digestid), owner = request.user).exists():
-                    digest = form.save(commit=False)
-                    digest.owner = request.user
-		    digest.digestid = digestid
-            
-                else:
-                    return HttpResponseForbidden("You do not have permission to edit this Digest.")
-
-            digest.feeds.clear()
-            feeds = request.POST.getlist('url')
-            invalid_feeds = []
-            if not (feeds is None):
-                validate = URLValidator(verify_exists=True)
-                for feed in feeds:
-                    if feed.strip() != '':
-			try:
-			    validate(feed)
-			except ValidationError, e:
-			    invalid_feeds.append(feed)
-        
-            if invalid_feeds:
-                content = 'The following feeds are invalid and could not be added to your digest. Please check they exist, and try again.'
-                return render_to_response('error.html', {'title':'Error', 'header':'Invalid Feeds', 'content':content, 'data':invalid_feeds}, context_instance=RequestContext(request))
-
-            else:
-		for feed in feeds:
-                    if feed != '':
-   		        if UserFeeds.objects.filter(url=feed).exists():
-                            digest.feeds.add(UserFeeds.objects.get(url=feed))
-                        else:
-                            digest.feeds.create(url=feed)           
-                digest.save(force_update=True)
-
-		unusedFeeds = UserFeeds.objects.exclude(pk__in=Digest.feeds.through.objects.values('userfeeds'))
-		unusedFeeds.delete()
-
-                return HttpResponseRedirect('/digestlist/')
-
-        elif not (digestid is None):
-            digest = get_object_or_404( Digest, digestid=int(digestid) )
-            feeds = digest.feeds.all()
-
-    elif request.method == 'DELETE':
-        digest = get_object_or_404( Digest, digestid=int(digestid) )
-
-        if digest.owner != request.user:
-            return HttpResponseForbidden("You do not have permission to edit this Digest.")
-
-        else:
-            digest.delete()
-            unusedFeeds = UserFeeds.objects.exclude(pk__in=Digest.feeds.through.objects.values('userfeeds'))
-	    unusedFeeds.delete()
-
-            return HttpResponseRedirect('/digestlist/')
- 
-    else:
-        if digestid is None:
-            form = DigestForm()
-        else:
-            digest = Digest.objects.get(digestid=digestid, owner=request.user)
-            form = DigestForm(instance=digest)
-            feeds = digest.feeds.all()
-
-    return render_to_response('managedigest.html', {'form': form, 'feeds' : feeds}, context_instance=RequestContext(request))
-
-def digestlist(request):
-    if request.user.is_authenticated():
-        all_digests = Digest.objects.all()
-        public = []
-	personal = []
-	for digest in all_digests:
-            if digest.owner_id == request.user.id:
-                personal.append(digest)
-            
-            if digest.public:
-                public.append(digest)
-    else:
-        public = Digest.objects.filter(public=True)
-	personal = None
-        
-    return render_to_response('digests.html', {'public' : public, 'personal' : personal}, context_instance=RequestContext(request))
-
-def digest(request, digestid):
-    digest = Digest.objects.get( digestid=digestid )
-    
-    if (not digest):
-        return HttpResponse("Digest not found")
-
-    feeds = digest.feeds
-    items = Corpus.objects.filter(feed__in=feeds.values_list("feedurl", flat=True)).order_by("-date")[:3]
-        
-    return HttpResponse("".join(str(items.values_list("date", flat=True))), context_instance=RequestContext(request))
 
 @login_required
 def manageissue(request,issueid=None):

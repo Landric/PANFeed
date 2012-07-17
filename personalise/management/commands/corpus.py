@@ -17,7 +17,7 @@ class Corpus():
     def initDB(self):
         ### Execute this first to open DB connection.
         print "Init"
-        self.db=MySQLdb.connect(passwd="",db="tfidf",charset = "utf8",use_unicode=True)
+        self.db=MySQLdb.connect(passwd="",db="panfeedf",charset = "utf8",use_unicode=True)
         self.db.set_character_set("utf8")
         
     def build_corpus(self):
