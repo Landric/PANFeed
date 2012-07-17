@@ -38,7 +38,7 @@
 							<span class="pull-left">{{issue.title}}</span>
 							<form action="{{manage_url}}" method="post">
 								<div class="btn-group pull-right">
-						        		<a class="btn btn-mini" target="_blank" href="/issue/{{issue.id}}" title="View this Issue" alt="View this Issue"><i class="icon-eye-open"></i></a>
+						        		<a class="btn btn-mini" target="_blank" href="{% url 'issue' issue.id %}" title="View this Issue" alt="View this Issue"><i class="icon-eye-open"></i></a>
 									<a class="btn btn-mini" href="{{manage_url}}" title="Edit this Issue" alt="Edit this Issue"><i class="icon-edit"></i></a>
 									<input name="_method" value="DELETE" type="hidden"/>
 									<button type="submit" class="btn btn-mini" title="Delete this Issue" alt="Delete this Issue"><i class="icon-trash"></i></button>
