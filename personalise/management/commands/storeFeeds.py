@@ -1,5 +1,5 @@
 from django.core.management.base import BaseCommand, CommandError
-import MySQLdb
+from django.db import connection
 import feedparser
 import urllib2
 import string
@@ -23,9 +23,8 @@ class Corpus():
     def initDB(self):
         ### Execute this first to open DB connection.
         print "Init"
-        self.db=MySQLdb.connect(passwd="",db="panfeed",charset = "utf8",use_unicode=True)
-        self.db.set_character_set("utf8")
-        
+        self.db=connection
+                
     def build_feeds(self):
         #### Builds a corpus of documents from a set of feeds.
         

@@ -1,6 +1,6 @@
 from django.core.management.base import BaseCommand, CommandError
 from personalise.models import AcademicFeeds,Corpus
-import MySQLdb
+from django.db import connection
 import feedparser
 import urllib2
 import string
@@ -26,9 +26,8 @@ class corpus_obj():
     def initDB(self):
         ### Execute this first to open DB connection.
         print "Init"
-        self.db=MySQLdb.connect(user="root",passwd="",db="panfeed",charset = "utf8",use_unicode=True)
-        self.db.set_character_set("utf8")
-        
+        self.db=connection
+                
     def build_corpus(self):
     #### Builds a corpus of documents from a set of feeds.
     

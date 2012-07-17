@@ -1,6 +1,5 @@
 ## A corpus is a body of work consisting of many Documents
-
-import MySQLdb
+from django.db import connection
 import feedparser
 import urllib2
 import string
@@ -17,8 +16,7 @@ class Corpus():
     def initDB(self):
         ### Execute this first to open DB connection.
         print "Init"
-        self.db=MySQLdb.connect(passwd="",db="panfeedf",charset = "utf8",use_unicode=True)
-        self.db.set_character_set("utf8")
+        self.db=connection
         
     def build_corpus(self):
         #### Builds a corpus of documents from a set of feeds.
@@ -132,11 +130,11 @@ class Corpus():
 
 #    def  
         
-                        
-corp = Corpus()
-corp.initDB()
-corp.build_corpus()
-corp.count_words_and_store()
-corp.calculate_keywords_for_all()
-corp.get_keywords_for_item(50)
-corp.find_matching_items(("microsoft","apple","wireless"))
+if __name__ == '__main__':
+	corp = Corpus()
+	corp.initDB()
+	corp.build_corpus()
+	corp.count_words_and_store()
+	corp.calculate_keywords_for_all()
+	corp.get_keywords_for_item(50)
+	corp.find_matching_items(("microsoft","apple","wireless"))
