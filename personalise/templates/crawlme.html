@@ -1,4 +1,5 @@
 {% extends "template.html" %}
+{% load url from future %}
 {% block title %}Crawl Me{% endblock title %}
 {% block content %}
 <h2>How can my university be added?</h2>
@@ -10,7 +11,7 @@
 <p>To submit you feed simply copy its url into the box below. Remember your feed must be web accessible for us to index it. Happy feeding!</p>
 
 <div class="feed_submission">
-<form action="/submit/" method=post class="form-horizontal">
+<form action="{% url 'submit' %}" method=post class="form-horizontal">
 	{% csrf_token %}
 	<fieldset>
 		<div class="control-group">

@@ -1,4 +1,5 @@
 {% extends "template.html" %}
+{% load url from future %}
 {% block title %}Find News{% endblock title%}
 {% block findnews_nav %}active{% endblock findnews_nav %}
 {% block content %}
@@ -38,5 +39,5 @@
 	</div>
 
 </div>
-<p>If you represent an institution and want to see your feeds appearing in this search, <a href="/crawlme/">click here to find out how to get your feeds added</a>.</p>
+<p>If you represent an institution and want to see your feeds appearing in this search, <a href="{% url 'crawlme' %}">click here to find out how to get your feeds added</a>.</p>
 {% endblock content %}

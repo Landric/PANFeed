@@ -1,3 +1,4 @@
+{% load url from future %}
 <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.1//EN" "http://www.w3.org/TR/xhtml11/DTD/xhtml11.dtd">
 <html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en">
 
@@ -40,23 +41,23 @@
           <div class="nav-collapse collapse">
             <ul class="nav">
 		<li class="{% block findnews_nav %}{% endblock %}">
-			<a href="/findnews/">Find News</a>
+			<a href="{% url 'findnews' %}">Find News</a>
 		</li>
 
 		<li class="{% block read_nav %}{% endblock %}">
-			<a href="/digestlist/">Read</a>
+			<a href="{% url 'digestlist' %}">Read</a>
 	        </li>
 
 		<li class="{% block publish_nav %}{% endblock %}">
-			<a href="/issuelist/">Publish</a>
+			<a href="{% url 'issuelist' %}">Publish</a>
 		</li>
 
 		<li class="{% block faq_nav %}{% endblock %}">
-			<a href="/faq/">FAQ</a>
+			<a href="{% url 'faq' %}">FAQ</a>
 		</li>
 
 		<li class="{% block about_nav %}{% endblock %}">
-			<a href="/about/">About</a>
+			<a href="{% url 'about' %}">About</a>
 		</li>
 			  
 		{% if user.is_authenticated %}

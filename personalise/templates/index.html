@@ -1,4 +1,5 @@
 {% extends "template.html" %}
+{% load url from future %}
 {% block title %}Home{% endblock title%}
 {% block content %}
 <div class="hero-unit">		
@@ -37,13 +38,13 @@
 </div>
 <div class="row">
 	<div class="span4">
-		<p><a class="btn" href="/findnews/">View details &raquo;</a></p>
+		<p><a class="btn" href="{% url 'findnews' %}">View details &raquo;</a></p>
 	</div>
 	<div class="span4">
-		<p><a class="btn" href="/digestlist/">View details &raquo;</a></p>
+		<p><a class="btn" href="{% url 'digestlist' %}">View details &raquo;</a></p>
 	</div>
 	<div class="span4">
-		<p><a class="btn" href="/issuelist/">View details &raquo;</a></p>
+		<p><a class="btn" href="{% url 'issuelist' %}">View details &raquo;</a></p>
 	</div>
 </div>
 {% endblock content %}

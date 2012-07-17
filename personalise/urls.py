@@ -26,8 +26,8 @@ urlpatterns = patterns('personalise.views',
 )
 
 urlpatterns += patterns('',
-    url(r'^digest/(?P<digestid>\d+)$', DigestFeed()),
-    url(r'^issue/(?P<issueid>\d+)$', IssueFeed()),
+    url(r'^digest/(?P<digestid>\d+)$', DigestFeed(), name='digest'),
+    url(r'^issue/(?P<issueid>\d+)$', IssueFeed(), name='issue'),
     url(r'^issue/(?P<issueid>\d+)/.*$', IssueFeed()),
     url(r'^find/(?P<sources>\w+)/(?P<keywords>\w+)/$', PersonalFeed()),
 )

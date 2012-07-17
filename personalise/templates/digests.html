@@ -1,4 +1,5 @@
 {% extends "template.html" %}
+{% load url from future %}
 {% block title %}Read{% endblock title %}
 {% block read_nav %}active{% endblock read_nav %}
 {% block content %}
@@ -19,7 +20,7 @@
 				{% for digest in public %}
 					<li class="feed-list">
 						<span class="pull-left">{{digest.title}}</span>
-						<a target="_blank" href="/digest/{{digest.digestid}}" class="btn btn-mini pull-right" title="View this Digest" alt="View this Digest"><i class="icon-eye-open"></i></a>
+						<a target="_blank" href="{% url 'digest' digest.digestid %}" class="btn btn-mini pull-right" title="View this Digest" alt="View this Digest"><i class="icon-eye-open"></i></a>
 					</li>
 				{% endfor %}
 			</ul>
@@ -35,13 +36,14 @@
 				<p>These are the Digests you have created:</p>
 				<ul>
 					{% for digest in personal %}
+						{% url 'managedigest' digest.digestid as manage_url %}
 						<li class="feed-list">
 							<span class="pull-left">{{digest.title}}</span>
-							<form action="/managedigest/{{digest.digestid}}" method="post">
+							<form action="{{manage_url}}" method="post">
 								{% csrf_token %}
 								<div class="btn-group pull-right">
 							        	<a class="btn btn-mini" target="_blank" href="/digest/{{digest.digestid}}" title="View this Digest" alt="View this Digest"><i class="icon-eye-open"></i></a>
-									<a class="btn btn-mini" href="/managedigest/{{digest.digestid}}" title="Edit this Digest" alt="Edit this Digest"><i class="icon-edit"></i></a>
+									<a class="btn btn-mini" href="{{manage_url}}" title="Edit this Digest" alt="Edit this Digest"><i class="icon-edit"></i></a>
 									<input name="_method" value="DELETE" type="hidden"/>
 									<button type="submit" class="btn btn-mini" title="Delete this Digest" alt="Delete this Digest"><i class="icon-trash"></i></button>
         							</div>
@@ -56,7 +58,7 @@
 		<div class="span4">
 			<h2>Create a Digest</h2>
 			<p>Creating a Digest is quick and easy. Press the button below to get started!</p>
-			<a href="/managedigest/new/" class="btn">Create a Digest</a>
+			<a href="{% url 'newdigest' %}" class="btn">Create a Digest</a>
 		</div>
 	{% else %}
 		<div class="span8">

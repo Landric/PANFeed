@@ -1,4 +1,5 @@
 {% extends "template.html" %}
+{% load url from future %}
 {% block title %}Manage Digests{% endblock title %}
 {% block scripts %}<script type="text/javascript" src="{{ STATIC_URL }}scripts/manage_digest.js"></script>{% endblock scripts %}
 {% block read_nav %}active{% endblock read_nav %}
@@ -66,7 +67,7 @@
 		<div class="control-group">
 			<div class="controls">
 				<input type="submit" value="Submit" class="btn btn-primary"/>&nbsp;&nbsp;
-				<a href="/digestlist/" class="btn">Cancel</a>
+				<a href="{% url 'digestlist' %}" class="btn">Cancel</a>
 			</div>
 		</div>
 	</fieldset>
