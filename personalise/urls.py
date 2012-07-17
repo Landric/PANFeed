@@ -1,5 +1,5 @@
 from django.conf.urls.defaults import patterns, include, url
-from personalise.feed import PersonalFeed, DigestFeed, IssueFeed
+from personalise.feed import PersonalFeed, IssueFeed
 import settings
 
 urlpatterns = patterns('personalise.views',
@@ -7,11 +7,6 @@ urlpatterns = patterns('personalise.views',
     url(r'^about/$','about', name='about'),
     url(r'^crawlme/$','crawlme', name='crawlme'),
     url(r'^urltoitem$','urltoitem', name='urltoitem'),
-
-    url(r'^managedigest/$','managedigest', name='savedigest'),
-    url(r'^managedigest/new/$','managedigest', name='newdigest'),
-    url(r'^managedigest/(?P<digestid>\d+)$','managedigest', name='managedigest'),
-    url(r'^digestlist/$','digestlist', name='digestlist'),
 
     url(r'^manageissue/$','manageissue', name='saveissue'),
     url(r'^manageissue/new/$','manageissue', name='newissue'),
@@ -26,7 +21,6 @@ urlpatterns = patterns('personalise.views',
 )
 
 urlpatterns += patterns('',
-    url(r'^digest/(?P<digestid>\d+)$', DigestFeed(), name='digest'),
     url(r'^issue/(?P<issueid>\d+)$', IssueFeed(), name='issue'),
     url(r'^issue/(?P<issueid>\d+)/.*$', IssueFeed()),
     url(r'^find/(?P<sources>\w+)/(?P<keywords>\w+)/$', PersonalFeed()),

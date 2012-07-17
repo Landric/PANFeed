@@ -5,7 +5,7 @@ import datetime
 import time
 import sys
 from operator import itemgetter
-from personalise.models import Corpus,Digest,Issue, IssueItem
+from personalise.models import Corpus,Issue, IssueItem
 import feedparser
 
 class PANFeed:
@@ -86,42 +86,6 @@ class PersonalFeed(Feed):
 
         return hot_rank
 
-class DigestFeed(Feed):
-    
-    def items(self,obj):
-        digest_items = []
-        for feed in obj.feeds.all():
-            feed = feedparser.parse(feed.url)
-            for item in feed[ "items" ]:
-                item.title = item.title + " - " + feed.channel.title
-                digest_items.append(item)
-
-        return sorted(digest_items, key=lambda item: item.date_parsed,reverse=True)
-
-    def title(self,obj):
-        return obj.title 
-
-    def link(self, obj):
-        return "http://panfeed.ecs.soton.ac.uk/digest/"+str(obj.digestid)
-
-    def description(self, obj):
-        return obj.description
-
-    def item_title(self,item):
-        return item.title
-        
-    def item_description(self,item):
-        return item.summary
-        
-    def item_link(self,item):
-        return item.link
-    
-    def item_pubdate(self,item):
-        return datetime.datetime.fromtimestamp(time.mktime(item.date_parsed))
-    
-    def get_object(self,request,digestid):
-        return get_object_or_404(Digest, digestid=digestid);
-
 class IssueFeed(Feed):
 
     def items(self,obj):
@@ -134,7 +98,7 @@ class IssueFeed(Feed):
         return obj.description 
 
     def link(self, obj):
-        return "http://panfeed.ecs.soton.ac.uk/digest/"+str(obj.id)
+        return "http://panfeed.ecs.soton.ac.uk/issue/"+str(obj.id)
 
     def item_title(self,item):
         return item.title

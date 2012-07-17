@@ -1,5 +1,5 @@
 from django.conf.urls.defaults import patterns, include, url
-from personalise.feed import PersonalFeed, DigestFeed, IssueFeed
+from personalise.feed import PersonalFeed, IssueFeed
 import settings
 
 # Uncomment the next two lines to enable the admin:

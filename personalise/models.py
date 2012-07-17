@@ -60,28 +60,6 @@ class Words(models.Model):
     class Meta:
         db_table = u'words'
 
-class UserFeeds(models.Model):
-    url = models.URLField(verify_exists=True)
-
-    def __unicode__(self):
-        return self.url;
-
-    class Meta:
-        db_table = u'user_feeds'
-
-class Digest(models.Model):
-    owner = models.ForeignKey(User) 
-    public = models.BooleanField()
-    digestid = models.AutoField(primary_key=True)
-    title = models.CharField(max_length=60)
-    description = models.TextField()
-    feeds = models.ManyToManyField(UserFeeds, blank=True)
-    def get_absolute_url(self):
-        return "/digest/"+str(self.digestid)+"/"+re.subn(r'[^A-Za-z0-9]+', '-', self.title)[0]
-
-    class Meta:
-        db_table = u'digest'
-
 class SpiderToDo(models.Model):
     pageurl=models.URLField(primary_key=True,max_length=255)
 
