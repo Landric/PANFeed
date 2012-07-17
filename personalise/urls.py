@@ -11,7 +11,7 @@ urlpatterns = patterns('personalise.views',
     url(r'^manageissue/$','manageissue', name='saveissue'),
     url(r'^manageissue/new/$','manageissue', name='newissue'),
     url(r'^manageissue/(?P<issueid>\d+)$','manageissue', name='manageissue'),
-    url(r'^issuelist/$','issuelist', name='issuelist'),
+    url(r'^publishnews/$','publishnews', name='publishnews'),
     url(r'^issueitems/(?P<issueid>\d+)$','issueitems', name='issueitems'),
 
     url(r'submit/$', 'submit', name='submit'),

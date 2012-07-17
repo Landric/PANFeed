@@ -70,7 +70,7 @@ def manageissue(request,issueid=None):
                 item.ordernumber = i;
                 item.save()
 
-            return HttpResponseRedirect('/issuelist/')
+            return HttpResponseRedirect('/publishnews/')
 
     elif request.method == 'DELETE':
         issue = get_object_or_404( Issue, id=int(issueid) )
@@ -80,7 +80,7 @@ def manageissue(request,issueid=None):
 
         else:
             issue.delete()
-            return HttpResponseRedirect('/issuelist/')
+            return HttpResponseRedirect('/publishnews/')
     else:
         if issueid is None:
             form = IssueForm()
@@ -132,9 +132,9 @@ def saveissue(request):
         item.ordernumber = i;
         item.save()
 
-    return HttpResponseRedirect('/issuelist')
+    return HttpResponseRedirect('/publishnews')
 
-def issuelist(request):
+def publishnews(request):
     if request.user.is_authenticated():
         all_issues = Issue.objects.all()
         public = []
