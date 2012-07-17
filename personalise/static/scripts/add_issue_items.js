@@ -7,7 +7,7 @@ function addURLsAsItems(from_id, to_id) {
     for(var url in issueUrls){
         // setTimeout stops the ajax hammering the server. django was having a tantrum so i thought this seemed like the simplest fix
         // if anyone has time to work out whats up please let me know
-        setTimeout("doAjax('"+issueUrls[url]+"', '"+from_id+"', '"+to_id+"')", url*2000);
+        setTimeout(doAjax,url*2000,issueUrls[url], from_id, to_id);
     }
 
 }
