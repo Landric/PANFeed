@@ -54,11 +54,10 @@ class corpus_obj():
         ### Performs a wordcount of each document and stores cumulative word count 
         ### and also wordcount specific to that document/word combination.
         c=self.db.cursor()
-        c.execute("""SELECT title,description,id FROM corpus""")
-        text = c.fetchall()
+        text = Corpus.objects.all()
         for item in text:
-            if (c.execute("""SELECT itemid FROM tf WHERE itemid=%s""",(item[2]))==0):
-                totaltext = unicodedata.normalize('NFKD',(item[0]+' '+item[1])).encode('ascii','ignore')
+            if not Tf.objects.get(itemid=itemid).exists:
+                totaltext = unicodedata.normalize('NFKD',(item.title+' '+item.description)).encode('ascii','ignore')
                 totaltext = self.__remove_extra_spaces(self.__remove_html_tags(totaltext))
                 freq = self.__get_word_frequencies(self.__remove_single_characters((''.join((x for x in (totaltext.lower()) if x not in string.punctuation)))))
                 for word in freq:
