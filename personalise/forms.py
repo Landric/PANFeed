@@ -1,5 +1,5 @@
 from django.forms import ModelForm, HiddenInput, RadioSelect, ChoiceField
-from models import Feed, FeedIte, SpecialIssue
+from models import Feed, FeedItem, SpecialIssue
 
 class FeedForm(ModelForm):
     displayAll = ChoiceField(label='Publishing options', widget=RadioSelect(), choices=[['1','Show all - show all published items and Special Issues'],['0','Show latest - only show the latest published item or Special Issue']], help_text='Don\'t worry, you can change this later if you change your mind')
