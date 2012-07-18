@@ -13,6 +13,10 @@ import re
 
 class Domains(models.Model):
     toplevel = models.URLField()
+    
+    def __unicode__(self):
+        return self.toplevel
+        
     class Meta:
         db_table=u'domains'
 
@@ -35,24 +39,32 @@ class Corpus(models.Model):
     keywords = models.TextField(blank=True,null=True, default="")
     date = models.DateTimeField(null=True, blank=True)
     toplevel = models.URLField(blank=True)
+    
+    def __unicode__(self):
+        return self.title
+    
     class Meta:
         db_table = u'corpus'
 
 class Corpuskeywords(models.Model):
-    itemid = models.IntegerField()
+    corpus = models.ForeignKey(Corpus, db_column="itemid")
     word = models.CharField(max_length=90)
     rank = models.IntegerField(null=True, blank=True)
+    
+    def __unicode__(self):
+        return "{word} {itemid}".format(word = self.word, itemid = self.itemid)
+    
     class Meta:
         db_table = u'corpuskeywords'
-        unique_together = ("itemid","word")
+        unique_together = ("corpus","word")
 
 class Tf(models.Model):
     word = models.CharField(max_length=90)
-    itemid = models.IntegerField()
+    corpus = models.ForeignKey(Corpus, db_column="itemid")
     count = models.IntegerField(null=True, blank=True)
     class Meta:
         db_table = u'tf'
-        unique_together = ("word","itemid")
+        unique_together = ("word","corpus")
 
 class Words(models.Model):
     word = models.CharField(max_length=90, primary_key=True)
@@ -74,7 +86,7 @@ class IssueItem(models.Model):
     description = models.TextField(blank=True)
     url = models.CharField(max_length=6249, blank=True)
     img = models.CharField(max_length=6249, blank=True)
-    issueid = models.IntegerField()
+    issue = models.ForeignKey('Issue', db_column="issueid")
     length = models.IntegerField(null=True, blank=True)
     keywords = models.TextField(blank=True,null=True, default="")
     date = models.DateTimeField(null=True, blank=True)

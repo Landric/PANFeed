@@ -29,17 +29,17 @@ class Corpus():
                 feed = feedparser.parse(page)
                 c=self.db.cursor()
                 for item in feed.entries:
-		    try:
+                    try:
                         if (c.execute("""SELECT * FROM corpus WHERE url = %s AND title = %s""",(item.link,item.title))==0):
                             try:
                                 d = datetime.datetime(*(item.date_parsed[0:6]))
                             except (AttributeError,TypeError):
                                 d=datetime.datetime.now()
                             dStr = d.isoformat(' ')
-	         	    try:
-			        itemDesc = item.description
-			    except:
-			        itemDesc = ""
+                            try:
+                                itemDesc = item.description
+                            except:
+                                itemDesc = ""
                             c.execute("""INSERT INTO corpus (title,description,url,feed,length,date) VALUES (%s,%s,%s,%s,%s,%s)""",(item.title,itemDesc,item.link,feedurl,len(itemDesc+item.title),dStr))
                     except:
                         print "Bad feed item"
@@ -131,10 +131,10 @@ class Corpus():
 #    def  
         
 if __name__ == '__main__':
-	corp = Corpus()
-	corp.initDB()
-	corp.build_corpus()
-	corp.count_words_and_store()
-	corp.calculate_keywords_for_all()
-	corp.get_keywords_for_item(50)
-	corp.find_matching_items(("microsoft","apple","wireless"))
+    corp = Corpus()
+    corp.initDB()
+    corp.build_corpus()
+    corp.count_words_and_store()
+    corp.calculate_keywords_for_all()
+    corp.get_keywords_for_item(50)
+    corp.find_matching_items(("microsoft","apple","wireless"))
