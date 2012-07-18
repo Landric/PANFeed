@@ -1,7 +1,10 @@
 ## A corpus is a body of work consisting of many Documents
 from personalise.models import AcademicFeeds, Corpuskeywords, Tf, Words
 from personalise.models import Corpus as MCorpus
+
 from django.db import connection
+from django.core.management.base import BaseCommand, CommandError
+
 from collections import namedtuple
 import feedparser
 import urllib2
@@ -10,6 +13,14 @@ import unicodedata
 import math
 import re
 import datetime
+
+class Command(BaseCommand):
+
+    help = 'Loads all the corpus stuff'
+
+    def handle(self, *args, **options):
+        load_generate_and_add_corpus_data()
+
 
 class Corpus():
     
@@ -103,7 +114,8 @@ class Corpus():
                 keywords = self.calculate_tfidf(worddata)
                 topkeys = keywords[:10]
                 for rank, word in topkeys:
-                    Corpuskeywords(corpus=corpus, word=word, rank=rank).save()                
+                    corpus.corpuskeywords_set.add(Corpuskeywords(corpus=corpus, word=Words(pk=word), rank=rank))
+                corpus.save()
         
     def calculate_tfidf(self,worddata):
         wordlist = []
@@ -128,11 +140,18 @@ class Corpus():
         print result
 
 #    def  
-        
-if __name__ == '__main__':
+
+def test():
+    corp = Corpus()
+    corp.get_keywords_for_item(MCorpus.objects.order_by('?')[0].id)
+    corp.find_matching_items(("microsoft","apple","wireless"))
+    
+def load_generate_and_add_corpus_data():
     corp = Corpus()
     corp.build_corpus()
     corp.count_words_and_store()
     corp.calculate_keywords_for_all()
-    corp.get_keywords_for_item(MCorpus.objects.order_by('?')[0].id)
-    corp.find_matching_items(("microsoft","apple","wireless"))
+    
+if __name__ == '__main__':
+    load_generate_and_add_corpus_data()
+    test()
