@@ -46,22 +46,22 @@ def manageissue(request,issueid=None):
                 issue.owner = request.user
                 issue.save()
             else:
-		if Issue.objects.filter(id=int(issueid), owner = request.user).exists():
+                if Issue.objects.filter(id=int(issueid), owner = request.user).exists():
                     issue = form.save(commit=False)
                     issue.owner = request.user
-		    issue.id = issueid
+                    issue.id = issueid
                     issue.save(force_update=True)
-                    IssueItem.objects.filter(issueid=issue.id).delete()
+                    IssueItem.objects.filter(issue=issue).delete()
             
                 else:
                     return HttpResponseForbidden("You do not have permission to edit this Issue.")
 
             for i, val in enumerate(request.REQUEST.getlist("item-title")) :
         
-                if IssueItem.objects.filter(issueid=issue.id, url=request.REQUEST.getlist("item-url")[i]).count() > 0:
-                    item = IssueItem.objects.filter(issueid=issue.id, url=request.REQUEST.getlist("item-url")[i])[0]
+                if IssueItem.objects.filter(issue=issue, url=request.REQUEST.getlist("item-url")[i]).count() > 0:
+                    item = IssueItem.objects.filter(issue=issue, url=request.REQUEST.getlist("item-url")[i])[0]
                 else:
-                    item = IssueItem.objects.create(issueid=issue.id)
+                    item = IssueItem.objects.create(issue=issue)
 
                 item.url = request.REQUEST.getlist("item-url")[i]
                 item.title = request.REQUEST.getlist("item-title")[i]
@@ -115,15 +115,15 @@ def saveissue(request):
         issue.public = request.REQUEST['public']
     issue.save();
 
-    IssueItem.objects.filter(issueid=issue.id).delete()
+    IssueItem.objects.filter(issue=issue).delete()
 
     for i, val in enumerate(request.REQUEST.getlist("item-title")) :
         pprint.pprint(request.REQUEST.getlist("item-url"), sys.stderr)
         
-        if IssueItem.objects.filter(issueid=issue.id, url=request.REQUEST.getlist("item-url")[i]).count() > 0:
-            item = IssueItem.objects.filter(issueid=issue.id, url=request.REQUEST.getlist("item-url")[i])[0]
+        if IssueItem.objects.filter(issue=issue, url=request.REQUEST.getlist("item-url")[i]).count() > 0:
+            item = IssueItem.objects.filter(issue=issue, url=request.REQUEST.getlist("item-url")[i])[0]
         else:
-            item = IssueItem.objects.create(issueid=issue.id)
+            item = IssueItem.objects.create(issue=issue)
 
         item.url = request.REQUEST.getlist("item-url")[i]
         item.title = request.REQUEST.getlist("item-title")[i]
@@ -138,8 +138,8 @@ def issuelist(request):
     if request.user.is_authenticated():
         all_issues = Issue.objects.all()
         public = []
-	personal = []
-	for issue in all_issues:
+        personal = []
+        for issue in all_issues:
             if issue.owner_id == request.user.id:
                 personal.append(issue)
             
@@ -147,7 +147,7 @@ def issuelist(request):
                 public.append(issue)
     else:
         public = Issue.objects.filter(public=True)
-	personal = None
+        personal = None
         
     return render_to_response('issues.html', {'public' : public, 'personal' : personal}, context_instance=RequestContext(request))
 
@@ -162,17 +162,17 @@ def submit(request):
         invalid_feeds = []
         validate = URLValidator(verify_exists=True)
         for url in feeds:
-	    try:
-	        validate(url)
+            try:
+                validate(url)
                 hostname = urlparse(url).hostname
                 if (hostname.endswith(".ac.uk") or hostname.endswith(".edu")):
                     if (feedparser.parse(url).version):
                         if (not AcademicFeeds.objects.filter(url=url).exists()):
                             AcademicFeeds.objects.create(url=url,toplevel=hostname)
-		else:
-	            invalid_feeds.append(url)
-	    except ValidationError, e:
-	        invalid_feeds.append(url)
+                else:
+                    invalid_feeds.append(url)
+            except ValidationError, e:
+                invalid_feeds.append(url)
         
 
         if invalid_feeds:

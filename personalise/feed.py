@@ -89,7 +89,7 @@ class PersonalFeed(Feed):
 class IssueFeed(Feed):
 
     def items(self,obj):
-        return IssueItem.objects.filter(issueid=obj.id).order_by("-date")
+        return IssueItem.objects.filter(issue__id=obj.id).order_by("-date")
 
     def title(self,obj):
         return obj.title 
