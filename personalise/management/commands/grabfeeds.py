@@ -1,5 +1,5 @@
 from django.core.management.base import BaseCommand, CommandError
-from personalise.models import AcademicFeeds,Corpus
+from personalise.models import AcademicFeeds, Corpus, Corpuskeywords, Tf, Words
 from django.db import connection
 import feedparser
 import urllib2
@@ -54,18 +54,19 @@ class corpus_obj():
         ### Performs a wordcount of each document and stores cumulative word count 
         ### and also wordcount specific to that document/word combination.
         c=self.db.cursor()
-        text = Corpus.objects.all()
-        for item in text:
-            if not Tf.objects.get(itemid=itemid).exists:
-                totaltext = unicodedata.normalize('NFKD',(item.title+' '+item.description)).encode('ascii','ignore')
+        corpusses = Corpus.objects.all()
+        for corpus in corpusses:
+            if not Tf.objects.filter(corpus=corpus).exists():
+                totaltext = unicodedata.normalize('NFKD',(corpus.title+' '+corpus.description)).encode('ascii','ignore')
                 totaltext = self.__remove_extra_spaces(self.__remove_html_tags(totaltext))
                 freq = self.__get_word_frequencies(self.__remove_single_characters((''.join((x for x in (totaltext.lower()) if x not in string.punctuation)))))
                 for word in freq:
-                    itemid = item[2]
+                    itemid = corpus.id
                     #print word, " ", freq[word], " ", itemid
-                    c.execute("""INSERT INTO words (word,count) VALUES (%s,%s) ON DUPLICATE KEY UPDATE count=count+1""",(word,1))
-                    c.execute("""INSERT INTO tf (word,itemid,count) VALUES (%s,%s,%s)""",(word,itemid,freq[word]))
-                
+                    dbword,created = Words.objects.get_or_create(word=word, defaults={'count':0})
+                    dbword.count += 1
+                    dbword.save()
+                    Tf(word = dbword, corpus = corpus, count = freq[word]).save()                
                 
             
     def __get_word_frequencies(self,text):
@@ -86,20 +87,20 @@ class corpus_obj():
         
     def calculate_keywords_for_all(self):
         c=self.db.cursor()
-        c.execute("""SELECT id FROM corpus""")
-        itemids = c.fetchall()
+        corpusses = Corpus.objects.all()
         global corpussize
-        corpussize = len(itemids)
+        corpussize = Corpus.objects.count()
         
-        for itemid in itemids:
-            if (c.execute("""SELECT itemid FROM corpuskeywords WHERE itemid=%s""",(itemid[0]))==0):
+        for corpus in corpusses:
+            if not Corpuskeywords.objects.filter(corpus=corpus).exists():
         ### For each item from feeds
                 worddata = {}
-                c.execute("""SELECT word,count FROM tf WHERE itemid=%s""",(itemid))
+                c.execute("""SELECT word,count FROM tf WHERE itemid=%s""",(corpus.id))
+                words = Tf.objects.filter(corpus=corpus).values('word','count')
                 ### For each word in that item
-                for word in c.fetchall():
-                    c.execute("""SELECT count FROM words WHERE word=%s""",(word[0]))
-                    worddata[word[0]] = (word[1], c.fetchall()[0][0])
+                for word in words:
+                    c.execute("""SELECT count FROM words WHERE word=%s""",(word['word']))
+                    worddata[word['word']] = (word['count'], c.fetchall()[0][0])
                 keywords = self.calculate_tfidf(worddata)
                 topkeys = keywords[:10]
                 for key in topkeys:
@@ -115,16 +116,14 @@ class corpus_obj():
         return sorted(wordlist, reverse=True)
         
     def get_keywords_for_item(self,itemid):
-        c=self.db.cursor()
-        c.execute("""SELECT word FROM corpuskeywords WHERE itemid=%s""",(itemid))
-        print c.fetchall()
-        return c.fetchall()
+        words = Corpuskeywords.objects.filter(corpus__id=itemid).values_list('word', flat=True)
+        print words
+        return words
         
     def find_matching_items(self,keywords):
-        c=self.db.cursor()
         result = set()
         for key in keywords:
-            c.execute("""SELECT corpus.id,corpus.title FROM corpus,corpuskeywords WHERE corpus.id=corpuskeywords.itemid AND corpuskeywords.word LIKE %s""",(key))
-            for listitem in c.fetchall():
+            matches = Corpuskeywords.objects.filter(word__contains="foo").values("corpus", "corpus__title")
+            for listitem in matches:
                 result.add(listitem)
         print result
