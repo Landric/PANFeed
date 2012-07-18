@@ -16,23 +16,17 @@ class Command(BaseCommand):
 
     def handle(self, *args, **options):
         corp = corpus_obj()
-        corp.initDB()
         corp.build_corpus()
         corp.count_words_and_store()
         corp.calculate_keywords_for_all()
 
 class corpus_obj():
     
-    def initDB(self):
-        ### Execute this first to open DB connection.
-        print "Init"
-        self.db=connection
                 
     def build_corpus(self):
-    #### Builds a corpus of documents from a set of feeds.
+        #### Builds a corpus of documents from a set of feeds.
     
-        c=self.db.cursor()
-	#c.execute("""SELECT url,toplevel FROM feeds""")
+        #c.execute("""SELECT url,toplevel FROM feeds""")
         feeds = AcademicFeeds.objects.all()
         for feedurl in feeds:
             print feedurl.url
@@ -53,7 +47,6 @@ class corpus_obj():
     def count_words_and_store(self):
         ### Performs a wordcount of each document and stores cumulative word count 
         ### and also wordcount specific to that document/word combination.
-        c=self.db.cursor()
         corpusses = Corpus.objects.all()
         for corpus in corpusses:
             if not Tf.objects.filter(corpus=corpus).exists():
@@ -86,26 +79,23 @@ class corpus_obj():
         return p.sub('',data)
         
     def calculate_keywords_for_all(self):
-        c=self.db.cursor()
         corpusses = Corpus.objects.all()
         global corpussize
         corpussize = Corpus.objects.count()
         
         for corpus in corpusses:
             if not Corpuskeywords.objects.filter(corpus=corpus).exists():
-        ### For each item from feeds
+                ### For each item from feeds
                 worddata = {}
-                c.execute("""SELECT word,count FROM tf WHERE itemid=%s""",(corpus.id))
                 words = Tf.objects.filter(corpus=corpus).values('word','count')
                 ### For each word in that item
                 for word in words:
-                    c.execute("""SELECT count FROM words WHERE word=%s""",(word['word']))
-                    worddata[word['word']] = (word['count'], c.fetchall()[0][0])
+                    wordcount = Words.objects.get(word['word']).count
+                    worddata[word['word']] = (word['count'], wordcount)
                 keywords = self.calculate_tfidf(worddata)
                 topkeys = keywords[:10]
-                for key in topkeys:
-                    c.execute("""INSERT INTO corpuskeywords (itemid,word,rank) VALUES (%s,%s,%s)""",(itemid[0],key[1],key[0]))
-                
+                for rank, word in topkeys:
+                    Corpuskeywords(corpus=corpus, word=word, rank=rank).save()                
         
     def calculate_tfidf(self,worddata):
         wordlist = []
