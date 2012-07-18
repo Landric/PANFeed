@@ -52,7 +52,7 @@ class Corpuskeywords(models.Model):
     rank = models.IntegerField(null=True, blank=True)
     
     def __unicode__(self):
-        return "{word} {itemid}".format(word = self.word, itemid = self.itemid)
+        return "{word} {corpus}".format(word = self.word, corpus = self.corpus)
     
     class Meta:
         db_table = u'corpuskeywords'
