@@ -3,47 +3,42 @@
 {% block title %}Find News{% endblock title%}
 {% block findnews_nav %}active{% endblock findnews_nav %}
 {% block content %}
-<h1>Find News</h1>
-<br/>
-<p>You can use PANFeed to search a vast store of academic news feeds to create a tailored stream of news related directly to your interests. Just enter some keywords (seperated by commas) into the box below and click "Feed me!" to create your very own custom news feed. To quickly view some of the articles that PANFeed has selected for you, click "View preview".</p>
-<br/>
-<br/>
-
 <div class="row">
-	<div class="span5 offset1">
+	<div class="span8">
+		<h1>Find News</h1>
+		<p>You can use PANFeed to search a vast store of academic news feeds to create a tailored stream of news related directly to your interests. Just enter some keywords (seperated by commas) into the box below and click "Feed me!" to create your very own custom news feed. To quickly view some of the articles that PANFeed has selected for you, click "View preview".</p>
+		<br/>
+	</div>
+</div>
+<div class="row">
+	<div class="span4 offset1">
 		<h2>Select a custom Feed</h2>
 		<p>Enter some keywords separated by commas into the box below to create a custom news feed.</p>
-		<div class="row">
-			<div class="span6">
 				<div class="input-append">
      					<input class="span2" id="keyword_input" size="16" type="text"><button class="btn" type="button" onclick="makeFeed()">Feed me!</button>
 				</div>
 		
 				<p>Popular searches: <a href="javascript:example('eprints')">eprints</a>, <a href="javascript:example('ecs')">ecs</a>, <a href="javascript:example('security')">security</a></p>
 				<br/>
-			</div>		
-		</div>
+		<p>If you represent an institution and want to see your feeds appearing in this search, <a href="{% url 'crawlme' %}">click here to find out how to get your feeds added</a>.</p>
 	</div>
-	<div class="span5 offset1">	
+	<div class="span4 offset1">	
 		<h2>Select user created Feed</h2>
 		<p>These feeds have been created by other PANFeed users.</p>
 		<br/>
 		<p>There are currently no user created Feeds. Why not be the first to <a href="/publishnews/">publish some news</a>?</p>
 	</div>
 </div>
-<div class="well">
-	<div class="row">
-		<div class="span8 offset2">
-			<p>To quickly view some of the items in the Feed, click "View Preview". To add the Feed to your feed reader, you can simple click one of the buttons below if you use <a href="http://www.google.com/reader">Google Reader</a>, <a href="http://reader.feedshow.com/">Feed Show</a> or <a href="http://www.newsalloy.com/">News Alloy</a>. If you use a different reader, copy the feed link provided and paste it in to your reader of choice.</p>
-			<div class="input-append">
-				<input class="span4" id="feed_link" type="text" value="http://panfeed.ecs.soton.ac.uk/find/all/eprints"><button class="btn" type="button">Copy to clipboard</button><a class="btn" id="view_more" href="http://panfeed.ecs.soton.ac.uk/find/all/eprints" target="_blank">View Preview</a>
-			</div>
-			<a id="google_link" href="http://fusion.google.com/add?source=atgs&feedurl=http%3A//panfeed.ecs.soton.ac.uk/find/eprints"><img src="http://buttons.googlesyndication.com/fusion/add.gif" border="0" alt="Add to Google"></a>&nbsp;&nbsp;
-			<a id="feedshow_link" href="http://www.feedshow.com/subscribe.php?url=http%3A//panfeed.ecs.soton.ac.uk/find/all/eprints" title="subscribe"><img src="http://www.feedshow.com/images/addfeedshow.gif" border="0" alt="Add to FeedShow" /></a>&nbsp;&nbsp;
-			<a id="newsalloy_link" href="http://www.newsalloy.com/?rss=http%3A//panfeed.ecs.soton.ac.uk/find/all/eprints"><img src="http://www.newsalloy.com/subrss1.png" alt="NewsAlloy button" style="border:0"/></a>&nbsp;&nbsp;
+<br/>
+<div class="row">
+	<div class="span8 offset2 well">
+		<p>To quickly view some of the items in the Feed, click "View Preview". To add the Feed to your feed reader, you can simple click one of the buttons below if you use <a href="http://www.google.com/reader">Google Reader</a>, <a href="http://reader.feedshow.com/">Feed Show</a> or <a href="http://www.newsalloy.com/">News Alloy</a>. If you use a different reader, copy the feed link provided and paste it in to your reader of choice.</p>
+		<div class="input-append">
+			<input class="span4" id="feed_link" type="text" value="http://panfeed.ecs.soton.ac.uk/find/all/eprints"><button class="btn" type="button">Copy to clipboard</button><a class="btn" id="view_more" href="http://panfeed.ecs.soton.ac.uk/find/all/eprints" target="_blank">View Preview</a>
 		</div>
+		<a id="google_link" href="http://fusion.google.com/add?source=atgs&feedurl=http%3A//panfeed.ecs.soton.ac.uk/find/eprints"><img src="http://buttons.googlesyndication.com/fusion/add.gif" border="0" alt="Add to Google"></a>&nbsp;&nbsp;
+		<a id="feedshow_link" href="http://www.feedshow.com/subscribe.php?url=http%3A//panfeed.ecs.soton.ac.uk/find/all/eprints" title="subscribe"><img src="http://www.feedshow.com/images/addfeedshow.gif" border="0" alt="Add to FeedShow" /></a>&nbsp;&nbsp;
+		<a id="newsalloy_link" href="http://www.newsalloy.com/?rss=http%3A//panfeed.ecs.soton.ac.uk/find/all/eprints"><img src="http://www.newsalloy.com/subrss1.png" alt="NewsAlloy button" style="border:0"/></a>&nbsp;&nbsp;
 	</div>
-
 </div>
-<p>If you represent an institution and want to see your feeds appearing in this search, <a href="{% url 'crawlme' %}">click here to find out how to get your feeds added</a>.</p>
 {% endblock content %}

@@ -149,7 +149,7 @@ def publishnews(request):
         public = Issue.objects.filter(public=True)
 	personal = None
         
-    return render_to_response('issues.html', {'public' : public, 'personal' : personal}, context_instance=RequestContext(request))
+    return render_to_response('publishnews.html', {'public' : public, 'personal' : personal}, context_instance=RequestContext(request))
 
 def urltoitem(request):
     itemmaker = ItemMaker()
