@@ -1,5 +1,8 @@
 ## A corpus is a body of work consisting of many Documents
+from personalise.models import AcademicFeeds, Corpuskeywords, Tf, Words
+from personalise.models import Corpus as MCorpus
 from django.db import connection
+from collections import namedtuple
 import feedparser
 import urllib2
 import string
@@ -12,11 +15,6 @@ class Corpus():
     
     db = None
     corpussize = None
-    
-    def initDB(self):
-        ### Execute this first to open DB connection.
-        print "Init"
-        self.db=connection
         
     def build_corpus(self):
         #### Builds a corpus of documents from a set of feeds.
@@ -27,10 +25,9 @@ class Corpus():
             try:
                 page = urllib2.urlopen(feedurl)
                 feed = feedparser.parse(page)
-                c=self.db.cursor()
                 for item in feed.entries:
                     try:
-                        if (c.execute("""SELECT * FROM corpus WHERE url = %s AND title = %s""",(item.link,item.title))==0):
+                        if not MCorpus.objects.filter(url=item.link, title=item.title).exists():
                             try:
                                 d = datetime.datetime(*(item.date_parsed[0:6]))
                             except (AttributeError,TypeError):
@@ -40,9 +37,18 @@ class Corpus():
                                 itemDesc = item.description
                             except:
                                 itemDesc = ""
-                            c.execute("""INSERT INTO corpus (title,description,url,feed,length,date) VALUES (%s,%s,%s,%s,%s,%s)""",(item.title,itemDesc,item.link,feedurl,len(itemDesc+item.title),dStr))
-                    except:
-                        print "Bad feed item"
+                            
+                            MCorpus(
+                                title = item.title,
+                                description = itemDesc,
+                                url = item.link,
+                                feed = feedurl,
+                                length = len(itemDesc+item.title),
+                                date = dStr
+                            ).save()
+                            
+                    except Exception as e:
+                        print(e)
             except urllib2.URLError:
                 print "Error getting page: ", feedurl
  
@@ -51,21 +57,19 @@ class Corpus():
     def count_words_and_store(self):
         ### Performs a wordcount of each document and stores cumulative word count 
         ### and also wordcount specific to that document/word combination.
-        c=self.db.cursor()
-        c.execute("""SELECT title,description,id FROM corpus""")
-        text = c.fetchall()
-        for item in text:
-            if (c.execute("""SELECT itemid FROM tf WHERE itemid=%s""",(item[2]))==0):
-                totaltext = unicodedata.normalize('NFKD',(item[0]+' '+item[1])).encode('ascii','ignore')
+        corpusses = MCorpus.objects.all()
+        for corpus in corpusses:
+            if not Tf.objects.filter(corpus=corpus).exists():
+                totaltext = unicodedata.normalize('NFKD',(corpus.title+' '+corpus.description)).encode('ascii','ignore')
                 totaltext = self.__remove_extra_spaces(self.__remove_html_tags(totaltext))
                 freq = self.__get_word_frequencies(self.__remove_single_characters((''.join((x for x in (totaltext.lower()) if x not in string.punctuation)))))
                 for word in freq:
-                    itemid = item[2]
+                    itemid = corpus.id
                     #print word, " ", freq[word], " ", itemid
-                    c.execute("""INSERT INTO words (word,count) VALUES (%s,%s) ON DUPLICATE KEY UPDATE count=count+1""",(word,1))
-                    c.execute("""INSERT INTO tf (word,itemid,count) VALUES (%s,%s,%s)""",(word,itemid,freq[word]))
-                
-                
+                    dbword,created = Words.objects.get_or_create(word=word, defaults={'count':0})
+                    dbword.count += 1
+                    dbword.tf_set.add(Tf(corpus=corpus, count=freq[word]))
+                    dbword.save()
             
     def __get_word_frequencies(self,text):
         result = dict([(w[:29], text.count(w[:29])) for w in text.split()])
@@ -84,26 +88,22 @@ class Corpus():
         return p.sub('',data)
         
     def calculate_keywords_for_all(self):
-        c=self.db.cursor()
-        c.execute("""SELECT id FROM corpus""")
-        itemids = c.fetchall()
+        corpusses = MCorpus.objects.all()
         global corpussize
-        corpussize = len(itemids)
+        corpussize = MCorpus.objects.count()
         
-        for itemid in itemids:
-            if (c.execute("""SELECT itemid FROM corpuskeywords WHERE itemid=%s""",(itemid[0]))==0):
-        ### For each item from feeds
+        for corpus in corpusses:
+            if not Corpuskeywords.objects.filter(corpus=corpus).exists():
+                ### For each item from feeds
                 worddata = {}
-                c.execute("""SELECT word,count FROM tf WHERE itemid=%s""",(itemid))
+                words = corpus.tf_set
                 ### For each word in that item
-                for word in c.fetchall():
-                    c.execute("""SELECT count FROM words WHERE word=%s""",(word[0]))
-                    worddata[word[0]] = (word[1], c.fetchall()[0][0])
+                for tf in corpus.tf_set.all():
+                    worddata[tf.word.word] = (tf.count, tf.word.count)  #The count for the corpus, and the count for all words
                 keywords = self.calculate_tfidf(worddata)
                 topkeys = keywords[:10]
-                for key in topkeys:
-                    c.execute("""INSERT INTO corpuskeywords (itemid,word,rank) VALUES (%s,%s,%s)""",(itemid[0],key[1],key[0]))
-                
+                for rank, word in topkeys:
+                    Corpuskeywords(corpus=corpus, word=word, rank=rank).save()                
         
     def calculate_tfidf(self,worddata):
         wordlist = []
@@ -114,27 +114,25 @@ class Corpus():
         return sorted(wordlist, reverse=True)
         
     def get_keywords_for_item(self,itemid):
-        c=self.db.cursor()
-        c.execute("""SELECT word FROM corpuskeywords WHERE itemid=%s""",(itemid))
-        print c.fetchall()
-        return c.fetchall()
+        MCorpus.objects.get(id=itemid).corpuskeywords_set.values_list('word', flat=True)
+        print words
+        return words
         
     def find_matching_items(self,keywords):
-        c=self.db.cursor()
         result = set()
         for key in keywords:
-            c.execute("""SELECT corpus.id,corpus.title FROM corpus,corpuskeywords WHERE corpus.id=corpuskeywords.itemid AND corpuskeywords.word LIKE %s""",(key))
-            for listitem in c.fetchall():
-                result.add(listitem)
+            matches = Corpuskeywords.objects.filter(word__word__contains=key).values("corpus", "corpus__title")
+            MatchingItem = namedtuple('MatchingItem', ["corpus", "title"])
+            for listitem in matches:
+                result.add(MatchingItem(corpus=listitem["corpus"], title=listitem["corpus__title"]))
         print result
 
 #    def  
         
 if __name__ == '__main__':
     corp = Corpus()
-    corp.initDB()
     corp.build_corpus()
     corp.count_words_and_store()
     corp.calculate_keywords_for_all()
-    corp.get_keywords_for_item(50)
+    corp.get_keywords_for_item(MCorpus.objects.order_by('?')[0].id)
     corp.find_matching_items(("microsoft","apple","wireless"))

@@ -48,7 +48,7 @@ class Corpus(models.Model):
 
 class Corpuskeywords(models.Model):
     corpus = models.ForeignKey(Corpus, db_column="itemid")
-    word = models.CharField(max_length=90)
+    word = models.ForeignKey('Words', db_column="word")
     rank = models.IntegerField(null=True, blank=True)
     
     def __unicode__(self):
@@ -59,9 +59,12 @@ class Corpuskeywords(models.Model):
         unique_together = ("corpus","word")
 
 class Tf(models.Model):
-    word = models.CharField(max_length=90)
+    word = models.ForeignKey('Words', db_column="word")
     corpus = models.ForeignKey(Corpus, db_column="itemid")
     count = models.IntegerField(null=True, blank=True)
+    
+    def __unicode__(self):
+        return "{word} {count}".format(word = self.word, count=self.count)
     class Meta:
         db_table = u'tf'
         unique_together = ("word","corpus")
@@ -69,6 +72,10 @@ class Tf(models.Model):
 class Words(models.Model):
     word = models.CharField(max_length=90, primary_key=True)
     count = models.IntegerField(null=True, blank=True)
+    
+    def __unicode__(self):
+        return "{word} {count}".format(word=self.word, count=self.count)
+    
     class Meta:
         db_table = u'words'
 
