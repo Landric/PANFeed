@@ -16,9 +16,6 @@ class Domains(models.Model):
     
     def __unicode__(self):
         return self.toplevel
-        
-    class Meta:
-        db_table=u'domains'
 
 class AcademicFeeds(models.Model):
     url = models.URLField(verify_exists=True)
@@ -26,9 +23,6 @@ class AcademicFeeds(models.Model):
 
     def __unicode__(self):
         return self.url;
-
-    class Meta:
-        db_table = u'academic_feeds'
 
 class Corpus(models.Model):
     title = models.TextField(blank=True)
@@ -42,9 +36,6 @@ class Corpus(models.Model):
     
     def __unicode__(self):
         return self.title
-    
-    class Meta:
-        db_table = u'corpus'
 
 class Corpuskeywords(models.Model):
     corpus = models.ForeignKey(Corpus, db_column="itemid")
@@ -55,7 +46,6 @@ class Corpuskeywords(models.Model):
         return "{word} {corpus}".format(word = self.word, corpus = self.corpus)
     
     class Meta:
-        db_table = u'corpuskeywords'
         unique_together = ("corpus","word")
 
 class Tf(models.Model):
@@ -66,7 +56,6 @@ class Tf(models.Model):
     def __unicode__(self):
         return "{word} {count}".format(word = self.word, count=self.count)
     class Meta:
-        db_table = u'tf'
         unique_together = ("word","corpus")
 
 class Words(models.Model):
@@ -75,9 +64,6 @@ class Words(models.Model):
     
     def __unicode__(self):
         return "{word} {count}".format(word=self.word, count=self.count)
-    
-    class Meta:
-        db_table = u'words'
 
 class SpiderToDo(models.Model):
     pageurl=models.URLField(primary_key=True,max_length=255)
