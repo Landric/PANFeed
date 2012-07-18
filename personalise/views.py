@@ -134,6 +134,7 @@ def saveissue(request):
 
     return HttpResponseRedirect('/publishnews')
 
+@login_required
 def publishnews(request):
     if request.user.is_authenticated():
         all_issues = Issue.objects.all()

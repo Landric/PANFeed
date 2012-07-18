@@ -5,63 +5,62 @@
 {% block content %}
 <div class="row">
 	<div class="span8">
-		<h1>PANFeed Issues</h1>
-    		<p>A PANFeed Issue is a carefully tailored news feed hand curated by you. You select web pages of interest to appear as items on your new feed. Add your own editorials and notes from your blog and customize the titles, descriptions and images which apear in the feed. You have complete control.</p>
+		<h1>Publish News</h1>
+		<p>PANFeed provides a simple way of managing news feeds, whether you are representing an institution or an individual. To start, create a new feed - this will provide you with a link that you can share with people.</p>
+		<p>You can then publish items (such as news articles) or Special Issues (a collection of items, with an editorial) to this Feed.</p>
+		<br/>
 	</div>
 </div>
 <div class="row">
 	<div class="span4">
-		<h2>Public Issues</h2>
-		{% if public %}
-			<p>These Issues have been created by other members of the community and are free for you to use:</p>
-			<ul>
-				{% for issue in public %}
-					<li class="feed-list">
-						<span class="pull-left">{{issue.title}}</span>
-						<a target="_blank" href="{% url 'issue' issue.id %}" class="btn btn-mini pull-right" title="View this Issue" alt="View this Issue"><i class="icon-eye-open"></i></a>
-					</li>
-				{% endfor %}
-			</ul>
-		{% else %}
-			<p>There are currently no public Issues. Why not create one?</p>
-		{% endif %}
+		<h2>Create a Feed</h2>
+		<p>Get started by creating a Feed!</p>
+		<a href="/createfeed/" class="btn">Create a new Feed &raquo;</a>
 	</div>
-	{% if user.is_authenticated %}
-		<div class="span4">
-			<h2>My Issues</h2>
-			{% if personal %}
-				<p>These are the Issues you have created:</p>
-				<ul>
-					{% for issue in personal %}
-						{% url 'manageissue' issue.id as manage_url%}
-						<li class="feed-list">
-							<span class="pull-left">{{issue.title}}</span>
-							<form action="{{manage_url}}" method="post">
-								<div class="btn-group pull-right">
-						        		<a class="btn btn-mini" target="_blank" href="{% url 'issue' issue.id %}" title="View this Issue" alt="View this Issue"><i class="icon-eye-open"></i></a>
-									<a class="btn btn-mini" href="{{manage_url}}" title="Edit this Issue" alt="Edit this Issue"><i class="icon-edit"></i></a>
-									<input name="_method" value="DELETE" type="hidden"/>
-									<button type="submit" class="btn btn-mini" title="Delete this Issue" alt="Delete this Issue"><i class="icon-trash"></i></button>
-        							</div>
-							</form>
-						</li>
-					{% endfor %}
-				</ul>
-			{% else %}
-				<p>You currently have no Issues. Why not create one?</p>
-			{% endif %}
-		</div>
-		<div class="span4">
-			<h2>Create an Issue</h2>
-			<p>Creating an Issue is quick and easy. Press the button below to get started!</p>
-			<a href="{% url 'newissue' %}" class="btn">Create an Issue</a>
-		</div>
-	{% else %}
-		<div class="span8">
-			<h2>Manage Issues</h2>
-			<p>You must <a href="/account/login/">log in</a> to be able to manage your Issues, or to create a new one.</p>
-			<p>Not a member? <a href="/account/register/">Create an account!</a></p>
-		</div>
-	{% endif %}		
+	<div class="span8">
+		<table class="table table-striped">
+		        <thead>
+		        	<tr>
+					<th><h2>Your Feeds</h2></th>
+					<th>Manage Feed</th>
+					<th>Publish To Feed</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr>
+        				<td>Feed Number One</td>
+					<td>
+						<div class="btn-group">
+							<a href="#" class="btn">View</a>
+							<a href="#" class="btn">Edit</a>
+							<a href="#" class="btn">Delete</a>
+						</div>
+					</td>
+					<td>
+						<div class="btn-group">
+							<a href="#" class="btn">Publish Item</a>
+							<a href="#" class="btn">Publish Special Issue</a>
+						</div>
+					</td>
+				</tr>
+				<tr>
+        				<td>Feed Number Two</td>
+					<td>
+						<div class="btn-group">
+							<a href="#" class="btn">View</a>
+							<a href="#" class="btn">Edit</a>
+							<a href="#" class="btn">Delete</a>
+						</div>
+					</td>
+					<td>
+						<div class="btn-group">
+							<a href="#" class="btn">Publish Item</a>
+							<a href="#" class="btn">Publish Special Issue</a>
+						</div>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>
 </div>
 {% endblock content %}
