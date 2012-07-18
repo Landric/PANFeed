@@ -9,16 +9,13 @@
 
 from django.db import models
 from django.contrib.auth.models import User
-import re
+from datetime import datetime
 
 class Domains(models.Model):
     toplevel = models.URLField()
     
     def __unicode__(self):
         return self.toplevel
-        
-    class Meta:
-        db_table=u'domains'
 
 class AcademicFeeds(models.Model):
     url = models.URLField(verify_exists=True)
@@ -26,9 +23,6 @@ class AcademicFeeds(models.Model):
 
     def __unicode__(self):
         return self.url;
-
-    class Meta:
-        db_table = u'academic_feeds'
 
 class Corpus(models.Model):
     title = models.TextField(blank=True)
@@ -42,9 +36,6 @@ class Corpus(models.Model):
     
     def __unicode__(self):
         return self.title
-    
-    class Meta:
-        db_table = u'corpus'
 
 class Corpuskeywords(models.Model):
     corpus = models.ForeignKey(Corpus, db_column="itemid")
@@ -55,7 +46,6 @@ class Corpuskeywords(models.Model):
         return "{word} {corpus}".format(word = self.word, corpus = self.corpus)
     
     class Meta:
-        db_table = u'corpuskeywords'
         unique_together = ("corpus","word")
 
 class Tf(models.Model):
@@ -66,7 +56,6 @@ class Tf(models.Model):
     def __unicode__(self):
         return "{word} {count}".format(word = self.word, count=self.count)
     class Meta:
-        db_table = u'tf'
         unique_together = ("word","corpus")
 
 class Words(models.Model):
@@ -75,9 +64,6 @@ class Words(models.Model):
     
     def __unicode__(self):
         return "{word} {count}".format(word=self.word, count=self.count)
-    
-    class Meta:
-        db_table = u'words'
 
 class SpiderToDo(models.Model):
     pageurl=models.URLField(primary_key=True,max_length=255)
@@ -88,6 +74,30 @@ class SpiderDone(models.Model):
 class SpiderRSS(models.Model):
     rssurl=models.URLField(primary_key=True,max_length=255)
 
+class Feed(models.Model):
+    owner = models.ForeignKey(User) 
+    title = models.CharField('feed title', max_length=60, help_text='Try to keep your title brief but informative (e.g. "Student Project News")')
+    description = models.TextField('feed description', help_text='Briefly describe the purpose of this feed (e.g. "Information for students working on their Third Year Project")')
+    displayAll = models.BooleanField('publishing options', default=True, help_text='Don\'t worry, you can change this later if you change your mind') #True=display all items, False=only display latest publication
+
+    def get_absolute_url(self):
+        return "/news/"+str(self.id)
+
+class SpecialIssue(models.Model):
+    title = models.CharField('issue title', max_length=60)
+    editorial = models.TextField(help_text='Briefly describe the contents of this Issue')
+
+class FeedItem(models.Model):
+    title = models.CharField(max_length=60)
+    content = models.TextField(help_text='This content will be displayed in the viewer\'s Feed Reader. They can still click the link to view the full article')
+    url = models.URLField(max_length=6249)
+    img = models.URLField(max_length=6249, blank=True)
+    date = models.DateTimeField(default=datetime.now, blank=True)
+    feed = models.ForeignKey(Feed)
+    special_issue = models.ForeignKey(SpecialIssue, null=True)
+    issue_position = models.IntegerField(null=True, db_index=True)
+
+'''
 class IssueItem(models.Model):
     title = models.TextField(blank=True)
     description = models.TextField(blank=True)
@@ -116,3 +126,4 @@ class Issue(models.Model):
 
     class Meta:
         db_table = u'issue'
+'''
