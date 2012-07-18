@@ -4,9 +4,10 @@
 {% block content %}
 <div class="hero-unit">		
 	<h1>Welcome to PANFeed</h1>
-	<p>PANFeed is a tool to help you take control of news feeds already existing on your university campus. It harvests feeds from university websites and uses them to build custom feeds of news you are actually interested in. The tool has a range of applications including personal custom news feeds, custom feeds for use in department websites or simply taking an inventory of your university feeds. Try out and take control of your news!</p>
-
+	<br/>
+	<p>PANFeed is a tool design to simplify the searching for and publishing of academic news. Whether you want to publish news for an entire department, publish your own personal news, or if you just want something to read over breakfast, PANFeed is the tool for you. Try it out, and take control of your news!</p>
 	{% if not user.is_authenticated %}
+		<br/>
 		<br/>
 		<a href="/account/login/"class="btn btn-large btn-primary">Login to start &raquo;</a>
 	{% endif %}
@@ -15,11 +16,11 @@
 <div class="row">
 	<div class="span4 offset1">
 		<h2>Find News</h2>
-		<p>Use PANFeed to search for news directly related to your academic interests. Just enter some keywords and PANFeed will search it's vast store of academic news feeds to create your own personalised feed.</p>
+		<p>Use PANFeed to search for news directly related to your academic interests, or browse some of the Feeds created by other users.</p>
 	</div>
 	<div class="span4 offset1">
 		<h2>Publish News</h2>
-		<p>Use PANFeed to create and publish Special Issues - resources that you want to share with the community, student projects, editorials and more! </p>
+		<p>Use PANFeed to create a Feed of your own, then use it to publish resources that you want to share with the community, student projects, editorials and more! </p>
 	</div>
 </div>
 <div class="row">
