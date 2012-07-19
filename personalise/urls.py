@@ -12,7 +12,7 @@ urlpatterns = patterns('personalise.views',
 
     url(r'^managefeed/$','managefeed', name='savefeed'),
     url(r'^managefeed/new/$','managefeed', name='newfeed'),
-    url(r'^managefeed/(?P<feedid>\d+)$','managefeed', name='managefeed'),
+    url(r'^managefeed/(?P<feed_id>\d+)$','managefeed', name='managefeed'),
 
     url(r'submit/$', 'submit', name='submit'),
 
