@@ -46,21 +46,25 @@ class PersonalFeed(Feed):
         urls.append(urls[0])#.append(words
         urls.extend(words)
         
-        corpuses = SearchQuerySet().models(Corpus).filter(contains=" ".join(words)).load_all()
+        corpora = SearchQuerySet().models(Corpus).all()
         
-        query = "SELECT corpus.*, corpuskeywords.rank FROM corpus,corpuskeywords WHERE corpus.id=corpuskeywords.itemid AND (corpus.toplevel IN (%s) OR %s = 'all') AND corpuskeywords.word IN (%s)" % (formatstring,"%s",formatwordstring)
-        results = Corpus.objects.raw(query,tuple(urls))
+        for word in words:
+            corpora = corpora.filter_or(content=word)
+        
+        #query = "SELECT corpus.*, corpuskeywords.rank FROM corpus,corpuskeywords WHERE corpus.id=corpuskeywords.itemid AND (corpus.toplevel IN (%s) OR %s = 'all') AND corpuskeywords.word IN (%s)" % (formatstring,"%s",formatwordstring)
+        #results = Corpus.objects.raw(query,tuple(urls))
 
-        for item in results:
-            if unique_results.has_key(item.id):
-                unique_results[item.id].rank+=item.rank
-            else:
-                unique_results[item.id]=item
+        #for item in results:
+        #    if unique_results.has_key(item.id):
+        #        unique_results[item.id].rank+=item.rank
+        #    else:
+        #        unique_results[item.id]=item
 
-        for item in unique_results.values():
-            item.hot=self.get_hot_ranking(item)    
-        sort = sorted(unique_results.values(), key=lambda student: student.hot,reverse=True)
-        return sort
+        #for item in unique_results.values():
+        #    item.hot=self.get_hot_ranking(item)    
+        #sort = sorted(unique_results.values(), key=lambda student: student.hot,reverse=True)
+        
+        return (corpus.object for corpus in corpora.load_all())
 
     def title(self,obj):
         return "PANFeed of " + ", ".join(obj[0].split("_")) 
