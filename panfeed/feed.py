@@ -46,7 +46,7 @@ class PersonalFeed(Feed):
         urls.append(urls[0])#.append(words
         urls.extend(words)
         
-        corpusses = SearchQuerySet().models(Corpus).filter(contains=" ".join(words)).load_all()
+        corpuses = SearchQuerySet().models(Corpus).filter(contains=" ".join(words)).load_all()
         
         query = "SELECT corpus.*, corpuskeywords.rank FROM corpus,corpuskeywords WHERE corpus.id=corpuskeywords.itemid AND (corpus.toplevel IN (%s) OR %s = 'all') AND corpuskeywords.word IN (%s)" % (formatstring,"%s",formatwordstring)
         results = Corpus.objects.raw(query,tuple(urls))

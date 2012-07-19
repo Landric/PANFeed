@@ -38,7 +38,7 @@ class Corpus(models.Model):
         return self.title
         
     class Meta:
-        verbose_name_plural = "corpusses"
+        verbose_name_plural = "corpuses"
 
 class Corpuskeywords(models.Model):
     corpus = models.ForeignKey(Corpus, db_column="itemid")

@@ -70,8 +70,8 @@ class Corpus():
     def count_words_and_store(self):
         ### Performs a wordcount of each document and stores cumulative word count 
         ### and also wordcount specific to that document/word combination.
-        corpusses = MCorpus.objects.all()
-        for corpus in corpusses:
+        corpuses = MCorpus.objects.all()
+        for corpus in corpuses:
             if not Tf.objects.filter(corpus=corpus).exists():
                 totaltext = unicodedata.normalize('NFKD',(corpus.title+' '+corpus.description)).encode('ascii','ignore')
                 totaltext = self.__remove_extra_spaces(self.__remove_html_tags(totaltext))
@@ -101,11 +101,11 @@ class Corpus():
         return p.sub('',data)
         
     def calculate_keywords_for_all(self):
-        corpusses = MCorpus.objects.all()
+        corpuses = MCorpus.objects.all()
         global corpussize
         corpussize = MCorpus.objects.count()
         
-        for corpus in corpusses:
+        for corpus in corpuses:
             if not Corpuskeywords.objects.filter(corpus=corpus).exists():
                 ### For each item from feeds
                 worddata = {}
