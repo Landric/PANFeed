@@ -28,7 +28,7 @@ setup(
         "django-registration",
         "django-csp",
         "django-haystack",
-        "haystack-xapian",
+        "xapian-haystack",
         "progressbar",
     ],
     package_data={'panfeed': [
