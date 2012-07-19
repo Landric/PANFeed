@@ -3,11 +3,13 @@ from personalise.models import AcademicFeeds, Corpuskeywords, Tf, Words
 from personalise.models import Corpus as MCorpus
 
 from django.db import connection
+from django.db.models import Q
 from django.core.management.base import BaseCommand, CommandError
 
 from collections import namedtuple
 import feedparser
 import urllib2
+from urlparse import urlparse
 import string
 import unicodedata
 import math
@@ -126,25 +128,22 @@ class Corpus():
         return sorted(wordlist, reverse=True)
         
     def get_keywords_for_item(self,itemid):
-        MCorpus.objects.get(id=itemid).corpuskeywords_set.values_list('word', flat=True)
-        print words
-        return words
+        return MCorpus.objects.get(id=itemid).corpuskeywords_set.values_list('word', flat=True)
         
     def find_matching_items(self,keywords):
+        items_query = Q()
         result = set()
         for key in keywords:
-            matches = Corpuskeywords.objects.filter(word__word__contains=key).values("corpus", "corpus__title")
-            MatchingItem = namedtuple('MatchingItem', ["corpus", "title"])
-            for listitem in matches:
-                result.add(MatchingItem(corpus=listitem["corpus"], title=listitem["corpus__title"]))
-        print result
+            items_query = items_query | Q(word__word__contains=key)
+                                
+        return Corpuskeywords.objects.filter(items_query).distinct(("corpus",)).values("corpus", "corpus__title")
 
 #    def  
 
 def test():
     corp = Corpus()
-    corp.get_keywords_for_item(MCorpus.objects.order_by('?')[0].id)
-    corp.find_matching_items(("microsoft","apple","wireless"))
+    print corp.get_keywords_for_item(MCorpus.objects.order_by('?')[0].id)
+    print corp.find_matching_items(("microsoft","apple","wireless"))
     
 def load_generate_and_add_corpus_data():
     corp = Corpus()
