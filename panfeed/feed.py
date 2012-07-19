@@ -109,7 +109,7 @@ class UserFeed(Feed):
         return obj.description 
 
     def link(self, obj):
-        return "http://panfeed.ecs.soton.ac.uk/issue/"+str(obj.id)
+        return "/issue/"+str(obj.id)
 
     def item_title(self,item):
         return item.title
