@@ -36,6 +36,9 @@ class Corpus(models.Model):
     
     def __unicode__(self):
         return self.title
+        
+    class Meta:
+        verbose_name_plural = "corpusses"
 
 class Corpuskeywords(models.Model):
     corpus = models.ForeignKey(Corpus, db_column="itemid")
