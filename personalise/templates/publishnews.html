@@ -36,7 +36,7 @@
 								{% csrf_token %}
 								<div class="btn-group">
 									<a href="#" class="btn">View</a>
-									<a href="#" class="btn">Edit</a>
+									<a href="/managefeed/{{feed.id}}" class="btn">Edit</a>
 									<input name="_method" value="DELETE" type="hidden">
 									<button type="submit" class="btn" title="Delete this Feed" type="submit">Delete</button>
 								</div>
