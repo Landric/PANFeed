@@ -58,7 +58,8 @@ HOME_ROOT = os.path.dirname(__file__)
 # Don't put anything in this directory yourself; store your static files
 # in apps' "static/" subdirectories and in STATICFILES_DIRS.
 # Example: "/home/media/media.lawrence.com/static/"
-STATIC_ROOT = HOME_ROOT + '/staticfiles/'
+
+STATIC_ROOT = os.path.join(HOME_ROOT, 'staticfiles')
 
 # URL prefix for static files.
 # Example: "http://media.lawrence.com/static/"
@@ -193,7 +194,7 @@ LOGGING = {
 HAYSTACK_CONNECTIONS = {
     'default': {
         'ENGINE': 'haystack.backends.xapian_backend.XapianEngine',
-        'PATH': os.path.join(os.path.dirname(__file__), 'xapian_index'),
+        'PATH': os.path.join(HOME_ROOT, 'xapian_index'),
     },
 }
 
