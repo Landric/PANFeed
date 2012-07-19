@@ -28,7 +28,6 @@ class PANFeed:
 
 class PersonalFeed(Feed):
     title = "Your Feed"
-    link = "/find/"
     description = "Your feed Personalised Academic News Feed from your keywords."
     keywords = [];
 
@@ -70,7 +69,7 @@ class PersonalFeed(Feed):
         return "PANFeed of " + ", ".join(obj[0].split("_")) 
 
     def link(self, obj):
-        return "http://panfeed.ecs.soton.ac.uk/find/"+obj[1]+"/"+obj[0]
+        return '/find/'+obj[1]+"/"+obj[0]
 
     def item_title(self,item):
         return item.title
