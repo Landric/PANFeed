@@ -68,7 +68,11 @@
 
 		<div class="control-group">
 			<div class="controls">
-				<input type="submit" value="Save" class="btn btn-primary"/>&nbsp;&nbsp;
+				{% if edit %}
+					<input type="submit" value="Save" class="btn btn-primary"/>&nbsp;&nbsp;
+				{% else %}
+					<input type="submit" value="Create" class="btn btn-primary"/>&nbsp;&nbsp;
+				{% endif %}
 				<a href="{% url 'publishnews' %}" class="btn">Cancel</a>
 			</div>
 		</div>
