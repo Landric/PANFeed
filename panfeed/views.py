@@ -1,24 +1,18 @@
 # Create your views here.
-from django.core.context_processors import csrf
-from django.http import HttpResponse,HttpResponseRedirect,HttpResponseForbidden, Http404
-from django.db import connection, transaction
-import urllib2
+from django.http import HttpResponse,HttpResponseRedirect,HttpResponseForbidden
 import feedparser
 import json
-import sys
 from urlparse import urlparse
 
-from panfeed.models import AcademicFeeds,Corpus,Corpuskeywords,Feed,FeedItem,SpecialIssue
+from panfeed.models import AcademicFeeds,Feed,FeedItem
 from panfeed.urltorss2 import ItemMaker
 
-from django.contrib.auth.models import User
-from django.contrib.sites.models import Site
 from django.shortcuts import render_to_response, get_object_or_404, redirect
-from django.template.loader import render_to_string
+
 from django.template import RequestContext
-import pprint
+
 from django.contrib.auth.decorators import login_required
-from forms import FeedForm, FeedItemForm, SpecialIssueForm
+from forms import FeedForm, FeedItemForm
 from django.core.validators import URLValidator
 from django.core.exceptions import ValidationError
 

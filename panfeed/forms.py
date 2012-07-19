@@ -1,4 +1,4 @@
-from django.forms import ModelForm, HiddenInput, RadioSelect, ChoiceField
+from django.forms import ModelForm, RadioSelect, ChoiceField
 from models import Feed, FeedItem, SpecialIssue
 
 class FeedForm(ModelForm):

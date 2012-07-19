@@ -1,15 +1,10 @@
-from django.core.management.base import BaseCommand, CommandError
-from panfeed.models import AcademicFeeds, Corpus, Corpuskeywords, Tf, Words
+from django.core.management.base import BaseCommand
+from panfeed.models import AcademicFeeds, Corpus
 from corpus import Corpus as CorpusScraper
 
 import feedparser
 import urllib2
-import string
-import unicodedata
-import math
-import re
 import datetime
-import time
 
 class Command(BaseCommand):
 

@@ -2,8 +2,6 @@ from django.core.management import setup_environ
 import settings
 
 setup_environ(settings)
-from django.db import connection, transaction
-from django.db import models
 from panfeed.models import SpiderToDo, SpiderDone, SpiderRSS 
 import urllib2
 import feedparser

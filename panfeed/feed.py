@@ -1,13 +1,7 @@
 from django.contrib.syndication.views import Feed
-from django.db import connection, transaction
 from django.shortcuts import get_object_or_404
 import datetime
-import time
-import sys
-from operator import itemgetter
-from panfeed.models import Corpus, FeedItem
-from panfeed.models import Feed as MFeed
-import feedparser
+from panfeed.models import Corpus
 
 from haystack.query import SearchQuerySet
 

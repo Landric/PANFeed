@@ -1,12 +1,5 @@
-from django.core.management.base import BaseCommand, CommandError
+from django.core.management.base import BaseCommand
 from django.db import connection
-import feedparser
-import urllib2
-import string
-import unicodedata
-import math
-import re
-import datetime
 import urlparse
 
 class Command(BaseCommand):

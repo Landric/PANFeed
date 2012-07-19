@@ -1,4 +1,3 @@
-import datetime
 from haystack import indexes
 from haystack import site
 from panfeed.models import Corpus

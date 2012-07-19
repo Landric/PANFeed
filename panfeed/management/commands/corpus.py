@@ -1,15 +1,13 @@
 ## A corpus is a body of work consisting of many Documents
-from panfeed.models import AcademicFeeds, Corpuskeywords, Tf, Words
+from panfeed.models import Corpuskeywords, Tf, Words
 from panfeed.models import Corpus as MCorpus
 
-from django.db import connection
 from django.db.models import Q
-from django.core.management.base import BaseCommand, CommandError
+from django.core.management.base import BaseCommand
 
-from collections import namedtuple
 import feedparser
 import urllib2
-from urlparse import urlparse
+
 import string
 import unicodedata
 import math
