@@ -20,21 +20,6 @@ from forms import FeedForm, FeedItemForm, SpecialIssueForm
 from django.core.validators import URLValidator
 from django.core.exceptions import ValidationError
 
-def home(request):
-    return render_to_response('index.html', context_instance=RequestContext(request))
-
-def about(request):
-    return render_to_response('about.html', context_instance=RequestContext(request))
-
-def crawlme(request):
-    return render_to_response('crawlme.html', context_instance=RequestContext(request))
-    
-def faq(request):
-    return render_to_response('faq.html', context_instance=RequestContext(request))
-
-def findnews(request):
-    return render_to_response('findnews.html', context_instance=RequestContext(request))
-
 def managefeed(request, feed_id=None):
     if request.method == "POST":
         form = FeedForm(request.POST)

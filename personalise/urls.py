@@ -1,11 +1,15 @@
 from django.conf.urls.defaults import patterns, include, url
+from django.views.generic import TemplateView
 from personalise.feed import PersonalFeed, UserFeed
 import settings
 
 urlpatterns = patterns('personalise.views',
-    url(r'^$','home', name='home'),
-    url(r'^about/$','about', name='about'),
-    url(r'^crawlme/$','crawlme', name='crawlme'),
+    url(r'^$',         TemplateView.as_view(template_name="index.html"),name='home'),
+    url(r'^about/$',   TemplateView.as_view(template_name="about.html"),name='about'),
+    url(r'^crawlme/$', TemplateView.as_view(template_name="crawlme.html"),name='crawlme'),
+    url(r'^findnews/$',TemplateView.as_view(template_name="findnews.html"), name='findnews'),
+    url(r'^faq/$',     TemplateView.as_view(template_name="faq.html"), name='faq'),
+    
     url(r'^urltoitem$','urltoitem', name='urltoitem'),
 
     url(r'^publishnews/$','publishnews', name='publishnews'),
@@ -15,9 +19,6 @@ urlpatterns = patterns('personalise.views',
     url(r'^managefeed/(?P<feedid>\d+)$','managefeed', name='managefeed'),
 
     url(r'submit/$', 'submit', name='submit'),
-
-    url(r'^findnews/$','findnews', name='findnews'),
-    url(r'^faq/$','faq', name='faq'),
 )
 
 urlpatterns += patterns('',
