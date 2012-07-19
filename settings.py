@@ -1,4 +1,4 @@
-
+import os
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
@@ -52,11 +52,14 @@ MEDIA_ROOT = ''
 # Examples: "http://media.lawrence.com/media/", "http://example.com/media/"
 MEDIA_URL = ''
 
+HOME_ROOT = os.path.dirname(__file__)
+
 # Absolute path to the directory static files should be collected to.
 # Don't put anything in this directory yourself; store your static files
 # in apps' "static/" subdirectories and in STATICFILES_DIRS.
 # Example: "/home/media/media.lawrence.com/static/"
-STATIC_ROOT = '/opt/PANFeed/personalise/staticfiles/'
+
+STATIC_ROOT = os.path.join(HOME_ROOT, 'staticfiles')
 
 # URL prefix for static files.
 # Example: "http://media.lawrence.com/static/"
@@ -122,6 +125,7 @@ INSTALLED_APPS = (
     'django.contrib.sites',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'haystack',
     'csp',
     'jquery',
     'personalise',
@@ -186,6 +190,18 @@ LOGGING = {
         },
     }
 }
+
+HAYSTACK_CONNECTIONS = {
+    'default': {
+        'ENGINE': 'haystack.backends.xapian_backend.XapianEngine',
+        'PATH': os.path.join(HOME_ROOT, 'xapian_index'),
+    },
+}
+
+HAYSTACK_SITECONF = 'search_sites'
+HAYSTACK_SEARCH_ENGINE = 'xapian'
+HAYSTACK_XAPIAN_PATH = HAYSTACK_CONNECTIONS["default"]["PATH"]
+
 try:
     from local_settings import *
 except ImportError as e:
