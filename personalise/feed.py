@@ -5,7 +5,8 @@ import datetime
 import time
 import sys
 from operator import itemgetter
-from personalise.models import Corpus,Issue, IssueItem
+from personalise.models import Corpus, FeedItem
+from personalise.models import Feed as MFeed
 import feedparser
 
 class PANFeed:
@@ -86,7 +87,7 @@ class PersonalFeed(Feed):
 
         return hot_rank
 
-class IssueFeed(Feed):
+class UserFeed(Feed):
 
     def items(self,obj):
         return IssueItem.objects.filter(issue__id=obj.id).order_by("-date")
@@ -114,4 +115,3 @@ class IssueFeed(Feed):
 
     def get_object(self,request,issueid):
         return get_object_or_404(Issue, id=issueid);
-

@@ -7,7 +7,7 @@ import feedparser
 import json
 import sys
 from urlparse import urlparse
-from personalise.models import AcademicFeeds,Corpus,Corpuskeywords,Issue,IssueItem
+from personalise.models import AcademicFeeds,Corpus,Corpuskeywords,Feed,FeedItem,SpecialIssue
 from django.contrib.auth.models import User
 from personalise.urltorss2 import ItemMaker
 from django.contrib.sites.models import Site
@@ -16,7 +16,7 @@ from django.template.loader import render_to_string
 from django.template import RequestContext
 import pprint
 from django.contrib.auth.decorators import login_required
-from forms import IssueForm
+from forms import FeedForm, FeedItemForm, SpecialIssueForm
 from django.core.validators import URLValidator
 from django.core.exceptions import ValidationError
 
@@ -35,6 +35,44 @@ def faq(request):
 def findnews(request):
     return render_to_response('findnews.html', context_instance=RequestContext(request))
 
+def managefeed(request, feed_id=None):
+    if request.method == "POST":
+        form = FeedForm(request.POST)
+        if form.is_valid():
+
+            if feed_id is None:
+                feed = form.save(commit=False)
+                feed.owner = request.user
+                feed.save()
+            else:
+                if Feed.objects.filter(id=int(feed_id), owner = request.user).exists():
+                    feed = form.save(commit=False)
+                    feed.owner = request.user
+                    feed.id = feed_id
+                    feed.save(force_update=True)
+                else:
+                    return HttpResponseForbidden("You do not have permission to edit this Feed.")
+
+            return HttpResponseRedirect('/publishnews/')
+
+    elif request.method == 'DELETE':
+        feed = get_object_or_404(Feed, id=feed_id)
+
+        if feed.owner != request.user:
+            return HttpResponseForbidden("You do not have permission to edit this Feed.")
+        else:
+            feed.delete()
+            return HttpResponseRedirect('/publishnews/')
+    else:
+        if feed_id is None:
+            form = FeedForm()
+        else:
+            feed = Feed.objects.get(id=feed_id, owner=request.user)
+
+            form = FeedForm(instance=feed)
+
+        return render_to_response('managefeed.html', {'form': form}, context_instance=RequestContext(request))
+'''
 @login_required
 def manageissue(request,issueid=None):
     if request.method == "POST":
@@ -133,24 +171,12 @@ def saveissue(request):
         item.save()
 
     return HttpResponseRedirect('/publishnews')
+'''
 
 @login_required
 def publishnews(request):
-    if request.user.is_authenticated():
-        all_issues = Issue.objects.all()
-        public = []
-        personal = []
-        for issue in all_issues:
-            if issue.owner_id == request.user.id:
-                personal.append(issue)
-            
-            if issue.public:
-                public.append(issue)
-    else:
-        public = Issue.objects.filter(public=True)
-        personal = None
-        
-    return render_to_response('publishnews.html', {'public' : public, 'personal' : personal}, context_instance=RequestContext(request))
+    feeds = Feed.objects.filter(owner=request.user.id)
+    return render_to_response('publishnews.html', {'feeds':feeds}, context_instance=RequestContext(request))
 
 def urltoitem(request):
     itemmaker = ItemMaker()

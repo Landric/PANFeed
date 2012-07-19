@@ -1,5 +1,5 @@
 from django.conf.urls.defaults import patterns, include, url
-from personalise.feed import PersonalFeed, IssueFeed
+from personalise.feed import PersonalFeed, UserFeed
 import settings
 
 urlpatterns = patterns('personalise.views',
@@ -8,11 +8,11 @@ urlpatterns = patterns('personalise.views',
     url(r'^crawlme/$','crawlme', name='crawlme'),
     url(r'^urltoitem$','urltoitem', name='urltoitem'),
 
-    url(r'^manageissue/$','manageissue', name='saveissue'),
-    url(r'^manageissue/new/$','manageissue', name='newissue'),
-    url(r'^manageissue/(?P<issueid>\d+)$','manageissue', name='manageissue'),
     url(r'^publishnews/$','publishnews', name='publishnews'),
-    url(r'^issueitems/(?P<issueid>\d+)$','issueitems', name='issueitems'),
+
+    url(r'^managefeed/$','managefeed', name='savefeed'),
+    url(r'^managefeed/new/$','managefeed', name='newfeed'),
+    url(r'^managefeed/(?P<feedid>\d+)$','managefeed', name='managefeed'),
 
     url(r'submit/$', 'submit', name='submit'),
 
@@ -21,7 +21,7 @@ urlpatterns = patterns('personalise.views',
 )
 
 urlpatterns += patterns('',
-    url(r'^issue/(?P<issueid>\d+)$', IssueFeed(), name='issue'),
-    url(r'^issue/(?P<issueid>\d+)/.*$', IssueFeed()),
+    url(r'^issue/(?P<issueid>\d+)$', UserFeed(), name='issue'),
+    url(r'^issue/(?P<issueid>\d+)/.*$', UserFeed()),
     url(r'^find/(?P<sources>\w+)/(?P<keywords>\w+)/$', PersonalFeed()),
 )
