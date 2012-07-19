@@ -6,7 +6,7 @@ from django.contrib import admin
 admin.autodiscover()
 
 urlpatterns = patterns('',
-    url(r'', include('personalise.urls')),
+    url(r'', include('panfeed.urls')),
 #    url(r'^password_required/$', 'password_required.views.login'),    
     # Examples:
     # url(r'^$', 'personal.views.home', name='home'),
@@ -19,6 +19,6 @@ urlpatterns = patterns('',
     url(r'^admin/', include(admin.site.urls)),
     #url(r'^(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.MEDIA_ROOT}),
     url(r'^account/', include('registration.urls')),
-    url(r'^account/login_redirect', 'personalise.views.login_redirect'),
+    url(r'^account/login_redirect', 'panfeed.views.login_redirect'),
 
 )

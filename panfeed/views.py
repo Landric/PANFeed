@@ -7,9 +7,11 @@ import feedparser
 import json
 import sys
 from urlparse import urlparse
-from personalise.models import AcademicFeeds,Corpus,Corpuskeywords,Feed,FeedItem,SpecialIssue
+
+from panfeed.models import AcademicFeeds,Corpus,Corpuskeywords,Feed,FeedItem,SpecialIssue
+from panfeed.urltorss2 import ItemMaker
+
 from django.contrib.auth.models import User
-from personalise.urltorss2 import ItemMaker
 from django.contrib.sites.models import Site
 from django.shortcuts import render_to_response, get_object_or_404, redirect
 from django.template.loader import render_to_string

@@ -1,9 +1,9 @@
 from django.conf.urls.defaults import patterns, include, url
 from django.views.generic import TemplateView
-from personalise.feed import PersonalFeed, UserFeed
+from panfeed.feed import PersonalFeed, UserFeed
 import settings
 
-urlpatterns = patterns('personalise.views',
+urlpatterns = patterns('panfeed.views',
     url(r'^$',         TemplateView.as_view(template_name="index.html"),name='home'),
     url(r'^about/$',   TemplateView.as_view(template_name="about.html"),name='about'),
     url(r'^crawlme/$', TemplateView.as_view(template_name="crawlme.html"),name='crawlme'),

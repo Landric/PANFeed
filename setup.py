@@ -19,7 +19,7 @@ setup(
     license='LICENSE',
     keywords='django rss feed panfeed ATOM'.split(),
     platforms='any',
-    packages=['personalise',],
+    packages=['panfeed',],
     install_requires=[
         "Django",
         "feedparser",
@@ -30,7 +30,7 @@ setup(
         "django-haystack",
         "haystack-xapian",
     ],
-    package_data={'personalise': [
+    package_data={'panfeed': [
         'text.txt',
         'static/featured.txt',
         'static/index.html',

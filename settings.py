@@ -128,7 +128,7 @@ INSTALLED_APPS = (
     'haystack',
     'csp',
     'jquery',
-    'personalise',
+    'panfeed',
     'respite',
     # Uncomment the next line to enable the admin:
     'django.contrib.admin',

@@ -1,7 +1,7 @@
 from django.core.management.base import BaseCommand, CommandError
-from personalise.models import AcademicFeeds, Corpus, Corpuskeywords, Tf, Words
+from panfeed.models import AcademicFeeds, Corpus, Corpuskeywords, Tf, Words
 from corpus import Corpus as CorpusScraper
-from django.db import connection
+
 import feedparser
 import urllib2
 import string

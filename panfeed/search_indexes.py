@@ -1,7 +1,7 @@
 import datetime
 from haystack import indexes
 from haystack import site
-from personalise.models import Corpus
+from panfeed.models import Corpus
 
 class CorpusIndex(indexes.SearchIndex):
     text = indexes.CharField(document=True, use_template=True)

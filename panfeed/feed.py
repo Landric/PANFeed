@@ -5,9 +5,11 @@ import datetime
 import time
 import sys
 from operator import itemgetter
-from personalise.models import Corpus, FeedItem
-from personalise.models import Feed as MFeed
+from panfeed.models import Corpus, FeedItem
+from panfeed.models import Feed as MFeed
 import feedparser
+
+from haystack.query import SearchQuerySet
 
 class PANFeed:
     title = ""
@@ -37,10 +39,15 @@ class PersonalFeed(Feed):
         
         results = []
         unique_results = {}
+        
+        
         formatstring = ",".join(["%s"] * len(urls))
         formatwordstring = ",".join(["%s"] * len(words))
         urls.append(urls[0])#.append(words
         urls.extend(words)
+        
+        corpusses = SearchQuerySet().models(Corpus).filter(contains=" ".join(words)).load_all()
+        
         query = "SELECT corpus.*, corpuskeywords.rank FROM corpus,corpuskeywords WHERE corpus.id=corpuskeywords.itemid AND (corpus.toplevel IN (%s) OR %s = 'all') AND corpuskeywords.word IN (%s)" % (formatstring,"%s",formatwordstring)
         results = Corpus.objects.raw(query,tuple(urls))
 

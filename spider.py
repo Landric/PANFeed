@@ -4,7 +4,7 @@ import settings
 setup_environ(settings)
 from django.db import connection, transaction
 from django.db import models
-from personalise.models import SpiderToDo, SpiderDone, SpiderRSS 
+from panfeed.models import SpiderToDo, SpiderDone, SpiderRSS 
 import urllib2
 import feedparser
 import lxml.html
