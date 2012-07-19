@@ -16,6 +16,8 @@ import math
 import re
 import datetime
 
+from progressbar import ProgressBar as PB
+
 class Command(BaseCommand):
 
     help = 'Loads all the corpus stuff'
@@ -33,8 +35,7 @@ class Corpus():
         #### Builds a corpus of documents from a set of feeds.
         
         feeds = open("newfeed.txt", "r")
-        for feedurl in feeds:
-            print feedurl
+        for feedurl in PB()(list(feeds)):
             try:
                 page = urllib2.urlopen(feedurl)
                 feed = feedparser.parse(page)
@@ -70,8 +71,8 @@ class Corpus():
     def count_words_and_store(self):
         ### Performs a wordcount of each document and stores cumulative word count 
         ### and also wordcount specific to that document/word combination.
-        corpuses = MCorpus.objects.all()
-        for corpus in corpuses:
+
+        for corpus in PB()(MCorpus.objects.all()):
             if not Tf.objects.filter(corpus=corpus).exists():
                 totaltext = unicodedata.normalize('NFKD',(corpus.title+' '+corpus.description)).encode('ascii','ignore')
                 totaltext = self.__remove_extra_spaces(self.__remove_html_tags(totaltext))
@@ -105,7 +106,7 @@ class Corpus():
         global corpussize
         corpussize = MCorpus.objects.count()
         
-        for corpus in corpuses:
+        for corpus in PB()(MCorpus.objects.all()):
             if not Corpuskeywords.objects.filter(corpus=corpus).exists():
                 ### For each item from feeds
                 worddata = {}

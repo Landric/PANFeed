@@ -29,6 +29,7 @@ setup(
         "django-csp",
         "django-haystack",
         "haystack-xapian",
+        "progressbar",
     ],
     package_data={'panfeed': [
         'text.txt',
