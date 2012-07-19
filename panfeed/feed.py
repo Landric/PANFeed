@@ -32,16 +32,10 @@ class PersonalFeed(Feed):
     keywords = [];
 
     def items(self,params):
-        cursor = connection.cursor()
+
         words = params[0].split("_")
         urls = params[1].split("_") 
-        
-        results = []
-        unique_results = {}
-        
-        
-        formatstring = ",".join(["%s"] * len(urls))
-        formatwordstring = ",".join(["%s"] * len(words))
+                
         urls.append(urls[0])#.append(words
         urls.extend(words)
         
