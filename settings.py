@@ -1,4 +1,4 @@
-
+import os
 
 DEBUG = True
 TEMPLATE_DEBUG = DEBUG
@@ -52,11 +52,13 @@ MEDIA_ROOT = ''
 # Examples: "http://media.lawrence.com/media/", "http://example.com/media/"
 MEDIA_URL = ''
 
+HOME_ROOT = os.path.dirname(__file__)
+
 # Absolute path to the directory static files should be collected to.
 # Don't put anything in this directory yourself; store your static files
 # in apps' "static/" subdirectories and in STATICFILES_DIRS.
 # Example: "/home/media/media.lawrence.com/static/"
-STATIC_ROOT = '/opt/PANFeed/personalise/staticfiles/'
+STATIC_ROOT = HOME_ROOT + '/staticfiles/'
 
 # URL prefix for static files.
 # Example: "http://media.lawrence.com/static/"
