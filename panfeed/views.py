@@ -32,7 +32,7 @@ def managefeed(request, feed_id=None):
                 feed.owner = request.user
                 feed.save()
             else:
-                if Feed.objects.filter(id=int(feed_id), owner = request.user).exists():
+                if Feed.objects.filter(id=feed_id, owner = request.user).exists():
                     feed = form.save(commit=False)
                     feed.owner = request.user
                     feed.id = feed_id
@@ -66,107 +66,52 @@ def managefeed(request, feed_id=None):
             items = FeedItem.objects.filter(feed=feed_id)
             return render_to_response('managefeed.html', {'form': form, 'edit':True, 'items': items}, context_instance=RequestContext(request))
 
-'''
-@login_required
-def manageissue(request,issueid=None):
+def manageitem(request, feed_id, item_id=None):
+    feed = get_object_or_404(Feed, id=feed_id)
+    if feed.owner != request.user:
+        return HttpResponseForbidden("You do not have permission to edit this Feed.")
+
     if request.method == "POST":
-        form = IssueForm(request.POST)
+        form = FeedItemForm(request.POST)
         if form.is_valid():
 
-            if issueid is None:
-                issue = form.save(commit=False)
-                issue.owner = request.user
-                issue.save()
-            else:
-                if Issue.objects.filter(id=int(issueid), owner = request.user).exists():
-                    issue = form.save(commit=False)
-                    issue.owner = request.user
-p
-                    issue.id = issueid
-                    issue.save(force_update=True)
-                    IssueItem.objects.filter(issue=issue).delete()
-            
-                else:
-                    return HttpResponseForbidden("You do not have permission to edit this Issue.")
-
-            for i, val in enumerate(request.REQUEST.getlist("item-title")) :
-        
-                if IssueItem.objects.filter(issue=issue, url=request.REQUEST.getlist("item-url")[i]).count() > 0:
-                    item = IssueItem.objects.filter(issue=issue, url=request.REQUEST.getlist("item-url")[i])[0]
-                else:
-                    item = IssueItem.objects.create(issue=issue)
-
-                item.url = request.REQUEST.getlist("item-url")[i]
-                item.title = request.REQUEST.getlist("item-title")[i]
-                item.description = request.REQUEST.getlist("item-description")[i]
-                item.img = request.REQUEST.getlist("item-img")[i]
-                item.ordernumber = i;
+            if item_id is None:
+                item = form.save(commit=False)
+                item.feed = feed_id
                 item.save()
+            else:
+                if FeedItem.objects.filter(id=item_id, feed=feed_id).exists():
+                    item = form.save(commit=False)
+                    item.feed = feed_id
+                    item.id = item_id
+                    item.save(force_update=True)
+                else:
+                    return HttpResponseForbidden("You do not have permission to edit this Feed.")
 
             return HttpResponseRedirect('/publishnews/')
-
-    elif request.method == 'DELETE':
-        issue = get_object_or_404( Issue, id=int(issueid) )
-
-        if issue.owner != request.user:
-            return HttpResponseForbidden("You do not have permission to edit this Issue.")
 
         else:
-            issue.delete()
-            return HttpResponseRedirect('/publishnews/')
+            return render_to_response('manageitem.html', {'form': form, 'feed_title':feed.title, 'edit': True}, context_instance=RequestContext(request))
+        '''
+        elif request.method == 'DELETE':
+            item = get_object_or_404(Feed, id=item_id)
+
+            if feed.owner != request.user:
+                return HttpResponseForbidden("You do not have permission to edit this Feed.")
+            else:
+                feed.delete()
+                return HttpResponseRedirect('/publishnews/')
+        '''
     else:
-        if issueid is None:
-            form = IssueForm()
+        if item_id is None:
+            form = FeedItemForm()
+            return render_to_response('manageitem.html', {'form': form, 'feed_title':feed.title}, context_instance=RequestContext(request))
+
         else:
-            issue = Issue.objects.get(id=issueid, owner=request.user)
+            item = FeedItem.objects.get(id=item_id)
 
-            form = IssueForm(instance=issue)
-
-    return render_to_response('manageissue.html', {'form': form, 'issueid': issueid}, context_instance=RequestContext(request))
-
-def issueitems(request, issueid):
-    itemlist = [];
-    for item in IssueItem.objects.filter(issueid=issueid).order_by('ordernumber'):
-        itemlist.append({'title':item.title, 'url':item.url, 'description':item.description, 'img':item.img})
-    return HttpResponse(json.dumps(itemlist), mimetype="application/json")
-
-@login_required
-def saveissue(request):
-    pagetitle = "Save Issue"
-    issue = get_object_or_404( Issue, id=int(request.POST['issueid']) )
-
-    if issue.owner != request.user:
-        return HttpResponseForbidden("You do not have permission to edit this issue.")
-
-    if (not issue):
-        p = { 'title':pagetitle, 'content':'This issue does not exist or you do not have permission to edit it.' }
-        return render_to_response('template.html', { 'page':p }, context_instance=RequestContext(request))
-
-    issue.title = request.REQUEST['title']
-    issue.description = request.REQUEST['description']
-    if 'public' in request.REQUEST :
-        issue.public = request.REQUEST['public']
-    issue.save();
-
-    IssueItem.objects.filter(issue=issue).delete()
-
-    for i, val in enumerate(request.REQUEST.getlist("item-title")) :
-        pprint.pprint(request.REQUEST.getlist("item-url"), sys.stderr)
-        
-        if IssueItem.objects.filter(issue=issue, url=request.REQUEST.getlist("item-url")[i]).count() > 0:
-            item = IssueItem.objects.filter(issue=issue, url=request.REQUEST.getlist("item-url")[i])[0]
-        else:
-            item = IssueItem.objects.create(issue=issue)
-
-        item.url = request.REQUEST.getlist("item-url")[i]
-        item.title = request.REQUEST.getlist("item-title")[i]
-        item.description = request.REQUEST.getlist("item-description")[i]
-        item.img = request.REQUEST.getlist("item-img")[i]
-        item.ordernumber = i;
-        item.save()
-
-    return HttpResponseRedirect('/publishnews')
-'''
+            form = FeedItemForm(instance=item)
+            return render_to_response('manageitem.html', {'form': form, 'feed_title':feed.title, 'edit':True}, context_instance=RequestContext(request))
 
 @login_required
 def publishnews(request):

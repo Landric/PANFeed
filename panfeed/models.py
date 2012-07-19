@@ -38,11 +38,11 @@ class Corpus(models.Model):
         return self.title
         
     class Meta:
-        verbose_name_plural = "corpuses"
+        verbose_name_plural = "corpora"
 
 class Corpuskeywords(models.Model):
-    corpus = models.ForeignKey(Corpus, db_column="itemid")
-    word = models.ForeignKey('Words', db_column="word")
+    corpus = models.ForeignKey(Corpus)
+    word = models.ForeignKey('Words')
     rank = models.IntegerField(null=True, blank=True)
     
     def __unicode__(self):
@@ -52,8 +52,8 @@ class Corpuskeywords(models.Model):
         unique_together = ("corpus","word")
 
 class Tf(models.Model):
-    word = models.ForeignKey('Words', db_column="word")
-    corpus = models.ForeignKey(Corpus, db_column="itemid")
+    word = models.ForeignKey('Words')
+    corpus = models.ForeignKey(Corpus)
     count = models.IntegerField(null=True, blank=True)
     
     def __unicode__(self):
@@ -99,34 +99,3 @@ class FeedItem(models.Model):
     feed = models.ForeignKey(Feed)
     special_issue = models.ForeignKey(SpecialIssue, null=True)
     issue_position = models.IntegerField(null=True, db_index=True)
-
-'''
-class IssueItem(models.Model):
-    title = models.TextField(blank=True)
-    description = models.TextField(blank=True)
-    url = models.CharField(max_length=6249, blank=True)
-    img = models.CharField(max_length=6249, blank=True)
-    issue = models.ForeignKey('Issue', db_column="issueid")
-    length = models.IntegerField(null=True, blank=True)
-    keywords = models.TextField(blank=True,null=True, default="")
-    date = models.DateTimeField(null=True, blank=True)
-    toplevel = models.URLField(blank=True)
-    public = models.BooleanField(default=True)
-    ordernumber = models.IntegerField(null=True, db_index=True)
-
-    class Meta:
-        db_table = u'issue_item'
-
-class Issue(models.Model):
-    public = models.BooleanField(default=False)
-    owner = models.ForeignKey(User) 
-    title = models.CharField(max_length=60)
-    description = models.TextField(blank=True)
-    toplevel = models.URLField(blank=True,null=True,default="")
-
-    def get_absolute_url(self):
-        return "/issue/"+str(self.id)+"/"+re.subn(r'[^A-Za-z0-9]+', '-', self.title)[0]
-
-    class Meta:
-        db_table = u'issue'
-'''

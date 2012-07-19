@@ -18,6 +18,9 @@ urlpatterns = patterns('panfeed.views',
     url(r'^managefeed/new/$','managefeed', name='newfeed'),
     url(r'^managefeed/(?P<feed_id>\d+)$','managefeed', name='managefeed'),
 
+    url(r'^managefeed/(?P<feed_id>\d+)/manageitem/new$','manageitem', name='newitem'),
+    url(r'^managefeed/(?P<feed_id>\d+)/manageitem/(?P<item_id>\d+)$','manageitem', name='manageitem'),
+
     url(r'submit/$', 'submit', name='submit'),
 )
 
