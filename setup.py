@@ -27,6 +27,8 @@ setup(
         "django-respite",
         "django-registration",
         "django-csp",
+        "django-haystack",
+        "haystack-xapian",
     ],
     package_data={'personalise': [
         'text.txt',
