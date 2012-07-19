@@ -40,6 +40,10 @@ def managefeed(request, feed_id=None):
 
             return HttpResponseRedirect('/publishnews/')
 
+        else:
+            items = FeedItem.objects.filter(feed=feed_id)
+            return render_to_response('managefeed.html', {'form': form, 'edit': True, 'items': items}, context_instance=RequestContext(request))
+
     elif request.method == 'DELETE':
         feed = get_object_or_404(Feed, id=feed_id)
 
@@ -51,12 +55,15 @@ def managefeed(request, feed_id=None):
     else:
         if feed_id is None:
             form = FeedForm()
+            return render_to_response('managefeed.html', {'form': form}, context_instance=RequestContext(request))
+
         else:
             feed = Feed.objects.get(id=feed_id, owner=request.user)
 
             form = FeedForm(instance=feed)
+            items = FeedItem.objects.filter(feed=feed_id)
+            return render_to_response('managefeed.html', {'form': form, 'edit':True, 'items': items}, context_instance=RequestContext(request))
 
-        return render_to_response('managefeed.html', {'form': form}, context_instance=RequestContext(request))
 '''
 @login_required
 def manageissue(request,issueid=None):
@@ -72,6 +79,7 @@ def manageissue(request,issueid=None):
                 if Issue.objects.filter(id=int(issueid), owner = request.user).exists():
                     issue = form.save(commit=False)
                     issue.owner = request.user
+p
                     issue.id = issueid
                     issue.save(force_update=True)
                     IssueItem.objects.filter(issue=issue).delete()
