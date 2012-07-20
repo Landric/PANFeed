@@ -21,7 +21,7 @@ import random
 def findnews(request):
     feeds = list(Feed.objects.all())
     random.shuffle(feeds)
-    return render_to_response('findnews.html', {'feeds': feeds[:4]}, context_instance=RequestContext(request))
+    return render_to_response('findnews.html', {'feeds1': feeds[:4], 'feeds2': feeds[4:8]}, context_instance=RequestContext(request))
 
 def allfeeds(request):
     feeds = Feed.objects.all()
@@ -49,7 +49,10 @@ def managefeed(request, feed_id=None):
 
         else:
             items = FeedItem.objects.filter(feed=feed_id)
-            return render_to_response('managefeed.html', {'form': form, 'edit': True, 'items': items}, context_instance=RequestContext(request))
+            if(feed_id is None):
+                return render_to_response('managefeed.html', {'form': form}, context_instance=RequestContext(request))
+            else:
+                return render_to_response('managefeed.html', {'form': form, 'edit': True, 'items': items}, context_instance=RequestContext(request))
 
     elif request.method == 'DELETE':
         feed = get_object_or_404(Feed, id=feed_id)
