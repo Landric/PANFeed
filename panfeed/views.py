@@ -49,7 +49,10 @@ def managefeed(request, feed_id=None):
 
         else:
             items = FeedItem.objects.filter(feed=feed_id)
-            return render_to_response('managefeed.html', {'form': form, 'edit': True, 'items': items}, context_instance=RequestContext(request))
+            if(feed_id is None):
+                return render_to_response('managefeed.html', {'form': form}, context_instance=RequestContext(request))
+            else:
+                return render_to_response('managefeed.html', {'form': form, 'edit': True, 'items': items}, context_instance=RequestContext(request))
 
     elif request.method == 'DELETE':
         feed = get_object_or_404(Feed, id=feed_id)
