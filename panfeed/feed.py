@@ -2,19 +2,23 @@ from django.contrib.syndication.views import Feed
 from django.shortcuts import get_object_or_404
 import datetime
 from panfeed.models import Corpus
+import urllib
+
 
 from haystack.query import SearchQuerySet
+
+from collections import namedtuple
 
 class PersonalFeed(Feed):
     description = "Your feed Personalised Academic News Feed from your keywords."
 
-    def items(self,params):
+    def items(self,obj):
 
-        words = params[0].split("_")
-        urls = params[1].split("_") 
+        words = obj["keywords"]
+        #urls = params[1].split("_") 
                 
-        urls.append(urls[0])#.append(words
-        urls.extend(words)
+        #urls.append(urls[0])#.append(words
+        #urls.extend(words)
         
         corpora = SearchQuerySet().models(Corpus).all()
         
@@ -24,10 +28,14 @@ class PersonalFeed(Feed):
         return (corpus.object for corpus in corpora.load_all())
 
     def title(self,obj):
-        return "PANFeed of " + ", ".join(obj[0].split("_")) 
+        return "PANFeed of " + ", ".join(obj['keywords']) 
 
     def link(self, obj):
-        return '/find/'+obj[1]+"/"+obj[0]
+        return '/find?{params}'.format(params=urllib.urlencode(
+            {'kw':obj['keywords']},
+            {'url':obj['sources']}
+            )
+        )
 
     def item_title(self,item):
         return item.title
@@ -41,8 +49,14 @@ class PersonalFeed(Feed):
     def item_pubdate(self,item):
         return item.date
     
-    def get_object(self,request,keywords,sources):
-        return (keywords,sources) 
+    def get_object(self,request):
+        get = request.GET
+        return (
+            {
+                "keywords":get.getlist("kw",[]),
+                "sources": get.getlist('url',[])
+            }
+        )
 
     def get_hot_ranking(self,result_item):
         
