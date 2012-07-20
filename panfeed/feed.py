@@ -75,11 +75,11 @@ class PersonalFeed(Feed):
     def get_object(self,request):
         get = request.GET
         obj = {
-            "keywords":get.getlist("kw", None),
+            "keywords":get.getlist("kw", []),
             "sources": get.getlist('url',[])
         }
         
-        if obj["keywords"] is None:
+        if not obj["keywords"]:
             raise(Http404)
         
         return (obj)
