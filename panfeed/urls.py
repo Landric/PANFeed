@@ -15,7 +15,6 @@ urlpatterns = patterns('panfeed.views',
 
     url(r'^publishnews/$','publishnews', name='publishnews'),
 
-    url(r'^managefeed/$','managefeed', name='savefeed'),
     url(r'^managefeed/new/$','managefeed', name='newfeed'),
     url(r'^managefeed/(?P<feed_id>\d+)$','managefeed', name='managefeed'),
 
