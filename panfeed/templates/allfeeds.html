@@ -1,0 +1,18 @@
+{% extends "template.html" %}
+{% load url from future %}
+{% block title %}Find News{% endblock title%}
+{% block findnews_nav %}active{% endblock findnews_nav %}
+{% block content %}
+<div class="row">
+	<div class="span8">
+		<h1>Find News</h1>
+		<p>Here you can browse some of the Feeds created by other PANFeed users.</p>
+		<br/>
+	</div>
+</div>
+<ul>
+	{% for feed in feeds %}
+		<li><a href='#'>{{feed.title}}</a></li>
+	{% endfor %}
+</ul>
+{% endblock content %}

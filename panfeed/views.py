@@ -17,8 +17,12 @@ from django.core.validators import URLValidator
 from django.core.exceptions import ValidationError
 
 def findnews(request):
-    feeds = Feed.objects.all()
+    feeds = Feed.objects.all()[:4]
     return render_to_response('findnews.html', {'feeds': feeds}, context_instance=RequestContext(request))
+
+def allfeeds(request):
+    feeds = Feed.objects.all()
+    return render_to_response('allfeeds.html', {'feeds': feeds}, context_instance=RequestContext(request))
 
 def managefeed(request, feed_id=None):
     if request.method == "POST":

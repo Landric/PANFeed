@@ -11,6 +11,7 @@ urlpatterns = patterns('panfeed.views',
     url(r'^urltoitem$','urltoitem', name='urltoitem'),
     
     url(r'^findnews/$', 'findnews', name='findnews'),
+    url(r'^findnews/allfeeds$', 'allfeeds', name='allfeeds'),
 
     url(r'^publishnews/$','publishnews', name='publishnews'),
 
