@@ -9,7 +9,7 @@ INSTALL
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.mysql', # Add 'postgresql_psycopg2', 'postgresql', 'mysql', 'sqlite3' or 'oracle'.
-        'NAME': 'tfidf',                      # Or path to database file if using sqlite3.
+        'NAME': '<database name here>',                      # Or path to database file if using sqlite3.
         'USER': '<username here>',                      # Not used with sqlite3.
         'PASSWORD': '<password here>',                  # Not used with sqlite3.
         'HOST': '',                      # Set to empty string for localhost. Not used with sqlite3.
