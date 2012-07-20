@@ -26,9 +26,9 @@ class AcademicFeeds(models.Model):
 
 class Corpus(models.Model):
     feed = models.ForeignKey(AcademicFeeds)
-    title = models.TextField(blank=True)
-    description = models.TextField(blank=True)
-    url = models.CharField(max_length=6249, blank=True)
+    title = models.TextField()
+    description = models.TextField()
+    url = models.URLField(verify_exists=True, max_length=6249)
     date = models.DateTimeField()
         
     def __unicode__(self):
