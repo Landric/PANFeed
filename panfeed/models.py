@@ -18,22 +18,20 @@ class Domains(models.Model):
         return self.toplevel
 
 class AcademicFeeds(models.Model):
-    url = models.URLField(verify_exists=True)
+    url = models.URLField(verify_exists=True, unique=True)
     toplevel = models.URLField()
 
     def __unicode__(self):
         return self.url;
 
 class Corpus(models.Model):
+    feed = models.ForeignKey(AcademicFeeds)
     title = models.TextField(blank=True)
     description = models.TextField(blank=True)
     url = models.CharField(max_length=6249, blank=True)
-    feed = models.CharField(max_length=6249, blank=True)
-    length = models.IntegerField(null=True, blank=True)
     keywords = models.TextField(blank=True,null=True, default="")
     date = models.DateTimeField(null=True, blank=True)
-    toplevel = models.URLField(blank=True)
-    
+        
     def __unicode__(self):
         return self.title
         

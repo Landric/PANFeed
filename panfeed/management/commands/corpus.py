@@ -49,7 +49,6 @@ def build_corpus():
                             description = itemDesc,
                             url = item.link,
                             feed = feedurl,
-                            length = len(itemDesc+item.title),
                             date = dStr
                         ).save()
                         

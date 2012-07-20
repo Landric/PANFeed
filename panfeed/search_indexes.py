@@ -5,9 +5,9 @@ from panfeed.models import Corpus
 class CorpusIndex(indexes.SearchIndex):
     text = indexes.CharField(document=True, use_template=True)
     url = indexes.CharField(model_attr='url')
-    feed = indexes.CharField(model_attr='feed')
+    feedurl = indexes.CharField(model_attr='feed__url')
     date = indexes.DateTimeField(model_attr='date')
-    toplevel = indexes.CharField(model_attr='toplevel')
+    toplevel = indexes.CharField(model_attr='feed__toplevel')
 
     def get_model(self):
         return Corpus

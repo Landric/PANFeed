@@ -24,14 +24,22 @@ def build_corpus():
             page = urllib2.urlopen(feed.url)
             parsedfeed = feedparser.parse(page)
             for item in parsedfeed.entries:
-                if not Corpus.objects.filter(url=item.link, feed=feed.url).exists():
-                    try:
-                        d = datetime.datetime(*(item.date_parsed[0:6]))
-                    except AttributeError:
-                        d=datetime.datetime.now()
-                    try:
-                        Corpus.objects.create(title=item.title,description=item.description,url=item.link,feed=feed.url,length=len(item.description+item.title),date=d,toplevel=feed.toplevel)
-                    except Exception as e:
-                        print(e)
+                if hasattr(item,"date_parsed"):
+                    d = datetime.datetime(*(item.date_parsed[0:6]))
+                else:
+                    d=datetime.datetime.now()
+                try:
+                    defaults = dict(
+                        title=item.title,
+                        description=item.description,
+                        date=d
+                    )
+                    corpus, created = Corpus.objects.get_or_create(url=item.link, feed=feed, defaults=defaults)
+                    if not created:
+                        corpus.title=item.title
+                        corpus.description=item.description
+                        corpus.date=d
+                except Exception as e:
+                    print(e)
         except urllib2.URLError:
             print "Error getting page: ", feed.url
