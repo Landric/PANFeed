@@ -1,6 +1,7 @@
 from django.contrib.syndication.views import Feed
 from django.shortcuts import get_object_or_404
 from django.core.urlresolvers import reverse
+from django.http import Http404
 import datetime
 from panfeed.models import Corpus
 import urllib
@@ -40,6 +41,9 @@ class PersonalFeed(Feed):
         
         corpora = corpora.filter(cfilter)
         
+        if not len(corpora):
+            raise(Http404)
+        
         return (corpus.object for corpus in corpora.load_all())
 
     def title(self,obj):
@@ -70,12 +74,15 @@ class PersonalFeed(Feed):
     
     def get_object(self,request):
         get = request.GET
-        return (
-            {
-                "keywords":get.getlist("kw",[]),
-                "sources": get.getlist('url',[])
-            }
-        )
+        obj = {
+            "keywords":get.getlist("kw", None),
+            "sources": get.getlist('url',[])
+        }
+        
+        if obj["keywords"] is None:
+            raise(Http404)
+        
+        return (obj)
 
     def get_hot_ranking(self,result_item):
         
