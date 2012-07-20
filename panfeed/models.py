@@ -40,34 +40,6 @@ class Corpus(models.Model):
     class Meta:
         verbose_name_plural = "corpora"
 
-class Corpuskeywords(models.Model):
-    corpus = models.ForeignKey(Corpus)
-    word = models.ForeignKey('Words')
-    rank = models.IntegerField(null=True, blank=True)
-    
-    def __unicode__(self):
-        return "{word} {corpus}".format(word = self.word, corpus = self.corpus)
-    
-    class Meta:
-        unique_together = ("corpus","word")
-
-class Tf(models.Model):
-    word = models.ForeignKey('Words')
-    corpus = models.ForeignKey(Corpus)
-    count = models.IntegerField(null=True, blank=True)
-    
-    def __unicode__(self):
-        return "{word} {count}".format(word = self.word, count=self.count)
-    class Meta:
-        unique_together = ("word","corpus")
-
-class Words(models.Model):
-    word = models.CharField(max_length=90, primary_key=True)
-    count = models.IntegerField(null=True, blank=True)
-    
-    def __unicode__(self):
-        return "{word} {count}".format(word=self.word, count=self.count)
-
 class SpiderToDo(models.Model):
     pageurl=models.URLField(primary_key=True,max_length=255)
 
