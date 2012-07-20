@@ -16,9 +16,12 @@ from forms import FeedForm, FeedItemForm
 from django.core.validators import URLValidator
 from django.core.exceptions import ValidationError
 
+import random
+
 def findnews(request):
-    feeds = Feed.objects.all()[:4]
-    return render_to_response('findnews.html', {'feeds': feeds}, context_instance=RequestContext(request))
+    feeds = list(Feed.objects.all())
+    random.shuffle(feeds)
+    return render_to_response('findnews.html', {'feeds': feeds[:4]}, context_instance=RequestContext(request))
 
 def allfeeds(request):
     feeds = Feed.objects.all()
