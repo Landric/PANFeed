@@ -1,11 +1,12 @@
 from django.contrib.syndication.views import Feed
 from django.shortcuts import get_object_or_404
+from django.core.urlresolvers import reverse
 import datetime
 from panfeed.models import Corpus
 import urllib
 
 
-from haystack.query import SearchQuerySet
+from haystack.query import SearchQuerySet, SQ
 
 from collections import namedtuple
 
@@ -15,15 +16,29 @@ class PersonalFeed(Feed):
     def items(self,obj):
 
         words = obj["keywords"]
-        #urls = params[1].split("_") 
+        urls = obj["sources"]
                 
         #urls.append(urls[0])#.append(words
         #urls.extend(words)
         
-        corpora = SearchQuerySet().models(Corpus).all()
         
+        
+        corpora = SearchQuerySet().models(Corpus)
+        cfilter = {"words":SQ(), "urls":SQ()}
         for word in words:
-            corpora = corpora.filter_or(content=word)
+            word = corpora.query.clean(word)
+            cfilter["words"] = cfilter["words"] | SQ(content=word)
+        
+        for url in urls:
+            url = corpora.query.clean(url)
+            cfilter["urls"] = cfilter["urls"] | SQ(toplevel=url)
+        
+        if urls:
+            cfilter = cfilter["words"] & cfilter["urls"]
+        else:
+            cfilter = cfilter["words"]
+        
+        corpora = corpora.filter(cfilter)
         
         return (corpus.object for corpus in corpora.load_all())
 
@@ -31,12 +46,16 @@ class PersonalFeed(Feed):
         return "PANFeed of " + ", ".join(obj['keywords']) 
 
     def link(self, obj):
-        return '/find?{params}'.format(params=urllib.urlencode(
+        return '{reverse}?{params}'.format(reverse=reverse('find'),params=urllib.urlencode(
             {'kw':obj['keywords']},
             {'url':obj['sources']}
             )
         )
 
+    def catagories(self, obj):
+        return obj["keywords"]
+    
+    
     def item_title(self,item):
         return item.title
         
