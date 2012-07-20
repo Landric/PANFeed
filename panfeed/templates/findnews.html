@@ -25,8 +25,17 @@
 	<div class="span4 offset1">	
 		<h2>Select user created Feed</h2>
 		<p>These feeds have been created by other PANFeed users.</p>
-		<br/>
-		<p>There are currently no user created Feeds. Why not be the first to <a href="/publishnews/">publish some news</a>?</p>
+		{% if feeds %}
+			<ul>
+			{% for feed in feeds|slice:":4" %}
+				<li><a href='#'>{{feed.title}}</a></li>
+			{% endfor %}
+			</ul>
+			<a href='#' class ='btn'>Browse all Feeds &raquo;</a>
+		{% else %}
+			<br/>
+			<p>There are currently no user created Feeds. Why not be the first to <a href="/publishnews/">publish some news</a>?</p>
+		{% endif %}
 	</div>
 </div>
 <br/>
