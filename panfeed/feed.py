@@ -5,25 +5,8 @@ from panfeed.models import Corpus
 
 from haystack.query import SearchQuerySet
 
-class PANFeed:
-    title = ""
-    description = ""
-    link = ""
-    
-    def reorder(self, fieldname):
-        foo = 1 + 1
-
-    def beautify(self):
-        foo = 1 + 1
-
-    def __items(self):
-        foo = 1 + 1
-
-
 class PersonalFeed(Feed):
-    title = "Your Feed"
     description = "Your feed Personalised Academic News Feed from your keywords."
-    keywords = [];
 
     def items(self,params):
 
@@ -37,19 +20,6 @@ class PersonalFeed(Feed):
         
         for word in words:
             corpora = corpora.filter_or(content=word)
-        
-        #query = "SELECT corpus.*, corpuskeywords.rank FROM corpus,corpuskeywords WHERE corpus.id=corpuskeywords.itemid AND (corpus.toplevel IN (%s) OR %s = 'all') AND corpuskeywords.word IN (%s)" % (formatstring,"%s",formatwordstring)
-        #results = Corpus.objects.raw(query,tuple(urls))
-
-        #for item in results:
-        #    if unique_results.has_key(item.id):
-        #        unique_results[item.id].rank+=item.rank
-        #    else:
-        #        unique_results[item.id]=item
-
-        #for item in unique_results.values():
-        #    item.hot=self.get_hot_ranking(item)    
-        #sort = sorted(unique_results.values(), key=lambda student: student.hot,reverse=True)
         
         return (corpus.object for corpus in corpora.load_all())
 
