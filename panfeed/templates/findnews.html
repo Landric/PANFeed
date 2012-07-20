@@ -27,11 +27,11 @@
 		<p>These feeds have been created by other PANFeed users.</p>
 		{% if feeds %}
 			<ul>
-			{% for feed in feeds|slice:":4" %}
+			{% for feed in feeds %}
 				<li><a href='#'>{{feed.title}}</a></li>
 			{% endfor %}
 			</ul>
-			<a href='#' class ='btn'>Browse all Feeds &raquo;</a>
+			<a href="{% url 'allfeeds' %}" class ='btn'>Browse all Feeds &raquo;</a>
 		{% else %}
 			<br/>
 			<p>There are currently no user created Feeds. Why not be the first to <a href="/publishnews/">publish some news</a>?</p>
