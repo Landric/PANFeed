@@ -29,8 +29,7 @@ class Corpus(models.Model):
     title = models.TextField(blank=True)
     description = models.TextField(blank=True)
     url = models.CharField(max_length=6249, blank=True)
-    keywords = models.TextField(blank=True,null=True, default="")
-    date = models.DateTimeField(null=True, blank=True)
+    date = models.DateTimeField()
         
     def __unicode__(self):
         return self.title
