@@ -71,7 +71,7 @@ def manageitem(request, feed_id, item_id=None):
 
             if item_id is None:
                 item = form.save(commit=False)
-                item.feed = feed_id
+                item.feed = feed
                 item.save()
             else:
                 if FeedItem.objects.filter(id=item_id, feed=feed_id).exists():

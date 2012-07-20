@@ -1,0 +1,48 @@
+{% extends "template.html" %}
+{% load url from future %}
+{% block title %}Publish{% endblock title %}
+{% block publish_nav %}active{% endblock publish_nav %}
+{% block content %}
+<h2>Publish an Item</h2>
+<form action="#" method="post" class="form-horizontal">
+	{% csrf_token %}
+	<fieldset>
+		<div class="control-group">
+			<label class="control-label">Feed title:</label>
+			<div class="controls">
+				<input class="input-xlarge disabled" placeholder="{{feed_title}}" disabled="disabled" type="text">
+			</div>
+		</div>
+		{% for field in form %}
+			{% if field.errors %}
+				<div class="control-group error">
+			{% else %}
+				<div class="control-group">
+			{% endif%}
+					<label class="control-label">{{ field.label }}:</label>
+					<div class="controls">
+						{{ field }}
+						{% if field.errors %}
+							{% for error in field.errors %}
+								<span class="help-inline">{{ error }}</span>
+							{% endfor %}
+						{% endif%}
+						{% if field.help_text %}
+							<span class="help-inline">{{field.help_text }}</span>
+						{% endif%}
+					</div>
+				</div>
+		{% endfor %}
+		<div class="control-group">
+			<div class="controls">
+				{% if edit %}
+					<input type="submit" value="Save" class="btn btn-primary"/>&nbsp;&nbsp;
+				{% else %}
+					<input type="submit" value="Publish" class="btn btn-primary"/>&nbsp;&nbsp;
+				{% endif %}
+				<a href="{% url 'publishnews' %}" class="btn">Cancel</a>
+			</div>
+		</div>
+	</fieldset>
+</form>
+{% endblock content %}
