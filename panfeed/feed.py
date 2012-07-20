@@ -1,5 +1,6 @@
 from django.contrib.syndication.views import Feed
 from django.shortcuts import get_object_or_404
+from django.core.urlresolvers import reverse
 import datetime
 from panfeed.models import Corpus
 import urllib
@@ -45,12 +46,16 @@ class PersonalFeed(Feed):
         return "PANFeed of " + ", ".join(obj['keywords']) 
 
     def link(self, obj):
-        return '/find?{params}'.format(params=urllib.urlencode(
+        return '{reverse}?{params}'.format(reverse=reverse('find'),params=urllib.urlencode(
             {'kw':obj['keywords']},
             {'url':obj['sources']}
             )
         )
 
+    def catagories(self, obj):
+        return obj["keywords"]
+    
+    
     def item_title(self,item):
         return item.title
         
