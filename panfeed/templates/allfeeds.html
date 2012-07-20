@@ -7,12 +7,17 @@
 	<div class="span8">
 		<h1>Find News</h1>
 		<p>Here you can browse some of the Feeds created by other PANFeed users.</p>
+		<div class="input-append">
+			<input type=text placeholder="Search..."><button class="btn">Search</button>
+		</div>
+		<br/>
 		<br/>
 	</div>
 </div>
 <ul>
 	{% for feed in feeds %}
-		<li><a href='#'>{{feed.title}}</a></li>
+		<li><h4><a href='#'>{{feed.title}}</a></h4>{{feed.description}}</li>
+		<br/>
 	{% endfor %}
 </ul>
 {% endblock content %}
