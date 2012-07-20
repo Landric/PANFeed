@@ -4,6 +4,7 @@
 {% block publish_nav %}active{% endblock publish_nav %}
 {% block content %}
 <h2>Publish an Item</h2>
+</br>
 <form action="#" method="post" class="form-horizontal">
 	{% csrf_token %}
 	<fieldset>
@@ -13,6 +14,15 @@
 				<input class="input-xlarge disabled" placeholder="{{feed_title}}" disabled="disabled" type="text">
 			</div>
 		</div>
+		<div class="control-group">
+			<label class="control-label">Url:</label>
+			<div class="controls">
+				<div class="input-append">
+					<input id="id_url" name="url" maxlength="6249" type="text"><button class="btn">Add Item</button>
+				</div>
+			</div>
+		</div>
+		<!--
 		{% for field in form %}
 			{% if field.errors %}
 				<div class="control-group error">
@@ -43,6 +53,7 @@
 				<a href="{% url 'publishnews' %}" class="btn">Cancel</a>
 			</div>
 		</div>
+		-->
 	</fieldset>
 </form>
 {% endblock content %}
