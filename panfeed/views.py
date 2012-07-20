@@ -21,7 +21,7 @@ import random
 def findnews(request):
     feeds = list(Feed.objects.all())
     random.shuffle(feeds)
-    return render_to_response('findnews.html', {'feeds': feeds[:4]}, context_instance=RequestContext(request))
+    return render_to_response('findnews.html', {'feeds1': feeds[:4], 'feeds2': feeds[4:8]}, context_instance=RequestContext(request))
 
 def allfeeds(request):
     feeds = Feed.objects.all()
