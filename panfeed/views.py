@@ -19,8 +19,7 @@ from django.core.exceptions import ValidationError
 import random
 
 def findnews(request):
-    feeds = list(Feed.objects.all())
-    random.shuffle(feeds)
+    feeds = Feed.objects.all().order_by('?')[:8]
     return render_to_response('findnews.html', {'feeds1': feeds[:4], 'feeds2': feeds[4:8]}, context_instance=RequestContext(request))
 
 def allfeeds(request):
