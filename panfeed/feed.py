@@ -84,17 +84,6 @@ class PersonalFeed(Feed):
         
         return (obj)
 
-    def get_hot_ranking(self,result_item):
-        
-        static_rank = result_item.rank/float(result_item.length)
-        difference = datetime.datetime.now() - result_item.date
-        if (difference.days>0):
-            hot_rank = static_rank/float(difference.days) 
-        else:
-            hot_rank = static_rank
-
-        return hot_rank
-
 class UserFeed(Feed):
 
     def items(self,obj):

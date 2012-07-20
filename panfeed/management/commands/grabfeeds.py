@@ -29,7 +29,9 @@ def build_corpus():
                         d = datetime.datetime(*(item.date_parsed[0:6]))
                     except AttributeError:
                         d=datetime.datetime.now()
-                    print item.title+" "+item.link
-                    Corpus.objects.create(title=item.title,description=item.description,url=item.link,feed=feed.url,length=len(item.description+item.title),date=d,toplevel=feed.toplevel)
+                    try:
+                        Corpus.objects.create(title=item.title,description=item.description,url=item.link,feed=feed.url,length=len(item.description+item.title),date=d,toplevel=feed.toplevel)
+                    except Exception as e:
+                        print(e)
         except urllib2.URLError:
-            print "Error getting page: ", feedurl
+            print "Error getting page: ", feed.url
