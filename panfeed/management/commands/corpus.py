@@ -148,10 +148,6 @@ def load_generate_and_add_corpus_data():
     corp = Corpus()
     print("Building Corpus")
     corp.build_corpus()
-    print("Counting words")
-    corp.count_words_and_store()
-    print("Calculating keywords")
-    corp.calculate_keywords_for_all()
     
 if __name__ == '__main__':
     load_generate_and_add_corpus_data()

@@ -13,8 +13,6 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         corp = corpus_obj()
         corp.build_corpus()
-        corp.count_words_and_store()
-        corp.calculate_keywords_for_all()
 
 class corpus_obj(CorpusScraper):
     
