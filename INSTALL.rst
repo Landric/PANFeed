@@ -2,8 +2,8 @@
 Install
 =======
 
-1. install dependencies from setup.py
-2. Go into local_settings.py in this directory and set up your database details with your mysql username and password::
+1. Install dependencies using setup.py
+2. Edit local_settings.py in this directory and set up your database details with your mysql username and password::
 
     DATABASES = {
         'default': {
@@ -16,16 +16,19 @@ Install
         }
     }
 
-3. Type the following command into the command line (while in the base directory)::
+3. Install the database schema and fixtures using::
 
-    python manage.py syncdb
+    $ ./manage.py syncdb
 
 4. Set up a cronjob to update from feeds hourly::
 
     1 * * * * python <your_path_goes_here>/personal/manage.py grabfeeds > /dev/null; <your_path_goes_here>/personal/manage.py grabfeeds update_index > /dev/null
 
-5. Deploy using `WSGI`__
-    __ https://docs.djangoproject.com/en/dev/howto/deployment/wsgi/
+5. Finally deploy using `WSGI`_
 6. Done!
 
-If you have any comments or suggestions or you find any bugs please let us know. You can email panfeed.gmail.com or post on our googlecode page at code.google.com/p/panfeed
+If you have any comments or suggestions or you find any bugs please `email`_ us or post on our `googlecode`_ page.
+
+.. _WSGI: https://docs.djangoproject.com/en/dev/howto/deployment/wsgi/
+.. _googlecode: http://code.google.com/p/panfeed
+.. _email: panfeed@gmail.com
