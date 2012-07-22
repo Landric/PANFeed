@@ -20,7 +20,8 @@
 		  <!--[if lt IE 9]>
     <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.6/html5shiv.min.js"></script>
   <![endif]-->
-  
+  {# angular.js must go in the head #}
+  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.0.1/angular.min.js"></script>
 </head>
 
 <body>
@@ -92,8 +93,8 @@
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
     <script type="text/javascript" src="{{ STATIC_URL }}js/jquery.js"></script>
+    <script type="text/javascript" src="{{ STATIC_URL }}js/URI.min.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}bootstrap/js/bootstrap.min.js"></script> 
-    <script type="text/javascript" src="{{ STATIC_URL }}scripts/jquery.jfeed.pack.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}scripts/make_feed_link.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}scripts/add_issue_items.js"></script>
     {% block scripts %}
