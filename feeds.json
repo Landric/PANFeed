@@ -1,0 +1,106 @@
+[
+    {
+        "toplevel": "ciie.bio.ed.ac.uk", 
+        "url": "http://ciie.bio.ed.ac.uk/rss.xml"
+    }, 
+    {
+        "toplevel": "www.law.ed.ac.uk", 
+        "url": "http://www.law.ed.ac.uk/courses/blogs/medialaw/rss.aspx"
+    }, 
+    {
+        "toplevel": "www.law.ed.ac.uk", 
+        "url": "http://www.law.ed.ac.uk/courses/blogs/sportandthelaw/rss.aspx"
+    }, 
+    {
+        "toplevel": "www.csas.ed.ac.uk", 
+        "url": "http://www.csas.ed.ac.uk/rssfeeds/news.rss"
+    }, 
+    {
+        "toplevel": "www.biology.ed.ac.uk", 
+        "url": "http://www.biology.ed.ac.uk/news/news.xml"
+    }, 
+    {
+        "toplevel": "www.biology.ed.ac.uk", 
+        "url": "http://www.biology.ed.ac.uk/news/events.xml"
+    }, 
+    {
+        "toplevel": "www.law.ed.ac.uk", 
+        "url": "http://www.law.ed.ac.uk/courses/rss.aspx?ref=22"
+    }, 
+    {
+        "toplevel": "www.shc.ed.ac.uk", 
+        "url": "http://www.shc.ed.ac.uk/archaeology/news/rss.xml"
+    }, 
+    {
+        "toplevel": "www.law.ed.ac.uk", 
+        "url": "http://www.law.ed.ac.uk/courses/rss.aspx?ref=96"
+    }, 
+    {
+        "toplevel": "wiki.inf.ed.ac.uk", 
+        "url": "https://wiki.inf.ed.ac.uk/PG/WebRss"
+    }, 
+    {
+        "toplevel": "wiki.inf.ed.ac.uk", 
+        "url": "https://wiki.inf.ed.ac.uk/DatabaseGroup/WebRss"
+    }, 
+    {
+        "toplevel": "www.pol.ed.ac.uk", 
+        "url": "http://www.pol.ed.ac.uk/rssfeeds/news.rss"
+    }, 
+    {
+        "toplevel": "wiki.inf.ed.ac.uk", 
+        "url": "https://wiki.inf.ed.ac.uk/Sandbox/WebAtom"
+    }, 
+    {
+        "toplevel": "www.law.ed.ac.uk", 
+        "url": "http://www.law.ed.ac.uk/courses/rss.aspx?ref=32"
+    }, 
+    {
+        "toplevel": "www.law.ed.ac.uk", 
+        "url": "http://www.law.ed.ac.uk/courses/rss.aspx?Type=phd"
+    }, 
+    {
+        "toplevel": "wiki.inf.ed.ac.uk", 
+        "url": "https://wiki.inf.ed.ac.uk/ComputingStrategy/WebRss"
+    }, 
+    {
+        "toplevel": "wiki.inf.ed.ac.uk", 
+        "url": "https://wiki.inf.ed.ac.uk/SDP/WebAtom"
+    }, 
+    {
+        "toplevel": "wiki.inf.ed.ac.uk", 
+        "url": "https://wiki.inf.ed.ac.uk/CSTR/WebRss"
+    }, 
+    {
+        "toplevel": "wiki.inf.ed.ac.uk", 
+        "url": "https://wiki.inf.ed.ac.uk/DistributedComputing/WebRss?search=;type=word;excludetopic=WebSearchAdvanced,WebHome,WebStatistics;web=DistributedComputing;limit=all;scope=text;casesensitive=off"
+    }, 
+    {
+        "toplevel": "wiki.inf.ed.ac.uk", 
+        "url": "https://wiki.inf.ed.ac.uk/Sandbox/WebRss"
+    }, 
+    {
+        "toplevel": "wiki.inf.ed.ac.uk", 
+        "url": "https://wiki.inf.ed.ac.uk/DiyDice/WebRss"
+    }, 
+    {
+        "toplevel": "www.law.ed.ac.uk", 
+        "url": "http://www.law.ed.ac.uk/courses/rss.aspx?ref=127"
+    }, 
+    {
+        "toplevel": "www.crh.ed.ac.uk", 
+        "url": "http://www.crh.ed.ac.uk/feed/"
+    }, 
+    {
+        "toplevel": "www.law.ed.ac.uk", 
+        "url": "http://www.law.ed.ac.uk/courses/rss.aspx?Type=others"
+    }, 
+    {
+        "toplevel": "wiki.inf.ed.ac.uk", 
+        "url": "https://wiki.inf.ed.ac.uk/SDPGroup8/WebRss"
+    }, 
+    {
+        "toplevel": "wiki.inf.ed.ac.uk", 
+        "url": "https://wiki.inf.ed.ac.uk/Seminars/WebRss"
+    }
+]
