@@ -57,7 +57,7 @@ class FindNews(FeedListView):
     
 class FeedCRUDMixin(LoginRequiredMixin, FeedMixin):
     """
-    Mixin that holds common meethods and properties for all the CRUD
+    Mixin that holds common methods and properties for all the CRUD
     operations on the Feed model
     """
     form_class = FeedForm
