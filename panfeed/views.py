@@ -120,8 +120,7 @@ class FeedDeleteView(FeedCRUDMixin, DeleteView):
 class FeedUpdateView(FeedCRUDMixin, UpdateView):
     pass
 
-class PublishNews(LoginRequiredMixin, ListView):
-    model = Feed
+class PublishNews(FeedCRUDMixin, ListView):
     context_object_name = "feeds"
     template_name = "panfeed/publishnews.html"
     
