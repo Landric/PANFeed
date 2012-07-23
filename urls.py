@@ -1,10 +1,20 @@
 from django.conf.urls.defaults import patterns, include, url
+from django.conf import settings
+from django.views.generic import RedirectView
 
 # Uncomment the next two lines to enable the admin:
 from django.contrib import admin
 admin.autodiscover()
 
 urlpatterns = patterns('',
+    url(
+        r'favicon\.ico$',
+        RedirectView.as_view(
+            url = settings.STATIC_URL + 'images/favicon.ico',
+            permanent = False
+        ),
+        name="favicon"
+    ),
     url(r'', include('panfeed.urls')),
 #    url(r'^password_required/$', 'password_required.views.login'),    
     # Examples:
