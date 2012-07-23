@@ -17,8 +17,9 @@ from django.utils.decorators import method_decorator
 from forms import FeedForm, FeedItemForm
 from django.core.validators import URLValidator
 from django.core.exceptions import ValidationError
-from django.views.generic import ListView
-
+from django.core.urlresolvers import reverse
+from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
+from django.views.generic.edit import ModelFormMixin
 
 class LoginRequiredMixin(object):
     
@@ -27,53 +28,18 @@ class LoginRequiredMixin(object):
         return super(LoginRequiredMixin, self).dispatch(*args, **kwargs)
         
 
-
-def managefeed(request, feed_id=None):
-    if request.method == "POST":
-        form = FeedForm(request.POST)
-        if form.is_valid():
-
-            if feed_id is None:
-                feed = form.save(commit=False)
-                feed.owner = request.user
-                feed.save()
-            else:
-                if Feed.objects.filter(id=feed_id, owner = request.user).exists():
-                    feed = form.save(commit=False)
-                    feed.owner = request.user
-                    feed.id = feed_id
-                    feed.save(force_update=True)
-                else:
-                    return HttpResponseForbidden("You do not have permission to edit this Feed.")
-
-            return HttpResponseRedirect('/publishnews/')
-
-        else:
-            items = FeedItem.objects.filter(feed=feed_id)
-            if(feed_id is None):
-                return render_to_response('managefeed.html', {'form': form}, context_instance=RequestContext(request))
-            else:
-                return render_to_response('managefeed.html', {'form': form, 'edit': True, 'items': items}, context_instance=RequestContext(request))
-
-    elif request.method == 'DELETE':
-        feed = get_object_or_404(Feed, id=feed_id)
-
-        if feed.owner != request.user:
-            return HttpResponseForbidden("You do not have permission to edit this Feed.")
-        else:
-            feed.delete()
-            return HttpResponseRedirect('/publishnews/')
-    else:
-        if feed_id is None:
-            form = FeedForm()
-            return render_to_response('managefeed.html', {'form': form}, context_instance=RequestContext(request))
-
-        else:
-            feed = Feed.objects.get(id=feed_id, owner=request.user)
-
-            form = FeedForm(instance=feed)
-            items = FeedItem.objects.filter(feed=feed_id)
-            return render_to_response('managefeed.html', {'form': form, 'edit':True, 'items': items}, context_instance=RequestContext(request))
+class OwnerModelFormMixin(ModelFormMixin):
+    def form_valid(self,form):
+        # save but don't commit the model form
+        self.object = form.save(commit=False)
+        # set the owner to be the current user
+        self.object.owner = self.request.user
+        #
+        # Here you can make any other adjustments to the model
+        #
+        self.object.save()
+        # ok now call the base class and we are done.
+        return super(OwnerModelFormMixin, self).form_valid(form)
 
 def manageitem(request, feed_id, item_id=None):
     feed = get_object_or_404(Feed, id=feed_id)
@@ -123,21 +89,54 @@ def manageitem(request, feed_id, item_id=None):
             return render_to_response('manageitem.html', {'form': form, 'feed_title':feed.title, 'edit':True}, context_instance=RequestContext(request))
 
 
-class FeedListView(ListView):
+class FeedMixin(object):
     model = Feed
+
+
+class FeedListView(FeedMixin, ListView):
     context_object_name = "feeds"
 
 
 class FindNews(FeedListView):
     template_name="panfeed/findnews.html"
+    context_object_name = "feeds"
     queryset = Feed.objects.all().order_by('?')[:8]
-   
+    
+    
+class FeedCRUDMixin(LoginRequiredMixin, FeedMixin):
+    form_class = FeedForm
+    def get_success_url(self):
+        return reverse('publishnews')
+    
+    def get_queryset(self):
+        return self.model.objects.filter(owner=self.request.user)
 
-class PublishNews(LoginRequiredMixin, FeedListView):
+class FeedDetailView(FeedCRUDMixin, DetailView):
+    pass
+class FeedCreateView(FeedCRUDMixin, OwnerModelFormMixin, CreateView):
+    pass
+class FeedDeleteView(FeedCRUDMixin, DeleteView):
+    pass
+class FeedUpdateView(FeedCRUDMixin, UpdateView):
+    pass
+
+class PublishNews(LoginRequiredMixin, ListView):
+    model = Feed
+    context_object_name = "feeds"
     template_name = "panfeed/publishnews.html"
     
     def get_queryset(self):
         return self.model.objects.filter(owner=self.request.user)
+
+
+def managefeed(request, feed_id=None):
+    if request.method == 'DELETE':
+        return FeedDeleteView.as_view()(request=request, pk=feed_id)
+    else:
+        if feed_id:
+            return FeedUpdateView.as_view()(request=request, pk=feed_id)
+        else:
+            return FeedCreateView.as_view()(request=request)
 
 
 def urltoitem(request):
