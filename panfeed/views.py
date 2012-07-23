@@ -56,7 +56,11 @@ class FindNews(FeedListView):
 class FeedCRUDMixin(LoginRequiredMixin, FeedMixin):
     form_class = FeedForm
     def get_success_url(self):
-        return reverse('publishnews')
+        feed = getattr(self,"object",False)
+        if feed:
+            return reverse('publishnews') + '#feed-{feed_id}'.format(feed_id = feed.id)
+        else:
+            return reverse('publishnews')
     
     def get_queryset(self):
         return self.model.objects.filter(owner=self.request.user)

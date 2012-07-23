@@ -29,8 +29,8 @@
 				</thead>
 				<tbody>
 					{% for feed in feeds %}
-						<tr>
-        						<td>{{feed.title}}</td>
+						<tr class="feed" id="feed-{{feed.id}}">
+                            <td>{{feed.title}}</td>
 							<td>
 							<form action="{% url 'managefeed' feed.id %}" method="post">
 								{% csrf_token %}
