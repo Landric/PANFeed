@@ -33,15 +33,9 @@ class OwnerModelFormMixin(ModelFormMixin):
     Add the owner to the created object from the request.user instance
     """
     def form_valid(self,form):
-        # save but don't commit the model form
         self.object = form.save(commit=False)
-        # set the owner to be the current user
         self.object.owner = self.request.user
-        #
-        # Here you can make any other adjustments to the model
-        #
         self.object.save()
-        # ok now call the base class and we are done.
         return super(OwnerModelFormMixin, self).form_valid(form)
 
 
