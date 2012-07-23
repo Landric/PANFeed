@@ -1,6 +1,8 @@
 from django.conf.urls.defaults import patterns, url
-from django.views.generic import TemplateView
+from django.views.generic import TemplateView, ListView
 from panfeed.feed import PersonalFeed, UserFeed
+from panfeed.models import AcademicFeeds,Feed,FeedItem
+from panfeed.views import FindNews, FeedListView, PublishNews
 
 urlpatterns = patterns('panfeed.views',
     url(r'^$',         TemplateView.as_view(template_name="index.html"),name='home'),
@@ -10,10 +12,9 @@ urlpatterns = patterns('panfeed.views',
     
     url(r'^urltoitem$','urltoitem', name='urltoitem'),
     
-    url(r'^findnews/$', 'findnews', name='findnews'),
-    url(r'^findnews/allfeeds$', 'allfeeds', name='allfeeds'),
-
-    url(r'^publishnews/$','publishnews', name='publishnews'),
+    url(r'^findnews/$',         FindNews.as_view(),     name='findnews'),
+    url(r'^findnews/allfeeds$', FeedListView.as_view(), name='allfeeds'),
+    url(r'^publishnews/$',      PublishNews.as_view(),  name='publishnews'),
 
     url(r'^managefeed/new/$','managefeed', name='newfeed'),
     url(r'^managefeed/(?P<feed_id>\d+)$','managefeed', name='managefeed'),

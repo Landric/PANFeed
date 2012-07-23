@@ -12,17 +12,13 @@ from django.shortcuts import render_to_response, get_object_or_404, redirect
 from django.template import RequestContext
 
 from django.contrib.auth.decorators import login_required
+from django.utils.decorators import method_decorator
+
 from forms import FeedForm, FeedItemForm
 from django.core.validators import URLValidator
 from django.core.exceptions import ValidationError
+from django.views.generic import ListView
 
-def findnews(request):
-    feeds = Feed.objects.all().order_by('?')[:8]
-    return render_to_response('findnews.html', {'feeds1': feeds[:4], 'feeds2': feeds[4:8]}, context_instance=RequestContext(request))
-
-def allfeeds(request):
-    feeds = Feed.objects.all()
-    return render_to_response('allfeeds.html', {'feeds': feeds}, context_instance=RequestContext(request))
 
 def managefeed(request, feed_id=None):
     if request.method == "POST":
@@ -118,10 +114,27 @@ def manageitem(request, feed_id, item_id=None):
             form = FeedItemForm(instance=item)
             return render_to_response('manageitem.html', {'form': form, 'feed_title':feed.title, 'edit':True}, context_instance=RequestContext(request))
 
-@login_required
-def publishnews(request):
-    feeds = Feed.objects.filter(owner=request.user.id)
-    return render_to_response('publishnews.html', {'feeds':feeds}, context_instance=RequestContext(request))
+
+class FeedListView(ListView):
+    model = Feed
+    context_object_name = "feeds"
+
+
+class FindNews(FeedListView):
+    template_name="panfeed/findnews.html"
+    queryset = Feed.objects.all().order_by('?')[:8]
+   
+
+class PublishNews(FeedListView):
+    template_name = "panfeed/publishnews.html"
+    
+    def get_queryset(self):
+        return self.model.objects.filter(owner=self.request.user)
+    
+    @method_decorator(login_required)
+    def dispatch(self, *args, **kwargs):
+        return super(PublishNews, self).dispatch(*args, **kwargs)
+
 
 def urltoitem(request):
     itemmaker = ItemMaker()
