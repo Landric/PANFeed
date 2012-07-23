@@ -27,6 +27,7 @@ setup(
         "django-respite",
         "django-registration",
         "django-csp",
+        "django-browserid",
         "django-haystack",
         "xapian-haystack",
         "progressbar",

@@ -158,9 +158,3 @@ def submit(request):
         content = 'Your data was not submitted - please retry sending the form. If you have reached this page in error, please go back and try again. If the problem persists, inform an administrator.'
         
         return render_to_response('error.html', {'title':'Error', 'header':'No data recieved', 'content':content}, context_instance=RequestContext(request))
-
-@login_required
-def login_redirect(request):
-    return redirect("/")
-
-

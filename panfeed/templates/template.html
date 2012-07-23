@@ -54,16 +54,31 @@
 		<li class="{% block about_nav %}{% endblock %}">
 			<a href="{% url 'about' %}">About</a>
 		</li>
-			  
-		{% if user.is_authenticated %}
-			<li class="">
-				<a href="/account/logout">Logout</a>
-			</li>
-		{% else %}
-			<li class="{% block login_nav %}{% endblock %}">
-				<a href="/account/login">Login/Register</a>
-			</li>
-		{% endif %}		
+        </ul>
+            <ul class="nav pull-right">
+                <li class="divider-vertical"></li>
+                {% if user.is_authenticated %}
+                    <li id="session" class="dropdown">
+                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                        {# <img class="avatar" src="{{user.get_profile.gravatar_url}}" /> #}
+                        <span class="username">{{user.email}}</span> <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            <li><a href="{% url 'logout' %}">Sign out</a></li>
+                        </ul>
+                    </li>
+                {% else %}
+                    {% block browserid %}
+                        <li id="login">
+                            <a id="browserid" href="">
+                                <img src="{{ STATIC_URL }}images/persona-login.png" alt="Sign In" />
+                            </a>
+                            <form hidden="hidden" method="POST" action="{% url 'browserid_verify' %}?next={{ request.path }}">
+                                {% csrf_token %}
+                                {{ browserid_form.as_p }}
+                            </form>
+                        </li>
+                    {% endblock browserid %}
+                {% endif %}
             </ul>
           </div>
         </div>
@@ -97,6 +112,7 @@
     <script type="text/javascript" src="{{ STATIC_URL }}bootstrap/js/bootstrap.min.js"></script> 
     <script type="text/javascript" src="{{ STATIC_URL }}scripts/make_feed_link.js"></script>
     <script type="text/javascript" src="{{ STATIC_URL }}scripts/add_issue_items.js"></script>
+    {{ browserid_form.media.js }}
     {% block scripts %}
     {% endblock scripts %}
 </body>

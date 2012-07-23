@@ -120,6 +120,7 @@ TEMPLATE_DIRS = (
 
 INSTALLED_APPS = (
     'django.contrib.auth',
+    'django_browserid',
     'django.contrib.contenttypes',
     'django.contrib.sessions',
     'django.contrib.sites',
@@ -147,8 +148,20 @@ TEMPLATE_CONTEXT_PROCESSORS =(
 )
 
 TEMPLATE_CONTEXT_PROCESSORS += (
-    'django.core.context_processors.request',
+    'django_browserid.context_processors.browserid_form',
+    'django.core.context_processors.request'
 )
+
+AUTHENTICATION_BACKENDS = (
+    'django_browserid.auth.BrowserIDBackend',
+)
+
+BROWSERID_CREATE_USER = True
+SITE_URL="http://localhost:8000"
+
+LOGIN_REDIRECT_URL = '/'
+LOGIN_URL = '/sign-in'
+LOGIN_REDIRECT_URL_FAILURE = '/failed'
 
 
 EMAIL_HOST = "smtp.ecs.soton.ac.uk"
@@ -156,16 +169,12 @@ EMAIL_HOST = "smtp.ecs.soton.ac.uk"
 
 DEFAULT_FROM_EMAIL = 'panfeed.ecs.soton.ac.uk <noreply@panfeed.ecs.soton.ac.uk>'
 
-ACCOUNT_ACTIVATION_DAYS = 7
-
-LOGIN_REDIRECT_URL = "/account/login_redirect/"
-LOGIN_URL = "/account/login"
-LOGOUT_URL = "/account/logout"
-
 CSP_REPORT_URI = '/csp/report'
 
 CSP_IMG_SRC = ('*',)
-CSP_SCRIPT_SRC = ("'self'","https://cdnjs.cloudflare.com",)
+CSP_SCRIPT_SRC = ("'self'", 'https://login.persona.org', 'https://browserid.org', "https://cdnjs.cloudflare.com",)
+CSP_FRAME_SRC = ("'self'", 'https://login.persona.org', 'https://browserid.org', 'https://browserid.org',)
+
 CSP_EXCLUDE_URL_PREFIXES = ('/admin',)
 
 # A sample logging configuration. The only tangible logging
