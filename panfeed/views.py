@@ -29,6 +29,9 @@ class LoginRequiredMixin(object):
         
 
 class OwnerModelFormMixin(ModelFormMixin):
+    """
+    Add the owner to the created object from the request.user instance
+    """
     def form_valid(self,form):
         # save but don't commit the model form
         self.object = form.save(commit=False)
@@ -50,12 +53,20 @@ class FeedListView(FeedMixin, ListView):
 
 class FindNews(FeedListView):
     template_name="panfeed/findnews.html"
-    context_object_name = "feeds"
     queryset = Feed.objects.all().order_by('?')[:8]
     
 class FeedCRUDMixin(LoginRequiredMixin, FeedMixin):
+    """
+    Mixin that holds common meethods and properties for all the CRUD
+    operations on the Feed model
+    """
     form_class = FeedForm
     def get_success_url(self):
+        """
+        Whenever a feed is created or updated successfully this will
+        return the user to the publishnews page with the feed they just
+        messed with highlighted
+        """
         feed = getattr(self,"object",False)
         if feed:
             return reverse('publishnews') + '#feed-{feed_id}'.format(feed_id = feed.id)
@@ -63,6 +74,9 @@ class FeedCRUDMixin(LoginRequiredMixin, FeedMixin):
             return reverse('publishnews')
     
     def get_queryset(self):
+        """
+        Only operate on feeds the user owns
+        """
         return self.model.objects.filter(owner=self.request.user)
 
 class FeedDetailView(FeedCRUDMixin, DetailView):
@@ -82,6 +96,10 @@ class PublishNews(FeedCRUDMixin, ListView):
         return self.model.objects.filter(owner=self.request.user)
 
 def managefeed(request, feed_id=None):
+    """
+    Route to the correct view based on Method or the existance of
+    feed_id.
+    """
     if request.method == 'DELETE':
         return FeedDeleteView.as_view()(request=request, pk=feed_id)
     else:
@@ -103,6 +121,9 @@ class ItemCRUDMixin(LoginRequiredMixin, FeedMixin):
         return reverse('publishnews')
     
     def get_queryset(self):
+        """
+        Only operate on items that belong to feeds the current user owns
+        """
         return self.model.objects.filter(feed__owner=self.request.user)
         
     def get_context_data(self, **kwargs):
@@ -120,6 +141,11 @@ class ItemUpdateView(ItemCRUDMixin, UpdateView):
     template_name = "panfeed/feeditem_form.html"
 
 def manageitem(request, feed_id, item_id=None):
+    """
+    Route to the correct view based on Method or the existance of
+    item_id.
+    """
+    
     feed = get_object_or_404(Feed, id=feed_id)
     if feed.owner != request.user:
         return HttpResponseForbidden("You do not have permission to edit this Feed.")
