@@ -161,7 +161,7 @@ SITE_URL="http://localhost:8000"
 
 LOGIN_REDIRECT_URL = '/'
 LOGIN_URL = '/sign-in'
-LOGIN_REDIRECT_URL_FAILURE = '/failed'
+LOGIN_REDIRECT_URL_FAILURE = '/'
 
 
 EMAIL_HOST = "smtp.ecs.soton.ac.uk"
