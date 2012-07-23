@@ -2,3 +2,7 @@
 {
 	padding:2px 0px;
 }
+
+#login a#browserid {
+    padding: 7px 0px 6px;
+}
