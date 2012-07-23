@@ -173,7 +173,7 @@ CSP_REPORT_URI = '/csp/report'
 
 CSP_IMG_SRC = ('*',)
 CSP_SCRIPT_SRC = ("'self'", 'https://login.persona.org', 'https://browserid.org', "https://cdnjs.cloudflare.com",)
-CSP_FRAME_SRC = ("'self'", 'https://login.persona.org', 'https://browserid.org', 'https://browserid.org',)
+CSP_FRAME_SRC = ("'self'", 'https://login.persona.org', 'https://browserid.org',)
 
 CSP_EXCLUDE_URL_PREFIXES = ('/admin',)
 
