@@ -16,11 +16,13 @@ urlpatterns = patterns('panfeed.views',
     url(r'^findnews/allfeeds$', FeedListView.as_view(), name='allfeeds'),
     url(r'^publishnews/$',      PublishNews.as_view(),  name='publishnews'),
 
+    url(r'^managefeed/(?P<feed_id>\d+)/manageitem/new$','manageitem', name='newitem'),
+    url(r'^managefeed/(?P<feed_id>\d+)/manageitem/(?P<item_id>\d+)$','manageitem', name='manageitem'),
+
     url(r'^managefeed/new/$','managefeed', name='newfeed'),
     url(r'^managefeed/(?P<feed_id>\d+)$','managefeed', name='managefeed'),
 
-    url(r'^managefeed/(?P<feed_id>\d+)/manageitem/new$','manageitem', name='newitem'),
-    url(r'^managefeed/(?P<feed_id>\d+)/manageitem/(?P<item_id>\d+)$','manageitem', name='manageitem'),
+
 
     url(r'submit/$', 'submit', name='submit'),
 )

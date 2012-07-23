@@ -41,67 +41,17 @@ class OwnerModelFormMixin(ModelFormMixin):
         # ok now call the base class and we are done.
         return super(OwnerModelFormMixin, self).form_valid(form)
 
-def manageitem(request, feed_id, item_id=None):
-    feed = get_object_or_404(Feed, id=feed_id)
-    if feed.owner != request.user:
-        return HttpResponseForbidden("You do not have permission to edit this Feed.")
-
-    if request.method == "POST":
-        form = FeedItemForm(request.POST)
-        if form.is_valid():
-
-            if item_id is None:
-                item = form.save(commit=False)
-                item.feed = feed
-                item.save()
-            else:
-                if FeedItem.objects.filter(id=item_id, feed=feed_id).exists():
-                    item = form.save(commit=False)
-                    item.feed = feed_id
-                    item.id = item_id
-                    item.save(force_update=True)
-                else:
-                    return HttpResponseForbidden("You do not have permission to edit this Feed.")
-
-            return HttpResponseRedirect('/publishnews/')
-
-        else:
-            return render_to_response('manageitem.html', {'form': form, 'feed_title':feed.title, 'edit': True}, context_instance=RequestContext(request))
-        '''
-        elif request.method == 'DELETE':
-            item = get_object_or_404(Feed, id=item_id)
-
-            if feed.owner != request.user:
-                return HttpResponseForbidden("You do not have permission to edit this Feed.")
-            else:
-                feed.delete()
-                return HttpResponseRedirect('/publishnews/')
-        '''
-    else:
-        if item_id is None:
-            form = FeedItemForm()
-            return render_to_response('manageitem.html', {'form': form, 'feed_title':feed.title}, context_instance=RequestContext(request))
-
-        else:
-            item = FeedItem.objects.get(id=item_id)
-
-            form = FeedItemForm(instance=item)
-            return render_to_response('manageitem.html', {'form': form, 'feed_title':feed.title, 'edit':True}, context_instance=RequestContext(request))
-
 
 class FeedMixin(object):
     model = Feed
 
-
 class FeedListView(FeedMixin, ListView):
     context_object_name = "feeds"
-
 
 class FindNews(FeedListView):
     template_name="panfeed/findnews.html"
     context_object_name = "feeds"
     queryset = Feed.objects.all().order_by('?')[:8]
-    
     
 class FeedCRUDMixin(LoginRequiredMixin, FeedMixin):
     form_class = FeedForm
@@ -127,7 +77,6 @@ class PublishNews(FeedCRUDMixin, ListView):
     def get_queryset(self):
         return self.model.objects.filter(owner=self.request.user)
 
-
 def managefeed(request, feed_id=None):
     if request.method == 'DELETE':
         return FeedDeleteView.as_view()(request=request, pk=feed_id)
@@ -136,6 +85,48 @@ def managefeed(request, feed_id=None):
             return FeedUpdateView.as_view()(request=request, pk=feed_id)
         else:
             return FeedCreateView.as_view()(request=request)
+
+
+class ItemMixin(object):
+    model = FeedItem
+
+class ItemListView(ItemMixin, ListView):
+    context_object_name = "items"
+
+class ItemCRUDMixin(LoginRequiredMixin, FeedMixin):
+    form_class = FeedItemForm
+    def get_success_url(self):
+        return reverse('publishnews')
+    
+    def get_queryset(self):
+        return self.model.objects.filter(feed__owner=self.request.user)
+        
+    def get_context_data(self, **kwargs):
+        context = super(ItemCRUDMixin, self).get_context_data(**kwargs)
+        context["feed"] = feed = get_object_or_404(Feed, id=self.kwargs["feed"])
+        return context
+
+class ItemDetailView(ItemCRUDMixin, DetailView):
+    pass
+class ItemCreateView(ItemCRUDMixin, CreateView):
+    template_name = "panfeed/feeditem_form.html"
+class ItemDeleteView(ItemCRUDMixin, DeleteView):
+    pass
+class ItemUpdateView(ItemCRUDMixin, UpdateView):
+    template_name = "panfeed/feeditem_form.html"
+
+def manageitem(request, feed_id, item_id=None):
+    feed = get_object_or_404(Feed, id=feed_id)
+    if feed.owner != request.user:
+        return HttpResponseForbidden("You do not have permission to edit this Feed.")
+
+    if request.method == 'DELETE':
+        return ItemDeleteView.as_view()(request=request, pk=item_id)
+    else:
+        if item_id:
+            return ItemUpdateView.as_view()(request=request, pk=item_id)
+        else:
+            return ItemCreateView.as_view()(request=request, feed=feed_id)
 
 
 def urltoitem(request):
