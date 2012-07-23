@@ -20,6 +20,14 @@ from django.core.exceptions import ValidationError
 from django.views.generic import ListView
 
 
+class LoginRequiredMixin(object):
+    
+    @method_decorator(login_required)
+    def dispatch(self, *args, **kwargs):
+        return super(LoginRequiredMixin, self).dispatch(*args, **kwargs)
+        
+
+
 def managefeed(request, feed_id=None):
     if request.method == "POST":
         form = FeedForm(request.POST)
@@ -125,15 +133,11 @@ class FindNews(FeedListView):
     queryset = Feed.objects.all().order_by('?')[:8]
    
 
-class PublishNews(FeedListView):
+class PublishNews(LoginRequiredMixin, FeedListView):
     template_name = "panfeed/publishnews.html"
     
     def get_queryset(self):
         return self.model.objects.filter(owner=self.request.user)
-    
-    @method_decorator(login_required)
-    def dispatch(self, *args, **kwargs):
-        return super(PublishNews, self).dispatch(*args, **kwargs)
 
 
 def urltoitem(request):
