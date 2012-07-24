@@ -22,11 +22,17 @@ function FindNewsCtrl($scope) {
             .toString();
     };
 
-    $scope.readerUrl = function() {
-        return $scope.absoluteUrl();
-    };
-    
     $scope.googleReaderURL = function() {
         URL("http://www.google.com/ig/add").addSearch({feedurl:$scope.absoluteUrl()})
     }
+
+    $scope.feedShowReaderURL = function() {
+        URL("http://reader.feedshow.com/subscribe.php").addSearch({url:$scope.absoluteUrl()})
+
+    }
+
+    $scope.newsAlloyReaderURL = function() {
+        URL("http://www.newsalloy.com/").addSearch({rss:$scope.absoluteUrl()})
+    }
+
 }
