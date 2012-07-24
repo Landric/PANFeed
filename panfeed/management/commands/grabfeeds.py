@@ -13,7 +13,6 @@ class Command(BaseCommand):
     def handle(self, *args, **options):
         build_corpus()
 
-    
 def build_corpus():
     #### Builds a corpus of documents from a set of feeds.
 
@@ -39,6 +38,7 @@ def build_corpus():
                         corpus.title=item.title
                         corpus.description=item.description
                         corpus.date=d
+                        corpus.save()
                 except Exception as e:
                     print(e)
         except urllib2.URLError:
