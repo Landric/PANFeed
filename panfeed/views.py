@@ -158,7 +158,6 @@ def manageitem(request, feed_id, item_id=None):
         if item_id:
             return ItemUpdateView.as_view()(request=request, feed=feed_id, pk=item_id)
         else:
-            print "create item"
             return ItemCreateView.as_view()(request=request, feed=feed_id)
 
 
