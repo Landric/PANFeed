@@ -1,15 +1,32 @@
 function FindNewsCtrl($scope) {
     $scope.searchTerms = "ecs eprints";
+    
+    function search(){
+        var search = $scope.searchTerms.replace(/,/g,'')
+        return {kw: search.split(" ")}
+    }
+    
+    function relativeUrl(){
+        return URI("/find").addSearch(search())
+    }
+    
     $scope.url = function() {
-        var search = $scope.searchTerms.replace(/,/g,'');
-        return URI("/find").addSearch({kw: search.split(" ")}).toString();
+        return relativeUrl().toString();
     };
     
     $scope.absoluteUrl = function() {
-        return URI(document.location).path($scope.url()).toString().replace(/http::/g,'http:');
+        documentUrl = URI(document.location)
+        return relativeUrl()
+            .authority(documentUrl.authority())
+            .scheme(documentUrl.scheme())
+            .toString();
     };
 
     $scope.readerUrl = function() {
-        return URI(document.location).path($scope.url()).toString().replace(/http::/g,'http%3A');
+        return $scope.absoluteUrl();
     };
+    
+    $scope.googleReaderURL = function() {
+        URL("http://www.google.com/ig/add").addSearch({feedurl:$scope.absoluteUrl()})
+    }
 }

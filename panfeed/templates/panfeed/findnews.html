@@ -15,9 +15,10 @@
     <div class="span4 offset1">
         <h2>Select a custom Feed</h2>
         <p>Enter some keywords separated by spaces into the box below to create a custom news feed.</p>
-                <div class="input-append">
-                        <input ng:model="searchTerms" class="span2" size="16" type="text" pattern="[\w ]*">
-                </div>
+                <form class="well form-search">
+                        <input class="search-query" ng:model="searchTerms" class="span2" size="16" type="text" pattern="[\w ]*">
+                        <a href={% templatetag openvariable %}url(){% templatetag closevariable %} class="btn">Search</a>
+                </form>
                 <br/>
         <p>If you represent an institution and want to see your feeds appearing in this search, <a href="{% url 'crawlme' %}">click here to find out how to get your feeds added</a>.</p>
     </div>
