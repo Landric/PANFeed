@@ -11,13 +11,17 @@
     </div>
 </div>
 <div class="row">
-    <div class="span4 offset1 ng-csp ng-app">
+    <div class="span4 offset1" ng:app ng:csp ng:controller="FindNewsCtrl">
         <h2>Select a custom Feed</h2>
-        <p>Enter some keywords separated by commas into the box below to create a custom news feed.</p>
+        <p>Enter some keywords separated by spaces into the box below to create a custom news feed.</p>
                 <div class="input-append">
-                        <input ng-model="searchTerms" class="span2" size="16" type="text">
+                        <input ng:model="searchTerms" class="span2" size="16" type="text" pattern="[\w ]*">
                 </div>
-                <p>{% templatetag openvariable %}searchTerms{% templatetag closevariable %}</p>
+                <p>
+                    Your custom feed: <a href="{% templatetag openvariable %}url(){% templatetag closevariable %}" >
+                        <span ng:bind="searchTerms"></span>
+                    </a>
+                </p>
                 <p>Popular searches: <a href="{% url 'find' %}?kw=eprints">eprints</a>, <a href="{% url 'find' %}?kw=ecs">ecs</a>, <a href="{% url 'find' %}?kw=security">security</a></p>
                 <br/>
         <p>If you represent an institution and want to see your feeds appearing in this search, <a href="{% url 'crawlme' %}">click here to find out how to get your feeds added</a>.</p>
@@ -62,3 +66,7 @@
     </div>
 </div>
 {% endblock content %}
+{% block scripts %}
+    <script type="text/javascript" src="{{ STATIC_URL }}scripts/findnews.js"></script>
+{% endblock scripts %}
+
