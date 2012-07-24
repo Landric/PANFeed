@@ -28,6 +28,7 @@ setup(
         "django-registration",
         "django-csp",
         "django-browserid",
+        "django-crispy-forms",
         "django-haystack",
         "xapian-haystack",
         "progressbar",
