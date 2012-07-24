@@ -6,7 +6,7 @@ class FeedForm(ModelForm):
     
     class Meta:
         model = Feed
-	exclude = ('owner')
+        exclude = ('owner')
         fields = ('title', 'description', 'displayAll')
 
 class SpecialIssueForm(ModelForm):
@@ -18,4 +18,4 @@ class FeedItemForm(ModelForm):
     
     class Meta:
         model = FeedItem
-	exclude = ('date', 'feed', 'special_issue', 'issue_position')
+        exclude = ('date', 'feed', 'special_issue', 'issue_position')
