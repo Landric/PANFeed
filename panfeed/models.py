@@ -62,8 +62,8 @@ class SpecialIssue(models.Model):
 class FeedItem(models.Model):
     title = models.CharField(max_length=60)
     content = models.TextField(help_text='This content will be displayed in the viewer\'s Feed Reader. They can still click the link to view the full article')
-    url = models.URLField(max_length=6249)
-    img = models.URLField(max_length=6249, blank=True)
+    url = models.URLField("URL", max_length=6249)
+    img = models.URLField("image", max_length=6249, blank=True)
     date = models.DateTimeField(default=datetime.now, blank=True)
     feed = models.ForeignKey(Feed)
     special_issue = models.ForeignKey(SpecialIssue, null=True)

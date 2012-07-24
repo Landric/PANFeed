@@ -1,12 +1,12 @@
 {% extends "template.html" %}
 {% load url from future %}
+{% load crispy_forms_tags %}
 {% block title %}Publish{% endblock title %}
 {% block publish_nav %}active{% endblock publish_nav %}
 {% block content %}
-{% load crispy_forms_tags %}
 <h2>Publish an Item</h2>
 </br>
-<h3>{{feed.title}}</h3>
+<h3>You are editing an Item on Feed: {{feed.title}}</h3>
 <form action="#" method="post" class="form-horizontal">
     {% csrf_token %}
 	{{form|crispy}}
