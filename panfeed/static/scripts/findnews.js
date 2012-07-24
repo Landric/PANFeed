@@ -23,16 +23,16 @@ function FindNewsCtrl($scope) {
     };
 
     $scope.googleReaderUrl = function() {
-        URI("http://www.google.com/ig/add").addSearch({feedurl:$scope.absoluteUrl()})
+        URI("http://www.google.com/ig/add").addSearch({feedurl:$scope.absoluteUrl()}).toString();
     }
 
     $scope.feedShowReaderUrl = function() {
-        URI("http://reader.feedshow.com/subscribe.php").addSearch({url:$scope.absoluteUrl()})
+        URI("http://reader.feedshow.com/subscribe.php").addSearch({url:$scope.absoluteUrl()}).toString();
 
     }
 
     $scope.newsAlloyReaderUrl = function() {
-        URI("http://www.newsalloy.com/").addSearch({rss:$scope.absoluteUrl()})
+        URI("http://www.newsalloy.com/").addSearch({rss:$scope.absoluteUrl()}).toString();
     }
 
 }
