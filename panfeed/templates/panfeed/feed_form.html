@@ -1,82 +1,24 @@
 {% extends "template.html" %}
 {% load url from future %}
+{% load crispy_forms_tags %}
 {% block title %}Publish{% endblock title %}
 {% block publish_nav %}active{% endblock publish_nav %}
 {% block content %}
 <h2>Create a Feed</h2>
 </br>
 <form action="#" method="post" class="form-horizontal">
-	{% csrf_token %}
-	<fieldset>
-		{% for field in form %}
-			{% if field.errors %}
-				<div class="control-group error">
-			{% else %}
-				<div class="control-group">
-			{% endif%}
-					<label class="control-label">{{ field.label }}:</label>
-					<div class="controls">
-						{{ field }}
-						{% if field.errors %}
-							{% for error in field.errors %}
-								<span class="help-inline">{{ error }}</span>
-							{% endfor %}
-						{% endif%}
-						{% if field.help_text %}
-							<span class="help-inline">{{field.help_text }}</span>
-						{% endif%}
-					</div>
-				</div>
-		{% endfor %}
-		{% if edit %}
-			<br/>
-			<br/>
-			<div class="control-group">
-				<label class="control-label">Items:</label>
-			{% if not items %}
-				<div class="controls">
-					<p>There are currently no items in this Feed</p>
-				</div>
-			</div>
-			{% else %}
-				</div>
-				<div class="control-group">
-					<div class="controls">
-						<table class="table table-striped table-bordered">
-							<thead>
-								<tr>
-									<th>Title</th>
-									<th>Date Published</th>
-									<th>Edit</th>
-									<th>Delete</th>
-								</tr>
-							</thead>
-							<tbody>
-								{% for item in items %}
-									<tr>
-						        			<td>{{item.title}}</td>
-										<td>{{item.date}}</td>
-										<td><input type="submit" value="Edit" class="btn"/></td>
-										<td><input type="submit" value="Delete" class="btn"/></td>
-									</tr>
-								{% endfor %}
-							</tbody>
-						</table>
-					</div>
-				</div>
-			{% endif %}
-		{% endif %}
-
-		<div class="control-group">
-			<div class="controls">
-				{% if edit %}
-					<input type="submit" value="Save" class="btn btn-primary"/>&nbsp;&nbsp;
-				{% else %}
-					<input type="submit" value="Create" class="btn btn-primary"/>&nbsp;&nbsp;
-				{% endif %}
-				<a href="{% url 'publishnews' %}" class="btn">Cancel</a>
-			</div>
-		</div>
-	</fieldset>
+    {% csrf_token %}
+    {{form|crispy}}
+        <div class="control-group">
+            <div class="controls">
+                {% if edit %}
+                    <input type="submit" value="Save" class="btn btn-primary"/>&nbsp;&nbsp;
+                {% else %}
+                    <input type="submit" value="Create" class="btn btn-primary"/>&nbsp;&nbsp;
+                {% endif %}
+                <a href="{% url 'publishnews' %}" class="btn">Cancel</a>
+            </div>
+        </div>
+    </fieldset>
 </form>
 {% endblock content %}
