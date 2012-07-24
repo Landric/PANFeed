@@ -22,8 +22,8 @@ Install
 
 4. Set up a cronjob to update from feeds hourly::
 
-    1 * * * * python <your_path_goes_here>/personal/manage.py grabfeeds > /dev/null; <your_path_goes_here>/personal/manage.py grabfeeds update_index > /dev/null
-
+    @hourly /path/to/my/project/manage.py runjobs hourly
+    
 5. Finally deploy using `WSGI`_
 6. Done!
 
