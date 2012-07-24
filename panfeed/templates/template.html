@@ -72,7 +72,7 @@
                             <a id="browserid" href="">
                                 <img src="{{ STATIC_URL }}images/persona-login.png" alt="Sign In" />
                             </a>
-                            <form hidden="hidden" method="POST" action="{% url 'browserid_verify' %}?next={{ request.path }}">
+                            <form hidden="hidden" method="POST" action="{% url 'browserid_verify' %}{% if request.path %}?next={{ request.path }}{% endif %}">
                                 {% csrf_token %}
                                 {{ browserid_form.as_p }}
                             </form>
