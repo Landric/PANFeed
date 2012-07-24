@@ -114,21 +114,29 @@ class ItemCRUDMixin(LoginRequiredMixin, FeedMixin):
     def get_success_url(self):
         return reverse('publishnews')
     
-    def get_queryset(self):
-        """
-        Only operate on items that belong to feeds the current user owns
-        """
-        return self.model.objects.filter(feed__owner=self.request.user)
+    #def get_queryset(self):
+        #"""
+        #Only operate on items that belong to feeds the current user owns
+        #"""
+        #return self.model.objects.filter(feed__owner=self.request.user)
         
     def get_context_data(self, **kwargs):
         context = super(ItemCRUDMixin, self).get_context_data(**kwargs)
-        context["feed"] = feed = get_object_or_404(Feed, id=self.kwargs["feed"])
+        context["feed"] = get_object_or_404(Feed, id=self.kwargs["feed"])
         return context
 
 class ItemDetailView(ItemCRUDMixin, DetailView):
     pass
 class ItemCreateView(ItemCRUDMixin, CreateView):
     template_name = "panfeed/feeditem_form.html"
+    
+    def form_valid(self,form):
+        print "form valid"
+        self.object = form.save(commit=False)
+        self.object.feed = Feed(self.kwargs["feed"])
+        self.object.save()
+        return super(ItemCreateView, self).form_valid(form)
+        
 class ItemDeleteView(ItemCRUDMixin, DeleteView):
     pass
 class ItemUpdateView(ItemCRUDMixin, UpdateView):
@@ -148,8 +156,9 @@ def manageitem(request, feed_id, item_id=None):
         return ItemDeleteView.as_view()(request=request, pk=item_id)
     else:
         if item_id:
-            return ItemUpdateView.as_view()(request=request, pk=item_id)
+            return ItemUpdateView.as_view()(request=request, feed=feed_id, pk=item_id)
         else:
+            print "create item"
             return ItemCreateView.as_view()(request=request, feed=feed_id)
 
 
