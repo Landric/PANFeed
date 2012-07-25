@@ -28,6 +28,7 @@ setup(
         "django-registration",
         "django-csp",
         "django-browserid",
+        "django-tastypie",
         "django-crispy-forms",
         "django-haystack",
         "django-extensions",
