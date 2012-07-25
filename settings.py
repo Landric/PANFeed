@@ -138,6 +138,7 @@ INSTALLED_APPS = (
     'registration',
     'crispy_forms',
     'django_extensions',
+    'django_tastypie',
 )
 
 TEMPLATE_CONTEXT_PROCESSORS =(

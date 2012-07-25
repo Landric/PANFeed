@@ -38,4 +38,5 @@ urlpatterns = patterns('',
     #url(r'^(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.MEDIA_ROOT}),
     url(r'^sign-out/$', 'django.contrib.auth.views.logout', name="logout"),
     url(r'^sign-in/$', 'django.contrib.auth.views.login', name="login")
+    (r'^api/', include(v1_api.urls)),
 )
