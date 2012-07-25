@@ -1,13 +1,9 @@
 {% extends "template.html" %}
 {% load url from future %}
 {% block title %}Find News{% endblock title%}
-{% block scripts %}
-<script src="lib/angular/angular.js"></script>
-<script src="js/controllers.js"></script>
-{% endblock scripts %}
 {% block findnews_nav %}active{% endblock findnews_nav %}
 {% block content %}
-<div ng-app ng-controller="FeedListCtrl">
+<div ng:app ng:controller="ListFeedsCtrl">
 	<div class="row">
 		<div class="span8">
 			<h1>Find News</h1>
@@ -20,7 +16,7 @@
 		</div>
 	</div>
 	<ul>
-		<li ng-repeat="feed in feeds">
+		<li ng:repeat="feed in feeds">
 			<h4><a href='#'>{{feed.title}}</a></h4>
 			{{feed.description}}
 			<br/>
@@ -35,3 +31,8 @@
 	</ul>
 	-->
 {% endblock content %}
+{% block scripts %}
+	<script src="lib/angular/angular.js"></script>
+	<script type="text/javascript" src="{{ STATIC_URL }}scripts/listfeeds.js"></script>
+{% endblock scripts %}
+
