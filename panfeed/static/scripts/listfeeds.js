@@ -13,4 +13,6 @@ function ListFeedsCtrl($scope, $http, $templateCache) {
         });
         
      }
+     
+     $scope.fetch();
 }
