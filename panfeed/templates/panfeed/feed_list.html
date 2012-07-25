@@ -3,22 +3,22 @@
 {% block title %}Find News{% endblock title%}
 {% block findnews_nav %}active{% endblock findnews_nav %}
 {% block content %}
-<div ng:app ng:csp ng:controller="ListFeedsCtrl">
+<div ng:app="panfeedModule" ng:csp ng:controller="ListFeedsCtrl">
 	<div class="row">
 		<div class="span8">
 			<h1>Find News</h1>
 			<p>Here you can browse some of the Feeds created by other PANFeed users.</p>
 			<div class="input-append">
-				<input type=text placeholder="Search..."><button class="btn">Search</button>
+				<input ng:model="searchText" type=text placeholder="Search..."><button ng:click="fetch()" class="btn">Search</button>
 			</div>
 			<br/>
 			<br/>
 		</div>
 	</div>
 	<ul>
-		<li ng:repeat="feed in get_feeds()">
+		<li ng:repeat="feed in feeds">
 			<h4><a href='#' ng:bind='feed.title'></a></h4>
-			[[feed.description]]
+			<span ng:bind="feed.description"></span>
 			<br/>
 		</li>
 	</ul>
@@ -32,7 +32,6 @@
 	-->
 {% endblock content %}
 {% block scripts %}
-	<script src="lib/angular/angular.js"></script>
 	<script type="text/javascript" src="{{ STATIC_URL }}scripts/listfeeds.js"></script>
 {% endblock scripts %}
 
