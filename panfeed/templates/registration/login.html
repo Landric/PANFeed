@@ -1,16 +1,18 @@
 {% extends "template.html" %}
 {% load url from future %}
 {% block browserid %}{% endblock browserid %}
+{% block title %}Sign-in{% endblock title %}
 {% block content %}
       <div class="hero-unit">
         <h1>Sign in with BrowserID</h1>
+	<br/>
         <p>So as to authenticate you without hosting passwords, you must
         login with <a href="https://browserid.org/about">BrowserID</a></p>
         <p>BrowserID was chosen because it is the authentication provider
         that reveals the least amount of personal information.</p>
         <p>Why do sites need to be able to read your Tweets or post on your
         Facebook wall just to log you in?</p>
-
+<br/>
 <button class="btn btn-primary btn-large" id="browserid" href="">
 <img src="{{ STATIC_URL }}images/persona-login.png" alt="Sign In" />
 </button>
