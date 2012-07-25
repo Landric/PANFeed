@@ -37,6 +37,6 @@ urlpatterns = patterns('',
     url(r'', include('django_browserid.urls')),
     #url(r'^(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.MEDIA_ROOT}),
     url(r'^sign-out/$', 'django.contrib.auth.views.logout', name="logout"),
-    url(r'^sign-in/$', 'django.contrib.auth.views.login', name="login")
-    (r'^api/', include(v1_api.urls)),
+    url(r'^sign-in/$', 'django.contrib.auth.views.login', name="login"),
+    (r'^api/', include(v2_api.urls)),
 )
