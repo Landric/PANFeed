@@ -3,7 +3,7 @@
 {% block title %}Find News{% endblock title%}
 {% block findnews_nav %}active{% endblock findnews_nav %}
 {% block content %}
-<div ng:app ng:csp ng:controller="FindNewsCtrl">
+<div ng:app="panfeedModule" ng:csp ng:controller="FindNewsCtrl">
     <div class="row">
         <div class="span8">
             <h1>Find News</h1>
@@ -52,13 +52,13 @@
             <p>To quickly view some of the items in the Feed, click "View Preview". To add the Feed to your feed reader, you can simple click one of the buttons below if you use <a href="http://www.google.com/reader">Google Reader</a>, <a href="http://reader.feedshow.com/">Feed Show</a> or <a href="http://www.newsalloy.com/">News Alloy</a>. If you use a different reader, copy the feed link provided and paste it in to your reader of choice.</p>
             <span ng:bind="absoluteUrl()"></span>
             <div class="btn-group">
-            <button class="btn disabled" type="button">Copy to clipboard</button><a class="btn" id="view_more" href="{% templatetag openvariable %}absoluteUrl(){% templatetag closevariable %}" target="_blank">View Preview</a>
+            <button class="btn disabled" type="button">Copy to clipboard</button><a class="btn" id="view_more" href="[[ absoluteUrl() ]]" target="_blank">View Preview</a>
             </div>
-        <a id="google_link"    href="{% templatetag openvariable %}googleReaderUrl(){% templatetag closevariable %}"><img src="http://buttons.googlesyndication.com/fusion/add.gif" border="0" alt="Add to Google"></a>
+        <a id="google_link"    href="[[ googleReaderUrl() ]]"><img src="http://buttons.googlesyndication.com/fusion/add.gif" border="0" alt="Add to Google"></a>
         &nbsp;&nbsp;
-        <a id="feedshow_link"  href="{% templatetag openvariable %}feedShowReaderUrl(){% templatetag closevariable %}" title="subscribe"><img src="http://www.feedshow.com/images/addfeedshow.gif" border="0" alt="Add to FeedShow" /></a>
+        <a id="feedshow_link"  href="[[ feedShowReaderUrl() ]]" title="subscribe"><img src="http://www.feedshow.com/images/addfeedshow.gif" border="0" alt="Add to FeedShow" /></a>
         &nbsp;&nbsp;
-        <a id="newsalloy_link" href="{% templatetag openvariable %}newsAlloyReaderUrl(){% templatetag closevariable %}"><img src="http://www.newsalloy.com/subrss1.png" alt="NewsAlloy button" style="border:0"/></a>
+        <a id="newsalloy_link" href="[[ newsAlloyReaderUrl() ]]"><img src="http://www.newsalloy.com/subrss1.png" alt="NewsAlloy button" style="border:0"/></a>
         &nbsp;&nbsp;
     </div>
 </div>
