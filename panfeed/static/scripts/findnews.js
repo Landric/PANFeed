@@ -12,7 +12,7 @@ function FindNewsCtrl($scope) {
     
     $scope.absoluteUrl = function() {
         var documentUrl = URI(document.location);
-        return URI($scope.url()).authority(documentUrl.authority()).scheme(documentUrl.scheme());
+        return URI($scope.url()).authority(documentUrl.authority()).scheme(documentUrl.scheme()).toString();
     };
 
     $scope.googleReaderUrl = function() {
