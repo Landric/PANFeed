@@ -3,7 +3,7 @@
 {% block title %}Find News{% endblock title%}
 {% block findnews_nav %}active{% endblock findnews_nav %}
 {% block content %}
-<div ng:app ng:controller="ListFeedsCtrl">
+<div ng:app ng:csp ng:controller="ListFeedsCtrl">
 	<div class="row">
 		<div class="span8">
 			<h1>Find News</h1>
@@ -16,9 +16,9 @@
 		</div>
 	</div>
 	<ul>
-		<li ng:repeat="feed in feeds">
-			<h4><a href='#'>{{feed.title}}</a></h4>
-			{{feed.description}}
+		<li ng:repeat="feed in get_feeds()">
+			<h4><a href='#' ng:bind='feed.title'></a></h4>
+			[[feed.description]]
 			<br/>
 		</li>
 	</ul>
