@@ -30,6 +30,7 @@ setup(
         "django-browserid",
         "django-crispy-forms",
         "django-haystack",
+        "django-extensions",
         "xapian-haystack",
         "progressbar",
     ],

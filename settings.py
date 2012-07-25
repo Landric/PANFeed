@@ -137,6 +137,7 @@ INSTALLED_APPS = (
     'django.contrib.admindocs',
     'registration',
     'crispy_forms',
+    'django_extensions',
 )
 
 TEMPLATE_CONTEXT_PROCESSORS =(

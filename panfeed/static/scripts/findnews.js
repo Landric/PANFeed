@@ -2,37 +2,41 @@ function FindNewsCtrl($scope) {
     $scope.searchTerms = "ecs eprints";
     
     function search(){
-        var search = $scope.searchTerms.replace(/,/g,'')
-        return {kw: search.split(" ")}
-    }
-    
-    function relativeUrl(){
-        return URI("/find").addSearch(search())
+        var search = $scope.searchTerms.replace(/,/g,'');
+        return {kw: search.split(" ")};
     }
     
     $scope.url = function() {
-        return relativeUrl().toString();
+        return URI("/find").addSearch(search()).toString();
     };
     
     $scope.absoluteUrl = function() {
-        documentUrl = URI(document.location)
-        return relativeUrl()
-            .authority(documentUrl.authority())
-            .scheme(documentUrl.scheme())
-            .toString();
+        var documentUrl = URI(document.location);
+        return URI($scope.url()).authority(documentUrl.authority()).scheme(documentUrl.scheme());
     };
 
     $scope.googleReaderUrl = function() {
-        URI("http://www.google.com/ig/add").addSearch({feedurl:$scope.absoluteUrl()}).toString();
+        return URI("http://www.google.com/ig/add").addSearch(
+            {
+                feedurl:$scope.absoluteUrl()
+            }
+        ).toString();
     }
 
     $scope.feedShowReaderUrl = function() {
-        URI("http://reader.feedshow.com/subscribe.php").addSearch({url:$scope.absoluteUrl()}).toString();
-
+        return URI("http://reader.feedshow.com/subscribe.php").addSearch(
+            {
+                url:$scope.absoluteUrl()
+            }
+        ).toString();
     }
 
     $scope.newsAlloyReaderUrl = function() {
-        URI("http://www.newsalloy.com/").addSearch({rss:$scope.absoluteUrl()}).toString();
+        return URI("http://www.newsalloy.com/").addSearch(
+            {
+                rss:$scope.absoluteUrl()
+            }
+        ).toString();
     }
 
 }
