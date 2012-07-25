@@ -3,6 +3,13 @@ from django.views.generic import TemplateView, ListView
 from panfeed.feed import PersonalFeed, UserFeed
 from panfeed.models import AcademicFeeds,Feed,FeedItem
 from panfeed.views import FindNews, FeedListView, PublishNews
+from tastypie.api import Api
+from panfeed.api import FeedResource, FeedItemResource, SpecialIssueResource
+
+v2_api = Api(api_name='v2')
+v2_api.register(FeedResource())
+v2_api.register(FeedItemResource())
+v2_api.register(SpecialIssueResource())
 
 urlpatterns = patterns('panfeed.views',
     url(r'^$',         TemplateView.as_view(template_name="index.html"),name='home'),
