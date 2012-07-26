@@ -12,7 +12,7 @@ function ListFeedsCtrl($scope, $http, $templateCache)
                 var objects = JSON.parse(data).objects;
                 angular.forEach(objects, function(object)
                 {
-                    object.searchOn = object.title + object.description;
+                    object["searchOn"] = object.title + object.description;
                 });
             }
         }).success(function(data,status)

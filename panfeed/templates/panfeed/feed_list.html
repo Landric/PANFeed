@@ -19,6 +19,7 @@
 			<h4><a href='#' ng:bind='feed.title'></a></h4>
 			<span ng:bind="feed.description"></span>
 			<br/>
+			<br/>
 		</li>
 	</ul>
     <ul ng:hide="feeds">
@@ -26,6 +27,7 @@
         <li>
 			<h4><a href='#'>{{feed.title}}</a></h4>
 			<span>{{feed.description}}</span>
+			<br/>
 			<br/>
 		</li>
         {% endfor %}
