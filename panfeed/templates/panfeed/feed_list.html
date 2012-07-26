@@ -14,7 +14,7 @@
 			<br/>
 		</div>
 	</div>
-	<ul ng:show="feeds">
+	<ul>
 		<li ng:repeat="feed in feeds | filter:searchText">
 			<h4><a href='#' ng:bind='feed.title'></a></h4>
 			<span ng:bind="feed.description"></span>
@@ -22,6 +22,7 @@
 			<br/>
 		</li>
 	</ul>
+<!--
     <ul ng:hide="feeds">
         {% for feed in feeds %}
         <li>
@@ -32,6 +33,7 @@
 		</li>
         {% endfor %}
     </ul>
+-->
 {% endblock content %}
 {% block scripts %}
 	<script type="text/javascript" src="{{ STATIC_URL }}scripts/listfeeds.js"></script>
