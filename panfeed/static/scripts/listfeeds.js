@@ -1,4 +1,5 @@
-function ListFeedsCtrl($scope, $http, $templateCache) {
+function ListFeedsCtrl($scope, $http, $templateCache) 
+{
     $scope.fetch = function()
     {
         $http(
@@ -11,7 +12,7 @@ function ListFeedsCtrl($scope, $http, $templateCache) {
                 var objects = JSON.parse(data).objects;
                 angular.forEach(objects, function(object)
                 {
-                    this.push('searchOn : ' + object.title + object.description);
+                    object.searchOn = object.title + object.description;
                 });
             }
         }).success(function(data,status)
