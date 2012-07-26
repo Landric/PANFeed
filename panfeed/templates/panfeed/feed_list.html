@@ -15,7 +15,7 @@
 		</div>
 	</div>
 	<ul>
-		<li ng:repeat="feed in feeds | filter:searchText">
+		<li ng:repeat="feed in feeds | filter:{title:searchText, description:searchText}">
 			<h4><a href='#' ng:bind='feed.title'></a></h4>
 			<span ng:bind="feed.description"></span>
 			<br/>

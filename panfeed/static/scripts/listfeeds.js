@@ -1,17 +1,23 @@
 function ListFeedsCtrl($scope, $http, $templateCache) {
-    $scope.fetch = function(){
-    
-        $http({
+    $scope.fetch = function()
+    {
+        $http(
+        {
             method: "GET",
             url: '/api/v2/feed/?format=json&limit=0',
             cache: $templateCache,
-            transformResponse: function(data,headersGetter){
-                return JSON.parse(data).objects;
+            transformResponse: function(data,headersGetter)
+            {
+                var objects = JSON.parse(data).objects;
+                angular.forEach(objects, function(object)
+                {
+                    this.push('searchOn : ' + object.title + object.description);
+                });
             }
-        }).success(function(data,status){
+        }).success(function(data,status)
+        {
             $scope.feeds = data;
         });
-        
      }
      
      $scope.fetch();
