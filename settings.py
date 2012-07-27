@@ -108,6 +108,7 @@ MIDDLEWARE_CLASSES = (
     'respite.middleware.HttpMethodOverrideMiddleware',
     'respite.middleware.HttpPutMiddleware',
     'respite.middleware.HttpPatchMiddleware',
+    'extra_exceptions.middleware.HttpExceptionMiddleware',
 )
 
 ROOT_URLCONF = 'urls'
@@ -138,6 +139,7 @@ INSTALLED_APPS = (
     'registration',
     'crispy_forms',
     'django_extensions',
+    'extra_exceptions',
     'tastypie',
 )
 
