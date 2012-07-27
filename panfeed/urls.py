@@ -28,7 +28,7 @@ urlpatterns = patterns('panfeed.views',
 )
 
 urlpatterns += patterns('',
-    url(r'^issue/(?P<issueid>\d+)$', UserFeed(), name='issue'),
-    url(r'^issue/(?P<issueid>\d+)/.*$', UserFeed()),
+    url(r'^feed/(?P<feedid>\d+)$', UserFeed(), name='viewfeed'),
+    url(r'^feed/(?P<feedid>\d+)/.*$', UserFeed()),
     url(r'^find$', PersonalFeed(), name="find"),
 )
