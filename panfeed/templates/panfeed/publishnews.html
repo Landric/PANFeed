@@ -32,11 +32,11 @@
 						<tr class="feed" id="feed-{{feed.id}}">
                             <td>{{feed.title}}</td>
 							<td>
-							<form action="{% url 'managefeed' feed.id %}" method="post">
+							<form action="{% url 'managefeed' feed.slug %}" method="post">
 								{% csrf_token %}
 								<div class="btn-group">
-									<a href="{% url 'viewfeed' feed.id %}" class="btn">View</a>
-									<a href="{% url 'managefeed' feed.id %}" class="btn">Edit</a>
+									<a href="{% url 'viewfeed' feed.slug %}" class="btn">View</a>
+									<a href="{% url 'managefeed' feed.slug %}" class="btn">Edit</a>
 									<input name="_method" value="DELETE" type="hidden">
 									<button type="submit" class="btn" title="Delete this Feed" type="submit">Delete</button>
 								</div>
@@ -44,7 +44,7 @@
 							</td>
 							<td>
 								<div class="btn-group">
-									<a href="{% url 'newitem' feed.id%}" class="btn">Publish Item</a>
+									<a href="{% url 'newitem' feed.slug %}" class="btn">Publish Item</a>
 									<a href="#" class="btn">Publish Special Issue</a>
 								</div>
 							</td>

@@ -16,11 +16,11 @@ urlpatterns = patterns('panfeed.views',
     url(r'^findnews/allfeeds$', FeedListView.as_view(), name='allfeeds'),
     url(r'^publishnews/$',      PublishNews.as_view(),  name='publishnews'),
 
-    url(r'^managefeed/(?P<feed_id>\d+)/manageitem/new$','manageitem', name='newitem'),
-    url(r'^managefeed/(?P<feed_id>\d+)/manageitem/(?P<item_id>\d+)$','manageitem', name='manageitem'),
+    url(r'^managefeed/(?P<feed_slug>[\w-]+)/manageitem/new$','manageitem', name='newitem'),
+    url(r'^managefeed/(?P<feed_slug>[\w-]+)/manageitem/(?P<item_slug>[\w-]+)$','manageitem', name='manageitem'),
 
     url(r'^managefeed/new/$','managefeed', name='newfeed'),
-    url(r'^managefeed/(?P<feed_id>\d+)$','managefeed', name='managefeed'),
+    url(r'^managefeed/(?P<feed_slug>[\w-]+)$','managefeed', name='managefeed'),
 
 
 
@@ -28,6 +28,6 @@ urlpatterns = patterns('panfeed.views',
 )
 
 urlpatterns += patterns('',
-    url(r'^feed/(?P<feed_id>\d+)$', UserFeed(), name='viewfeed'),
+    url(r'^feed/(?P<feed_slug>[\w-]+)$', UserFeed(), name='viewfeed'),
     url(r'^find$', PersonalFeed(), name="find"),
 )

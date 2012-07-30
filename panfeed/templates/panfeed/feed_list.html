@@ -25,7 +25,7 @@
     <ul ng:hide="feeds">
         {% for feed in feeds %}
         <li>
-            <h4><a href="{% url 'viewfeed' feed.id %}">{{feed.title}}</a></h4>
+            <h4><a href="{% url 'viewfeed' feed.slug %}">{{feed.title}}</a></h4>
             <span>{{feed.description}}</span>
             <br/>
             <br/>

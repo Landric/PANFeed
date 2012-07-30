@@ -86,17 +86,17 @@ class PersonalFeed(Feed):
 
 class UserFeed(Feed):
 
-    def items(self,obj):
-        if(obj.displayAll):
-            return FeedItem.objects.filter(feed=obj.id).order_by("-date")
+    def items(self,feed):
+        if(feed.displayAll):
+            return FeedItem.objects.filter(feed=feed).order_by("-date")
 
         else:  
-            latest_item = FeedItem.objects.filter(feed=obj.id).order_by("-date")[:1]
+            latest_item = FeedItem.objects.filter(feed=feed).order_by("-date")[:1]
             if latest_item:
                 latest_item = latest_item.select_related().get()
 
                 if (latest_item.special_issue):
-                    issue_items = list(FeedItem.objects.filter(feed=obj.id, special_issue=latest_item.special_issue).order_by("issue_position"))
+                    issue_items = list(FeedItem.objects.filter(feed=feed, special_issue=latest_item.special_issue).order_by("issue_position"))
                     return issue_items
                 else:
                     return latest_item
@@ -104,14 +104,14 @@ class UserFeed(Feed):
             else:
                 return latest_item
 
-    def title(self,obj):
-        return obj.title 
+    def title(self,feed):
+        return feed.title 
 
-    def description(self,obj):
-        return obj.description 
+    def description(self,feed):
+        return feed.description 
 
-    def link(self, obj):
-        return "/feed/"+str(obj.id)
+    def link(self, feed):
+        return "/feed/"+str(feed.slug)
 
     def item_title(self,item):
         return item.title
@@ -125,5 +125,5 @@ class UserFeed(Feed):
     def item_pubdate(self,item):
         return item.date
 
-    def get_object(self,request,feed_id):
-        return get_object_or_404(MFeed, id=feed_id);
+    def get_object(self,request,feed_slug):
+        return get_object_or_404(MFeed, slug=feed_slug);

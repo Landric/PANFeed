@@ -9,8 +9,11 @@
 
 from django.db import models
 from django.contrib.auth.models import User
+from django.utils.translation import ugettext_lazy as _
+
 from datetime import datetime
 from django_extensions.db.models import TimeStampedModel, TitleSlugDescriptionModel
+from django_extensions.db.fields import AutoSlugField
 
 class Domains(models.Model):
     toplevel = models.URLField()
@@ -46,21 +49,23 @@ class SpiderDone(models.Model):
 class SpiderRSS(models.Model):
     rssurl=models.URLField(primary_key=True,max_length=255)
 
-class Feed(models.Model):
+class Feed(TimeStampedModel):
     owner = models.ForeignKey(User) 
     title = models.CharField('feed title', max_length=60, help_text='Try to keep your title brief but informative (e.g. "Student Project News")')
+    slug = AutoSlugField(_('slug'), populate_from='title')
     description = models.TextField('feed description', help_text='Briefly describe the purpose of this feed (e.g. "Information for students working on their Third Year Project")')
     displayAll = models.BooleanField('publishing options', default=True, help_text='Don\'t worry, you can change this later if you change your mind') #True=display all items, False=only display latest publication
     
     @models.permalink
     def get_absolute_url(self):
-        return ("managefeed", [str(self.id)])
+        return ("managefeed", [str(self.slug)])
 
 class SpecialIssue(models.Model):
     pass
 
-class FeedItem(models.Model):
+class FeedItem(TimeStampedModel):
     title = models.CharField(max_length=60)
+    slug = AutoSlugField(_('slug'), populate_from='title')
     content = models.TextField(help_text='This content will be displayed in the viewer\'s Feed Reader. They can still click the link to view the full article')
     url = models.URLField("URL", max_length=6249)
     img = models.URLField("image", max_length=6249, blank=True)
