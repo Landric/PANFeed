@@ -56,8 +56,7 @@ class Feed(models.Model):
         return ("managefeed", [str(self.id)])
 
 class SpecialIssue(models.Model):
-    title = models.CharField('issue title', max_length=60)
-    editorial = models.TextField(help_text='Briefly describe the contents of this Issue')
+    pass
 
 class FeedItem(models.Model):
     title = models.CharField(max_length=60)
