@@ -10,6 +10,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from datetime import datetime
+from django_extensions.db.models import TimeStampedModel, TitleSlugDescriptionModel
 
 class Domains(models.Model):
     toplevel = models.URLField()
@@ -24,10 +25,8 @@ class AcademicFeeds(models.Model):
     def __unicode__(self):
         return self.url;
 
-class Corpus(models.Model):
+class Corpus(TimeStampedModel, TitleSlugDescriptionModel):
     feed = models.ForeignKey(AcademicFeeds)
-    title = models.TextField()
-    description = models.TextField()
     url = models.URLField(verify_exists=True, max_length=6249)
     date = models.DateTimeField()
         
