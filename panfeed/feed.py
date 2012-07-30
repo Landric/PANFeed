@@ -1,7 +1,5 @@
 from django.contrib.syndication.views import Feed
-from panfeed.models import Feed as MFeed, FeedItem
-from extra_exceptions.shortcuts import get_object_or
-from extra_exceptions.utils import HttpException
+from django.shortcuts import get_object_or_404
 from django.core.urlresolvers import reverse
 from django.http import Http404
 import datetime
@@ -120,5 +118,5 @@ class UserFeed(Feed):
     def item_pubdate(self,item):
         return item.date
 
-    def get_object(self,request, feedid):
-        return get_object_or(MFeed, exception = HttpException(status=404), id=feedid);
+    def get_object(self,request,issueid):
+        return get_object_or_404(Issue, id=issueid);
