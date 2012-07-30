@@ -1,34 +1,40 @@
 {% load url from future %}
+{% load compress %}
 <!DOCTYPE html>
 <html>
 <head>
   <meta charset="UTF-8" />
   <title>{% block title %}{% endblock title %} - PANFeed</title>
   <!-- **** Bootstrap Styles **** -->
-  <link href="{{ STATIC_URL }}bootstrap/css/bootstrap.css" rel="stylesheet">
-  <style>
-    body
-    {
-      padding-top: 60px;
-    }
-  </style>
-  <link href="{{ STATIC_URL }}bootstrap/css/bootstrap-responsive.css" rel="stylesheet">  
-  <!-- **** Additional Styles **** -->
-  <link href="{{ STATIC_URL }}styles/additional.css" rel="stylesheet" type="text/css">
+  
+    {% compress css %}
+        <link rel="stylesheet" href="{{ STATIC_URL }}bootstrap/css/bootstrap.css" >
+        <style type="text/css">
+            body
+            {
+              padding-top: 60px;
+            }
+        </style>
+        <link rel="stylesheet" href="{{ STATIC_URL }}bootstrap/css/bootstrap-responsive.css" type="text/css">
+        <link rel="stylesheet" href="{{ STATIC_URL }}styles/additional.css" type="text/css">
+    {% endcompress %}
 
-		  <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
-		  <!--[if lt IE 9]>
+    <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
+    <!--[if lt IE 9]>
     <script src="//cdnjs.cloudflare.com/ajax/libs/html5shiv/3.6/html5shiv.min.js"></script>
-  <![endif]-->
-  {# angular.js must go in the head #}
-  <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.0.1/angular.min.js"></script>
-  <script type="text/javascript" src="{{ STATIC_URL }}scripts/ngmodule.js"></script>
+    <![endif]-->
+    {# angular.js must go in the head #}
+    
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.0.1/angular.min.js"></script>
+    {% compress js %}
+        <script type="text/javascript" src="{{ STATIC_URL }}scripts/ngmodule.js"></script>
+    {% endcompress %}
 </head>
 
 <body>
 
-	<!-- Navbar
-	================================================== -->
+    <!-- Navbar
+    ================================================== -->
     <div class="navbar navbar-fixed-top">
       <div class="navbar-inner">
         <div class="container">
@@ -40,21 +46,21 @@
           <a class="brand" href="{% url 'home' %}">PANFeed</a>
           <div class="nav-collapse collapse">
             <ul class="nav">
-		<li class="{% block findnews_nav %}{% endblock %}">
-			<a href="{% url 'findnews' %}">Find News</a>
-		</li>
+        <li class="{% block findnews_nav %}{% endblock %}">
+            <a href="{% url 'findnews' %}">Find News</a>
+        </li>
 
-		<li class="{% block publish_nav %}{% endblock %}">
-			<a href="{% url 'publishnews' %}">Publish News</a>
-		</li>
+        <li class="{% block publish_nav %}{% endblock %}">
+            <a href="{% url 'publishnews' %}">Publish News</a>
+        </li>
 
-		<li class="{% block faq_nav %}{% endblock %}">
-			<a href="{% url 'faq' %}">FAQ</a>
-		</li>
+        <li class="{% block faq_nav %}{% endblock %}">
+            <a href="{% url 'faq' %}">FAQ</a>
+        </li>
 
-		<li class="{% block about_nav %}{% endblock %}">
-			<a href="{% url 'about' %}">About</a>
-		</li>
+        <li class="{% block about_nav %}{% endblock %}">
+            <a href="{% url 'about' %}">About</a>
+        </li>
         </ul>
             <ul class="nav pull-right">
                 <li class="divider-vertical"></li>
@@ -87,31 +93,33 @@
       </div>
     </div>
     <!-- End Navbar
-	============================================================================-->
+    ============================================================================-->
 
     <div id="site_content">
     <div class="container" id="content">
         {% block content %}
-	{% endblock content %}
+    {% endblock content %}
     </div>
     </div>
-	
-	<hr>
+    
+    <hr>
     <div class="container">
-	<div class="span12">
-      	<footer>
-       		 <p>Copyright &copy; <a href="http://www.southampton.ac.uk/">University of Southampton</a> | Made with <a target="_blank" href="http://getbootstrap.com">Bootstrap</a> | PANFeed is an output of the <a href="http://jisc.ac.uk">JISC</a> funded <a href="http://www.campus-roar.ecs.soton.ac.uk">CampusROAR</a> project | View more <a href="http://www.wais.ecs.soton.ac.uk/">WAIS</a> projects at our <a href="http://blogs.ecs.soton.ac.uk/oneshare/">OneShare Blog</a></p>
-	</footer>
-	</div>
+    <div class="span12">
+        <footer>
+             <p>Copyright &copy; <a href="http://www.southampton.ac.uk/">University of Southampton</a> | Made with <a target="_blank" href="http://getbootstrap.com">Bootstrap</a> | PANFeed is an output of the <a href="http://jisc.ac.uk">JISC</a> funded <a href="http://www.campus-roar.ecs.soton.ac.uk">CampusROAR</a> project | View more <a href="http://www.wais.ecs.soton.ac.uk/">WAIS</a> projects at our <a href="http://blogs.ecs.soton.ac.uk/oneshare/">OneShare Blog</a></p>
+    </footer>
+    </div>
     </div>
   </div>
   
-	<!-- Javascript
+    <!-- Javascript
     ================================================== -->
     <!-- Placed at the end of the document so the pages load faster -->
-    <script type="text/javascript" src="{{ STATIC_URL }}js/jquery.js"></script>
-    <script type="text/javascript" src="{{ STATIC_URL }}js/URI.min.js"></script>
-    <script type="text/javascript" src="{{ STATIC_URL }}bootstrap/js/bootstrap.min.js"></script> 
+    {% compress js %}
+        <script type="text/javascript" src="{{ STATIC_URL }}js/jquery.js"></script>
+        <script type="text/javascript" src="{{ STATIC_URL }}js/URI.min.js"></script>
+        <script type="text/javascript" src="{{ STATIC_URL }}bootstrap/js/bootstrap.min.js"></script>
+    {% endcompress %}
     {{ browserid_form.media.js }}
     {% block scripts %}
     {% endblock scripts %}

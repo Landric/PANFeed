@@ -82,6 +82,7 @@ STATICFILES_DIRS = (
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+    'compressor.finders.CompressorFinder',
 #    'django.contrib.staticfiles.finders.DefaultStorageFinder',
 )
 
@@ -139,6 +140,7 @@ INSTALLED_APPS = (
     'crispy_forms',
     'django_extensions',
     'tastypie',
+    'compressor'
 )
 
 TEMPLATE_CONTEXT_PROCESSORS =(
