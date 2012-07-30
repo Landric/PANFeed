@@ -1,6 +1,6 @@
 import os
 
-DEBUG = False #Override in local_settings.py if you require debugging
+DEBUG = True #Override in local_settings.py when you deploy
 TEMPLATE_DEBUG = DEBUG
 
 ADMINS = (

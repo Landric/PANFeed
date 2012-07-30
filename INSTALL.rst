@@ -3,7 +3,7 @@ Install
 =======
 
 1. Install dependencies using setup.py
-2. Edit local_settings.py in this directory and set up your database details with your mysql username and password::
+2. Edit local_settings.py in this directory and set up your server specific details::
 
     DATABASES = {
         'default': {
@@ -15,6 +15,13 @@ Install
             'PORT': '',                      # Set to empty string for default. Not used with sqlite3.
         }
     }
+
+    SECRET_KEY = '{{generated secret key}}'
+
+    DEBUG = False
+    TEMPLATE_DEBUG = DEBUG
+    
+    SITE_URL = '{{ your site url}}'
 
 3. Install the database schema and fixtures using::
 
