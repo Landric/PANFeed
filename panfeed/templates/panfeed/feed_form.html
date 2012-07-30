@@ -4,7 +4,7 @@
 {% block title %}Publish{% endblock title %}
 {% block publish_nav %}active{% endblock publish_nav %}
 {% block content %}
-{% if edit %}
+{% if form.is_bound %}
 	<h2>Edit Feed</h2>
 {% else %}
 	<h2>Create Feed</h2>
@@ -15,7 +15,7 @@
     {{form|crispy}}
         <div class="control-group">
             <div class="controls">
-                {% if edit %}
+                {% if form.is_bound %}
                     <input type="submit" value="Save" class="btn btn-primary"/>&nbsp;&nbsp;
                 {% else %}
                     <input type="submit" value="Create" class="btn btn-primary"/>&nbsp;&nbsp;
