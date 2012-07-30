@@ -68,3 +68,6 @@ class FeedItem(models.Model):
     feed = models.ForeignKey(Feed)
     special_issue = models.ForeignKey(SpecialIssue, null=True)
     issue_position = models.IntegerField(null=True, db_index=True)
+    
+    def __unicode__(self):
+        return self.title

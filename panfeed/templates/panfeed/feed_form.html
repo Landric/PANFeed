@@ -4,7 +4,6 @@
 {% block title %}Publish{% endblock title %}
 {% block publish_nav %}active{% endblock publish_nav %}
 {% block content %}
-
 {% if object %}
 	<h2>Edit Feed</h2>
 {% else %}
@@ -27,4 +26,7 @@
         </div>
     </fieldset>
 </form>
+{% for item in object.feeditem_set.all %}
+    {{item}}
+{% endfor %}
 {% endblock content %}
