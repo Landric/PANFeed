@@ -17,7 +17,7 @@
 <img src="{{ STATIC_URL }}images/persona-login.png" alt="Sign In" />
 </button>
 
-<form method="POST" action="{% url 'browserid_verify' %}{% if request.path %}?next={{ request.path }}{% endif %}">
+<form method="POST" action="{% url 'browserid_verify' %}">
 {% csrf_token %}
 {{ browserid_form.as_p }}
 </form>
