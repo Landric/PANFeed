@@ -111,7 +111,7 @@ class UserFeed(Feed):
         return feed.description 
 
     def link(self, feed):
-        return "/feed/"+str(feed.slug)
+        return feed.get_absolute_url()
 
     def item_title(self,item):
         return item.title
