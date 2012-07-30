@@ -93,9 +93,9 @@ class UserFeed(Feed):
         else:  
             latestItem = FeedItem.objects.filter(feed=obj.id).order_by("-date")[:1]
             if latestItem:
-                
-                if (latestItem.get().special_issue):
-                    return FeedItem.objects.filter(feed=obj.id, special_issue=latestItem.special_issue).order_by("issue_position")
+                item = latestItem.get()
+                if (item.special_issue):
+                    return FeedItem.objects.filter(feed=obj.id, special_issue=item.special_issue).order_by("issue_position")
                 else:
                     return latestItem
 
