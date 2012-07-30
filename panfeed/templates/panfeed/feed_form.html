@@ -4,7 +4,11 @@
 {% block title %}Publish{% endblock title %}
 {% block publish_nav %}active{% endblock publish_nav %}
 {% block content %}
-<h2>Create a Feed</h2>
+{% if edit %}
+	<h2>Edit Feed</h2>
+{% else %}
+	<h2>Create Feed</h2>
+{% endif %}
 </br>
 <form action="#" method="post" class="form-horizontal">
     {% csrf_token %}
