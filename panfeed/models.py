@@ -51,9 +51,10 @@ class Feed(models.Model):
     title = models.CharField('feed title', max_length=60, help_text='Try to keep your title brief but informative (e.g. "Student Project News")')
     description = models.TextField('feed description', help_text='Briefly describe the purpose of this feed (e.g. "Information for students working on their Third Year Project")')
     displayAll = models.BooleanField('publishing options', default=True, help_text='Don\'t worry, you can change this later if you change your mind') #True=display all items, False=only display latest publication
-
+    
+    @models.permalink
     def get_absolute_url(self):
-        return "/news/"+str(self.id)
+        return ("managefeed", [str(self.id)])
 
 class SpecialIssue(models.Model):
     title = models.CharField('issue title', max_length=60)
