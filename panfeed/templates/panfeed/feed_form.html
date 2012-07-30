@@ -10,7 +10,8 @@
 {% else %}
 	<h2>Create Feed</h2>
 {% endif %}
-</br>
+<p>Fields marked * are required.</p>
+<br/>
 <form action="#" method="post" class="form-horizontal">
     {% csrf_token %}
     {{form|crispy}}
