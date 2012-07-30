@@ -91,16 +91,18 @@ class UserFeed(Feed):
             return FeedItem.objects.filter(feed=obj.id).order_by("-date")
 
         else:  
-            latestItem = FeedItem.objects.filter(feed=obj.id).order_by("-date")[:1]
-            if latestItem:
-                item = latestItem.get()
-                if (item.special_issue):
-                    return FeedItem.objects.filter(feed=obj.id, special_issue=item.special_issue).order_by("issue_position")
+            latest_item = FeedItem.objects.filter(feed=obj.id).order_by("-date")[:1]
+            if latest_item:
+                latest_item = latest_item.select_related().get()
+
+                if (latest_item.special_issue):
+                    issue_items = list(FeedItem.objects.filter(feed=obj.id, special_issue=latest_item.special_issue).order_by("issue_position"))
+                    return issue_items
                 else:
-                    return latestItem
+                    return latest_item
 
             else:
-                return latestItem
+                return latest_item
 
     def title(self,obj):
         return obj.title 
