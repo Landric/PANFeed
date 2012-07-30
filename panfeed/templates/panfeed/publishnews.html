@@ -35,7 +35,7 @@
 							<form action="{% url 'managefeed' feed.id %}" method="post">
 								{% csrf_token %}
 								<div class="btn-group">
-									<a href="#" class="btn">View</a>
+									<a href="{% url 'viewfeed' feed.id %}" class="btn">View</a>
 									<a href="{% url 'managefeed' feed.id %}" class="btn">Edit</a>
 									<input name="_method" value="DELETE" type="hidden">
 									<button type="submit" class="btn" title="Delete this Feed" type="submit">Delete</button>

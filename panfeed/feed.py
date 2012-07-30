@@ -3,7 +3,7 @@ from django.shortcuts import get_object_or_404
 from django.core.urlresolvers import reverse
 from django.http import Http404
 import datetime
-from panfeed.models import Corpus
+from panfeed.models import Corpus, Feed as MFeed, FeedItem, SpecialIssue
 import urllib
 
 
@@ -88,12 +88,17 @@ class UserFeed(Feed):
 
     def items(self,obj):
         if(obj.displayAll):
-            return FeedItem.objects.filter(feeditem__id=obj.id).order_by("-date")
+            return FeedItem.objects.filter(feed=obj.id).order_by("-date")
 
         else:  
-            latestItem = FeedItem.objects.filter(feeditem__id=obj.id).order_by("-date")[:1]
-            if (latestItem.special_issue):
-                return FeedItem.objects.filter(feeditem__id=obj.id, feeditem__special_issue=latestItem.special_issue).order_by("issue_position")
+            latestItem = FeedItem.objects.filter(feed=obj.id).order_by("-date")[:1]
+            if latestItem:
+                
+                if (latestItem.get().special_issue):
+                    return FeedItem.objects.filter(feed=obj.id, special_issue=latestItem.special_issue).order_by("issue_position")
+                else:
+                    return latestItem
+
             else:
                 return latestItem
 
@@ -110,7 +115,7 @@ class UserFeed(Feed):
         return item.title
 
     def item_description(self,item):
-        return "<img src='"+item.img+"' /> " + item.description
+        return "<img src='"+item.img+"' /> " + item.content
 
     def item_link(self,item):
         return item.url
@@ -118,5 +123,5 @@ class UserFeed(Feed):
     def item_pubdate(self,item):
         return item.date
 
-    def get_object(self,request,issueid):
-        return get_object_or_404(Issue, id=issueid);
+    def get_object(self,request,feed_id):
+        return get_object_or_404(MFeed, id=feed_id);

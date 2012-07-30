@@ -28,7 +28,6 @@ urlpatterns = patterns('panfeed.views',
 )
 
 urlpatterns += patterns('',
-    url(r'^feed/(?P<feedid>\d+)$', UserFeed(), name='viewfeed'),
-    url(r'^feed/(?P<feedid>\d+)/.*$', UserFeed()),
+    url(r'^feed/(?P<feed_id>\d+)$', UserFeed(), name='viewfeed'),
     url(r'^find$', PersonalFeed(), name="find"),
 )
