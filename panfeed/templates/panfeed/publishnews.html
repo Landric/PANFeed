@@ -29,14 +29,14 @@
 				</thead>
 				<tbody>
 					{% for feed in feeds %}
-						<tr class="feed" id="feed-{{feed.id}}">
+						<tr class="feed" id="{{feed.get_fragment_id}}">
                             <td>{{feed.title}}</td>
 							<td>
-							<form action="{% url 'managefeed' feed.slug %}" method="post">
+							<form action="{{feed.get_modify_url}}" method="post">
 								{% csrf_token %}
 								<div class="btn-group">
-									<a href="{% url 'viewfeed' feed.slug %}" class="btn">View</a>
-									<a href="{% url 'managefeed' feed.slug %}" class="btn">Edit</a>
+									<a href="{{feed.get_absolute_url}}" class="btn">View</a>
+									<a href="{{feed.get_modify_url}}" class="btn">Edit</a>
 									<input name="_method" value="DELETE" type="hidden">
 									<button type="submit" class="btn" title="Delete this Feed" type="submit">Delete</button>
 								</div>

@@ -56,8 +56,15 @@ class Feed(TimeStampedModel):
     description = models.TextField('feed description', help_text='Briefly describe the purpose of this feed (e.g. "Information for students working on their Third Year Project")')
     displayAll = models.BooleanField('publishing options', default=True, help_text='Don\'t worry, you can change this later if you change your mind') #True=display all items, False=only display latest publication
     
+    def get_fragment_id(self):
+        return "feed-{feed_id}".format(feed_id=self.id)
+    
     @models.permalink
     def get_absolute_url(self):
+        return ("viewfeed", [str(self.slug)])
+        
+    @models.permalink
+    def get_modify_url(self):
         return ("managefeed", [str(self.slug)])
 
 class SpecialIssue(models.Model):
@@ -73,6 +80,10 @@ class FeedItem(TimeStampedModel):
     feed = models.ForeignKey(Feed)
     special_issue = models.ForeignKey(SpecialIssue, null=True)
     issue_position = models.IntegerField(null=True, db_index=True)
+    
+    @models.permalink
+    def get_modify_url(self):
+        return ("manageitem", [str(self.feed.slug), str(self.slug)])
     
     def __unicode__(self):
         return self.title

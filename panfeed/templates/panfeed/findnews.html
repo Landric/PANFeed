@@ -27,7 +27,7 @@
                     <div class="span2">
                         <ul>
                         {% for feed in feeds|slice:":4" %}
-                            <li><a href="{% url 'viewfeed' feed.slug %}">{{feed.title}}</a></li>
+                            <li><a href="{{feed.get_absolute_url}}">{{feed.title}}</a></li>
                         {% endfor %}
                         </ul>
                         <a href="{% url 'allfeeds' %}" class ='btn'>Browse all Feeds &raquo;</a>
@@ -35,7 +35,7 @@
                     <div class="span2">
                         <ul>
                         {% for feed in feeds|slice:"4:8" %}
-                            <li><a href="{% url 'viewfeed' feed.slug %}">{{feed.title}}</a></li>
+                            <li><a href="{{feed.get_absolute_url}}">{{feed.title}}</a></li>
                         {% endfor %}
                         </ul>
                     </div>
