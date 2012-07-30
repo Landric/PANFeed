@@ -14,6 +14,7 @@ function ListFeedsCtrl($scope, $http, $templateCache)
                 {
                     object["searchOn"] = object.title + object.description;
                 });
+                return objects
             }
         }).success(function(data,status)
         {
