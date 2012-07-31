@@ -5,7 +5,6 @@ import json
 from urlparse import urlparse
 
 from panfeed.models import AcademicFeeds,Feed,FeedItem
-from panfeed.urltorss2 import ItemMaker
 
 from django.shortcuts import render_to_response, get_object_or_404, redirect
 
@@ -20,6 +19,9 @@ from django.core.exceptions import ValidationError
 from django.core.urlresolvers import reverse
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.views.generic.edit import ModelFormMixin
+import urllib2
+import PyOpenGraph
+from BeautifulSoup import BeautifulSoup
 
 class LoginRequiredMixin(object):
     
@@ -162,9 +164,26 @@ def manageitem(request, feed_slug, item_slug=None):
 
 
 def urltoitem(request):
-    itemmaker = ItemMaker()
-    itemmaker.parse_url(request.REQUEST["url"])
-    return HttpResponse(json.dumps({ 'title':itemmaker.title, 'description':itemmaker.p, 'img':itemmaker.img }), mimetype="application/json")
+    #itemmaker = ItemMaker()
+    #itemmaker.parse_url(request.REQUEST["url"])
+    URLObject = urllib2.urlopen(request.REQUEST["url"])
+
+    #Use OpenGraph protocol as default
+    og = PyOpenGraph(URLObject.read())
+    if (og.is_valid()):
+        title = og.metadata['title']
+        description = og.metadata['description ']
+        image = og.metadata['image']
+
+
+    #Fallback
+    else:
+        soup = BeautifulSoup(URLObject.read())
+        title = soup.title.string
+        desc = ''
+        image = ''
+
+    return HttpResponse(json.dumps({ 'title':title, 'description':desc, 'img':image }), mimetype="application/json")
 
 def submit(request):
     if request.method == 'POST':
