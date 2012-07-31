@@ -20,7 +20,7 @@ from django.core.urlresolvers import reverse
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.views.generic.edit import ModelFormMixin
 import urllib2
-import PyOpenGraph
+import opengraph
 from BeautifulSoup import BeautifulSoup
 
 class LoginRequiredMixin(object):
@@ -169,11 +169,7 @@ def urltoitem(request):
     #Use OpenGraph protocol as default
     og = PyOpenGraph(URLObject.read())
     if (og.is_valid()):
-        title = og.metadata['title']
-        description = og.metadata['description ']
-        image = og.metadata['image']
-
-
+        return HttpResponse(json.dumps(og.items()), mimetype="application/json")
     #Fallback
     else:
         soup = BeautifulSoup(URLObject.read())
