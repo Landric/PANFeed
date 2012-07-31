@@ -11,8 +11,8 @@
 {% endif %}
 <p>Fields marked * are required.</p>
 <br/>
-</br>
-<h3>You are editing an Item on Feed: {{feed.title}}</h3>
+<h4>You are editing an Item on: {{feed.title}}</h4>
+<br/>
 <form action="#" method="post" class="form-horizontal">
     {% csrf_token %}
     {{form|crispy}}
