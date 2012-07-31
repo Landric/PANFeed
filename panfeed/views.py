@@ -164,20 +164,23 @@ def manageitem(request, feed_slug, item_slug=None):
 
 
 def urltoitem(request):
-    URLObject = urllib2.urlopen(request.REQUEST["url"])
+    required_keys = set(("title", "description", "image"))
+    url = (request.GET["url"])
 
-    #Use OpenGraph protocol as default
-    og = PyOpenGraph(URLObject.read())
-    if (og.is_valid()):
-        return HttpResponse(json.dumps(og.items()), mimetype="application/json")
-    #Fallback
-    else:
+    items = PyOpenGraph(url).items()
+    remaining_keys = required_keys - items.viewkeys()
+
+    if remaining_keys:
         soup = BeautifulSoup(URLObject.read())
-        title = soup.title.string
-        desc = soup.p
-        image = soup.img
+        parsers = dict(
+            title = lambda : soup.title.strings,
+            description = lambda : soup.p,
+            image = lambda : soup.img,
+        )
+        for key in required_keys:
+            items[key] = parsers[key]()
 
-        return HttpResponse(json.dumps({ 'title':title, 'description':desc, 'img':image }), mimetype="application/json")
+    return HttpResponse(json.dumps(items), mimetype="application/json")
 
 def submit(request):
     if request.method == 'POST':
