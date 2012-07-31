@@ -35,6 +35,7 @@ setup(
         "xapian-haystack",
         "progressbar",
         "django-compressor",
+        "ogp",
     ],
     package_data={'panfeed': [
         'text.txt',
