@@ -50,11 +50,12 @@
     <div class="row">
         <div class="span8 offset2">
             <p>To quickly view some of the items in the Feed, click "View Preview". To add the Feed to your feed reader, you can simple click one of the buttons below if you use <a href="http://www.google.com/reader">Google Reader</a>, <a href="http://reader.feedshow.com/">Feed Show</a> or <a href="http://www.newsalloy.com/">News Alloy</a>. If you use a different reader, copy the feed link provided and paste it in to your reader of choice.</p>
-            	<div class="well">
-			<span ng:bind="absoluteUrl()"></span>
-			<button class="btn disabled" type="button">Copy to clipboard</button>
-			<a class="btn" id="view_more" href="[[ absoluteUrl() ]]" target="_blank">View Preview</a>
-		</div>
+                <div ng:cloak class="well">
+                    <span ng:bind="absoluteUrl()"></span>
+                    <button class="btn disabled" type="button">Copy to clipboard</button>
+                    <a class="btn" id="view_more" href="[[ absoluteUrl() ]]" target="_blank">View Preview</a>
+                </div>
+        </div>
         <a id="google_link"    href="[[ googleReaderUrl() ]]"><img src="http://buttons.googlesyndication.com/fusion/add.gif" border="0" alt="Add to Google"></a>
         &nbsp;&nbsp;
         <a id="feedshow_link"  href="[[ feedShowReaderUrl() ]]" title="subscribe"><img src="http://www.feedshow.com/images/addfeedshow.gif" border="0" alt="Add to FeedShow" /></a>
