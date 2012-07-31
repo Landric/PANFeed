@@ -1,14 +1,14 @@
 {% extends "template.html" %}
 {% block title %}{{ title }}{% endblock title%}
 {% block content %}
-<div class="hero-unit">		
-	<h1>{{ header }}</h1>
-	<br/>
-	<p>{{ content }}</p>
-	{% if data %}
-		<ul>
-		{% for datum in data %}
-			<li>{{datum}}</li>
-		{% endfor %}
-	{% endif %}
+<div class="hero-unit">     
+    <h1>{{ header }}</h1>
+    <br/>
+    <p>{{ content }}</p>
+    {% if data %}
+        <ul>
+        {% for datum in data %}
+            <li>{{datum}}</li>
+        {% endfor %}
+    {% endif %}
 {% endblock content %}

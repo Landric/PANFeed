@@ -2,33 +2,33 @@
 {% load url from future %}
 {% block title %}Home{% endblock title%}
 {% block content %}
-<div class="hero-unit">		
-	<h1>Welcome to PANFeed</h1>
-	<br/>
-	<p>PANFeed is a tool design to simplify the searching for and publishing of academic news. Whether you want to publish news for an entire department, publish your own personal news, or if you just want something to read over breakfast, PANFeed is the tool for you. Try it out, and take control of your news!</p>
-	{% if not user.is_authenticated %}
-		<br/>
-		<br/>
-		<a href="{% url 'login' %}"class="btn btn-large btn-primary">Login to start &raquo;</a>
-	{% endif %}
+<div class="hero-unit">     
+    <h1>Welcome to PANFeed</h1>
+    <br/>
+    <p>PANFeed is a tool design to simplify the searching for and publishing of academic news. Whether you want to publish news for an entire department, publish your own personal news, or if you just want something to read over breakfast, PANFeed is the tool for you. Try it out, and take control of your news!</p>
+    {% if not user.is_authenticated %}
+        <br/>
+        <br/>
+        <a href="{% url 'login' %}"class="btn btn-large btn-primary">Login to start &raquo;</a>
+    {% endif %}
 </div>
 
 <div class="row">
-	<div class="span4 offset1">
-		<h2>Find News</h2>
-		<p>Use PANFeed to search for news directly related to your academic interests, or browse some of the Feeds created by other users.</p>
-	</div>
-	<div class="span4 offset1">
-		<h2>Publish News</h2>
-		<p>Use PANFeed to create a Feed of your own, then use it to publish resources that you want to share, editorials and more! </p>
-	</div>
+    <div class="span4 offset1">
+        <h2>Find News</h2>
+        <p>Use PANFeed to search for news directly related to your academic interests, or browse some of the Feeds created by other users.</p>
+    </div>
+    <div class="span4 offset1">
+        <h2>Publish News</h2>
+        <p>Use PANFeed to create a Feed of your own, then use it to publish resources that you want to share, editorials and more! </p>
+    </div>
 </div>
 <div class="row">
-	<div class="span4 offset1">
-		<p><a class="btn" href="{% url 'findnews' %}">View details &raquo;</a></p>
-	</div>
-	<div class="span4 offset1">
-		<p><a class="btn" href="{% url 'publishnews' %}">View details &raquo;</a></p>
-	</div>
+    <div class="span4 offset1">
+        <p><a class="btn" href="{% url 'findnews' %}">View details &raquo;</a></p>
+    </div>
+    <div class="span4 offset1">
+        <p><a class="btn" href="{% url 'publishnews' %}">View details &raquo;</a></p>
+    </div>
 </div>
 {% endblock content %}

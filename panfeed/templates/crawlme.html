@@ -12,21 +12,21 @@
 
 <div class="feed_submission">
 <form action="{% url 'submit' %}" method=post class="form-horizontal">
-	{% csrf_token %}
-	<fieldset>
-		<div class="control-group">
-			<label class="control-label">Feeds:</label>
-			<div class="controls">
-				<textarea name=urls id="urls" rows=8 cols=60></textarea>
-				<span class="help-inline">Enter each new feed on a seperate line</span>
-			</div>
-		</div>
-		<div class="control-group">
-			<div class="controls">
-     				<input class="btn btn-primary" type=submit value="Submit">
-			</div>
-		</div>
-	</fieldset>
+    {% csrf_token %}
+    <fieldset>
+        <div class="control-group">
+            <label class="control-label">Feeds:</label>
+            <div class="controls">
+                <textarea name=urls id="urls" rows=8 cols=60></textarea>
+                <span class="help-inline">Enter each new feed on a seperate line</span>
+            </div>
+        </div>
+        <div class="control-group">
+            <div class="controls">
+                    <input class="btn btn-primary" type=submit value="Submit">
+            </div>
+        </div>
+    </fieldset>
 </form>
 </div>
 {% endblock content %}
