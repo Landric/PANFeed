@@ -16,14 +16,14 @@ from django_extensions.db.models import TimeStampedModel, TitleSlugDescriptionMo
 from django_extensions.db.fields import AutoSlugField
 
 class Domains(models.Model):
-    toplevel = models.URLField()
+    toplevel = models.URLField(max_length=255) #https://tools.ietf.org/html/rfc3986
     
     def __unicode__(self):
         return self.toplevel
 
 class AcademicFeeds(models.Model):
     url = models.URLField(verify_exists=True, unique=True)
-    toplevel = models.URLField()
+    toplevel = models.URLField(max_length=255) #https://tools.ietf.org/html/rfc3986
 
     def __unicode__(self):
         return self.url;
