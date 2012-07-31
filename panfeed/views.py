@@ -165,9 +165,9 @@ def manageitem(request, feed_slug, item_slug=None):
 
 def urltoitem(request):
     required_keys = set(("title", "description", "image"))
-    url = (request.GET["url"])
+    user_url = (request.GET["url"])
 
-    items = PyOpenGraph(url).items()
+    items = opengraph.OpenGraph(url=user_url).items()
     remaining_keys = required_keys - items.viewkeys()
 
     if remaining_keys:
