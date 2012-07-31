@@ -1,5 +1,8 @@
-.feed-list
-{
+[ng\:cloak], [ng-cloak], .ng-cloak {
+    display: none;
+}
+
+.feed-list {
 	padding:2px 0px;
 }
 
@@ -7,7 +10,7 @@
     padding: 7px 0px 6px;
 }
 
-tr.feed:target td{
+tr.feed:target td {
     /*box-shadow: 0 0 10px rgba(0, 0, 255, 1);
     -webkit-box-shadow: 0 0 10px rgba(0, 0, 255, 1);
     -moz-box-shadow: 0 0 10px rgba(0, 0, 255, 1);

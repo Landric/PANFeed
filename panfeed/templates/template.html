@@ -23,9 +23,6 @@
     {# angular.js must go in the head #}
     
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.0.1/angular.min.js"></script>
-    {% compress js %}
-        <script type="text/javascript" src="{{ STATIC_URL }}scripts/ngmodule.js"></script>
-    {% endcompress %}
 </head>
 
 <body>
@@ -118,6 +115,7 @@
         <script type="text/javascript" src="{{ STATIC_URL }}bootstrap/js/bootstrap.min.js"></script>
         <script type="text/javascript" src="{{ STATIC_URL }}scripts/listfeeds.js"></script>
         <script type="text/javascript" src="{{ STATIC_URL }}scripts/findnews.js"></script>
+        <script type="text/javascript" src="{{ STATIC_URL }}scripts/ngmodule.js"></script>
     {% endcompress %}
     {{ browserid_form.media.js }}
     {% block scripts %}
