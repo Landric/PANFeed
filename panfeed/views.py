@@ -4,7 +4,7 @@ import feedparser
 import json
 from urlparse import urlparse
 
-from panfeed.models import AcademicFeeds,Feed,FeedItem
+from panfeed.models import AcademicFeeds,Feed,FeedItem,SpecialIssue
 
 from django.shortcuts import render_to_response, get_object_or_404, redirect
 
@@ -13,7 +13,7 @@ from django.template import RequestContext
 from django.contrib.auth.decorators import login_required
 from django.utils.decorators import method_decorator
 
-from forms import FeedForm, FeedItemForm
+from forms import FeedForm, FeedItemForm, SpecialIssueForm
 from django.core.validators import URLValidator
 from django.core.exceptions import ValidationError
 from django.core.urlresolvers import reverse
@@ -161,6 +161,64 @@ def manageitem(request, feed_slug, item_slug=None):
             return ItemUpdateView.as_view()(request=request, feed=feed_slug, slug=item_slug)
         else:
             return ItemCreateView.as_view()(request=request, feed=feed_slug)
+
+
+class IssueMixin(object):
+    model = SpecialIssue
+
+class IssueListView(IssueMixin, ListView):
+    context_object_name = "issues"
+
+class IssueCRUDMixin(LoginRequiredMixin, FeedMixin):
+    form_class = SpecialIssueForm
+    def get_success_url(self):
+        return reverse('publishnews')
+    
+    #def get_queryset(self):
+        #"""
+        #Only operate on issues that belong to feeds the current user owns
+        #"""
+        #return self.model.objects.filter(feed__owner=self.request.user)
+        
+    def get_context_data(self, **kwargs):
+        context = super(IssueCRUDMixin, self).get_context_data(**kwargs)
+        context["feed"] = get_object_or_404(Feed, slug=self.kwargs["feed"])
+        return context
+
+class IssueDetailView(IssueCRUDMixin, DetailView):
+    pass
+class IssueCreateView(IssueCRUDMixin, CreateView):
+    template_name = "panfeed/specialissue_form.html"
+    
+    def form_valid(self,form):
+        print "form valid"
+        self.object = form.save(commit=False)
+        self.object.feed_id = Feed.objects.get(slug=self.kwargs["feed"]).id
+        self.object.save()
+        return super(IssueCreateView, self).form_valid(form)
+        
+class IssueDeleteView(IssueCRUDMixin, DeleteView):
+    pass
+class IssueUpdateView(IssueCRUDMixin, UpdateView):
+    template_name = "panfeed/specialissue_form.html"
+
+def manageissue(request, feed_slug, issue_slug=None):
+    """
+    Route to the correct view based on Method or the existance of
+    issue_id.
+    """
+    
+    feed = get_object_or_404(Feed, slug=feed_slug)
+    if feed.owner != request.user:
+        return HttpResponseForbidden("You do not have permission to edit this Feed.")
+
+    if request.method == 'DELETE':
+        return IssueDeleteView.as_view()(request=request, slug=issue_slug)
+    else:
+        if issue_slug:
+            return IssueUpdateView.as_view()(request=request, feed=feed_slug, slug=issue_slug)
+        else:
+            return IssueCreateView.as_view()(request=request, feed=feed_slug)
 
 
 def urltoitem(request):
