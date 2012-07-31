@@ -37,7 +37,7 @@ class Corpus(TimeStampedModel, TitleSlugDescriptionModel):
         return self.title
         
     class Meta:
-        unique_together = unique_together = ("url", "feed")
+        unique_together = ("url", "feed")
         verbose_name_plural = "corpora"
 
 class SpiderToDo(models.Model):
