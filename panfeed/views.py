@@ -171,6 +171,7 @@ def urltoitem(request):
     
     og = ogp.OpenGraph(
         url=url,
+        required_attrs = ("title", "description", "image"),
         scrape=True,
     )
 
