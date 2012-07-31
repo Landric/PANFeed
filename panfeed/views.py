@@ -164,8 +164,6 @@ def manageitem(request, feed_slug, item_slug=None):
 
 
 def urltoitem(request):
-    #itemmaker = ItemMaker()
-    #itemmaker.parse_url(request.REQUEST["url"])
     URLObject = urllib2.urlopen(request.REQUEST["url"])
 
     #Use OpenGraph protocol as default
