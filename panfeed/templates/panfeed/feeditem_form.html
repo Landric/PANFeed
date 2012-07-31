@@ -5,9 +5,9 @@
 {% block publish_nav %}active{% endblock publish_nav %}
 {% block content %}
 {% if form.is_bound %}
-	<h2>Edit Item</h2>
+    <h2>Edit Item</h2>
 {% else %}
-	<h2>Publish Item</h2>
+    <h2>Publish Item</h2>
 {% endif %}
 <p>Fields marked * are required.</p>
 <br/>
@@ -15,17 +15,17 @@
 <h3>You are editing an Item on Feed: {{feed.title}}</h3>
 <form action="#" method="post" class="form-horizontal">
     {% csrf_token %}
-	{{form|crispy}}
-		<div class="control-group">
-			<div class="controls">
-					{% if form.is_bound %}
-						<input type="submit" value="Save" class="btn btn-primary"/>&nbsp;&nbsp;
-					{% else %}
-						<input type="submit" value="Publish" class="btn btn-primary"/>&nbsp;&nbsp;
-					{% endif %}
- 			                <a href="{% url 'publishnews' %}" class="btn">Cancel</a>
-			</div>
-		</div>
-	</fieldset>
+    {{form|crispy}}
+        <div class="control-group">
+            <div class="controls">
+                    {% if form.is_bound %}
+                        <input type="submit" value="Save" class="btn btn-primary"/>&nbsp;&nbsp;
+                    {% else %}
+                        <input type="submit" value="Publish" class="btn btn-primary"/>&nbsp;&nbsp;
+                    {% endif %}
+                            <a href="{% url 'publishnews' %}" class="btn">Cancel</a>
+            </div>
+        </div>
+    </fieldset>
 </form>
 {% endblock content %}

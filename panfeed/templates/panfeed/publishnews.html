@@ -4,58 +4,58 @@
 {% block publish_nav %}active{% endblock publish_nav %}
 {% block content %}
 <div class="row">
-	<div class="span8">
-		<h1>Publish News</h1>
-		<p>PANFeed provides a simple way of managing news feeds, whether you are representing an institution or an individual. To start, create a new feed - this will provide you with a link that you can share with people.</p>
-		<p>You can then publish items (such as news articles) or Special Issues (a collection of items, with an editorial) to this Feed.</p>
-		<br/>
-	</div>
+    <div class="span8">
+        <h1>Publish News</h1>
+        <p>PANFeed provides a simple way of managing news feeds, whether you are representing an institution or an individual. To start, create a new feed - this will provide you with a link that you can share with people.</p>
+        <p>You can then publish items (such as news articles) or Special Issues (a collection of items, with an editorial) to this Feed.</p>
+        <br/>
+    </div>
 </div>
 <div class="row">
-	<div class="span4">
-		<h2>Create a Feed</h2>
-		<p>Get started by creating a Feed!</p>
-		<a href="{% url 'newfeed' %}" class="btn">Create a new Feed &raquo;</a>
-	</div>
-	<div class="span8">
-		{% if feeds %}
-			<table class="table table-striped">
-			        <thead>
-			        	<tr>
-						<th><h2>Your Feeds</h2></th>
-						<th>Manage Feed</th>
-						<th>Publish To Feed</th>
-					</tr>
-				</thead>
-				<tbody>
-					{% for feed in feeds %}
-						<tr class="feed" id="{{feed.get_fragment_id}}">
+    <div class="span4">
+        <h2>Create a Feed</h2>
+        <p>Get started by creating a Feed!</p>
+        <a href="{% url 'newfeed' %}" class="btn">Create a new Feed &raquo;</a>
+    </div>
+    <div class="span8">
+        {% if feeds %}
+            <table class="table table-striped">
+                    <thead>
+                        <tr>
+                        <th><h2>Your Feeds</h2></th>
+                        <th>Manage Feed</th>
+                        <th>Publish To Feed</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for feed in feeds %}
+                        <tr class="feed" id="{{feed.get_fragment_id}}">
                             <td>{{feed.title}}</td>
-							<td>
-							<form action="{{feed.get_modify_url}}" method="post">
-								{% csrf_token %}
-								<div class="btn-group">
-									<a href="{{feed.get_absolute_url}}" class="btn">View</a>
-									<a href="{{feed.get_modify_url}}" class="btn">Edit</a>
-									<input name="_method" value="DELETE" type="hidden">
-									<button type="submit" class="btn" title="Delete this Feed" type="submit">Delete</button>
-								</div>
-							</form>
-							</td>
-							<td>
-								<div class="btn-group">
-									<a href="{% url 'newitem' feed.slug %}" class="btn">Publish Item</a>
-									<a href="#" class="btn">Publish Special Issue</a>
-								</div>
-							</td>
-						</tr>
-					{% endfor %}
-				</tbody>
-			</table>
-		{% else %}
-			<h2>Your Feeds</h2>
-			<p>You haven't created any feeds yet. Why not create one now?</p>
-		{% endif %}
-	</div>
+                            <td>
+                            <form action="{{feed.get_modify_url}}" method="post">
+                                {% csrf_token %}
+                                <div class="btn-group">
+                                    <a href="{{feed.get_absolute_url}}" class="btn">View</a>
+                                    <a href="{{feed.get_modify_url}}" class="btn">Edit</a>
+                                    <input name="_method" value="DELETE" type="hidden">
+                                    <button type="submit" class="btn" title="Delete this Feed" type="submit">Delete</button>
+                                </div>
+                            </form>
+                            </td>
+                            <td>
+                                <div class="btn-group">
+                                    <a href="{% url 'newitem' feed.slug %}" class="btn">Publish Item</a>
+                                    <a href="#" class="btn">Publish Special Issue</a>
+                                </div>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        {% else %}
+            <h2>Your Feeds</h2>
+            <p>You haven't created any feeds yet. Why not create one now?</p>
+        {% endif %}
+    </div>
 </div>
 {% endblock content %}
