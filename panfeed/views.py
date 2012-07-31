@@ -168,7 +168,7 @@ def urltoitem(request):
     url = (request.GET["url"])
 
     items = PyOpenGraph(url).items()
-    remaining_keys required_keys - items.viewkeys()
+    remaining_keys = required_keys - items.viewkeys()
 
     if remaining_keys:
         soup = BeautifulSoup(URLObject.read())
