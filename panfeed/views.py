@@ -1,5 +1,5 @@
 # Create your views here.
-from django.http import HttpResponse,HttpResponseRedirect,HttpResponseForbidden
+from django.http import HttpResponse,HttpResponseRedirect,HttpResponseForbidden, Http404
 import feedparser
 import json
 from urlparse import urlparse
@@ -20,7 +20,7 @@ from django.core.urlresolvers import reverse
 from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
 from django.views.generic.edit import ModelFormMixin
 import urllib2
-import opengraph
+import ogp
 from BeautifulSoup import BeautifulSoup
 
 class LoginRequiredMixin(object):
@@ -222,23 +222,18 @@ def manageissue(request, feed_slug, issue_slug=None):
 
 
 def urltoitem(request):
-    required_keys = set(("title", "description", "image"))
-    user_url = (request.GET["url"])
+    try:
+        url = (request.GET["url"])
+    except:
+        raise Http404
+    
+    og = ogp.OpenGraph(
+        url=url,
+        required_attrs = ("title", "description", "image"),
+        scrape=True,
+    )
 
-    items = opengraph.OpenGraph(url=user_url).items()
-    remaining_keys = required_keys - items.viewkeys()
-
-    if remaining_keys:
-        soup = BeautifulSoup(URLObject.read())
-        parsers = dict(
-            title = lambda : soup.title.strings,
-            description = lambda : soup.p,
-            image = lambda : soup.img,
-        )
-        for key in required_keys:
-            items[key] = parsers[key]()
-
-    return HttpResponse(json.dumps(items), mimetype="application/json")
+    return HttpResponse(json.dumps(og.items), mimetype="application/json")
 
 def submit(request):
     if request.method == 'POST':
