@@ -174,10 +174,10 @@ def urltoitem(request):
     else:
         soup = BeautifulSoup(URLObject.read())
         title = soup.title.string
-        desc = ''
-        image = ''
+        desc = soup.p
+        image = soup.img
 
-    return HttpResponse(json.dumps({ 'title':title, 'description':desc, 'img':image }), mimetype="application/json")
+        return HttpResponse(json.dumps({ 'title':title, 'description':desc, 'img':image }), mimetype="application/json")
 
 def submit(request):
     if request.method == 'POST':
