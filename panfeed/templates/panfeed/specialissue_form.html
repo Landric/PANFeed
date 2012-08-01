@@ -14,6 +14,20 @@
     <form action="#" method="post" class="form-horizontal">
         {% csrf_token %}
         <fieldset>
+            <div class='control-group'>
+               <label class='control-label'>Special Issue title:</label>
+                <div class='controls'>
+                    <input type='text' name='issue-title' value=''/>
+                </div>
+            </div>
+
+            <div class='control-group'>
+                <label class='control-label'>Editorial:</label>
+                <div class='controls'>
+                   <textarea name='issue-editorial'></textarea>
+                </div>
+            </div>
+
             <div class="control-group">
                 <div class="controls">
                     <textarea ng:model="url" placeholder="Enter URLs..."></textarea>
