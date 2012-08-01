@@ -17,12 +17,17 @@
             <div class="control-group">
                 <div class="controls">
                     <div class=input-append">
-                        <input ng:model="url" type="text" placeholder="Enter URL..."><button ng:click="doAJAX(url, 'x', 'items')" class="btn" type="button">Add URL</button>
+                        <input ng:model="url" type="text" placeholder="Enter URL..."><button ng:click="convertURL()" class="btn" type="button">Add URL</button>
                     </div>
                 </div>
             </div>
-            <div ng:cloak class="well" id="items">
 
+            <div ng:show="loading">
+                <img src="{{ STATIC_URL }}images/load.gif" alt="Loading..."/>
+            </div>
+
+            
+            <div ng:cloak ng:show="loaded" class="well" id="items">
                 <div class='control-group'>
                     <label class='control-label'>URL:</label>
                     <div class='controls'>
@@ -48,7 +53,7 @@
                     <label class='control-label'>Image URL:</label>
                     <div class='controls'>
                         <div class='input-append'>
-                            <input type='text' id='img-url-[[item.counter]]'  name='item-img' value='[[item.img]]'/><input type='button' class='btn' value='Update Image' onclick='changeImg(\"img-[[item.counter]]\", \"img-url-[[item.counter]]\")' />
+                            <input type='text' value='[[item.img]]' ng:model="image"/><input type='button' class='btn' value='Update Image' ng:click="changeImage()"/>
                         </div>
                     </div>
                 </div>
@@ -56,18 +61,16 @@
                 <div class='control-group'>
                     <label class='control-label'>Image Preview:</label>
                     <div class='controls'>
-                        <img id='img-[[item.counter]]' src='[[item.img' alt='URL does not resolve to image.' /><br />
+                        <img src='[[item.image]]' alt='URL does not resolve to image.' /><br />
                     </div>
                 </div>
-
-                <input type='hidden' name='item-ordernumber' value='[[ityem.counter]]' />
             </div>
             <div class="control-group">
                 <div class="controls">
                     {% if form.is_bound %}
                         <input type="submit" value="Save" class="btn btn-primary"/>&nbsp;&nbsp;
                     {% else %}
-                        <input type="submit" value="Publish" class="btn btn-primary disabled"/>&nbsp;&nbsp;
+                        <input type="submit" value="Publish" class="btn btn-primary"/>&nbsp;&nbsp;
                     {% endif %}
                         <a href="{% url 'publishnews' %}" class="btn">Cancel</a>
                 </div>
