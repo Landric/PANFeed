@@ -10,7 +10,7 @@
     <h2>Publish Item to "{{feed.title}}"</h2>
 {% endif %}
 <br/>
-<div ng:app="panfeedModule" ng:csp ng:controller="PublishCtrl">
+<div ng:app="panfeedModule" ng:csp ng:controller="PublishItemCtrl">
     <form action="#" method="post" class="form-horizontal">
         {% csrf_token %}
         <fieldset>
@@ -22,7 +22,7 @@
                 </div>
             </div>
 
-            <div ng:show="loading">
+            <div ng:cloak ng:show="loading">
                 <img src="{{ STATIC_URL }}images/load.gif" alt="Loading..."/>
             </div>
 
@@ -52,9 +52,7 @@
                 <div class='control-group'>
                     <label class='control-label'>Image URL:</label>
                     <div class='controls'>
-                        <div class='input-append'>
-                            <input type='text' value='[[item.img]]' ng:model="image"/><input type='button' class='btn' value='Update Image' ng:click="changeImage()"/>
-                        </div>
+                        <input type='text' ng:model="item.image"/>
                     </div>
                 </div>
 

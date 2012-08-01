@@ -1,4 +1,4 @@
-function PublishCtrl($scope)
+function PublishItemCtrl($scope)
 {
     $scope.item;
     $scope.loading = false;
@@ -27,9 +27,4 @@ function PublishCtrl($scope)
         });
         console.log($scope.item);
     };
-
-    $scope.changeImage = function()
-    {
-        $scope.item.image = $scope.image;
-    }
 }
