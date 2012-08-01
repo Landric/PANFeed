@@ -8,6 +8,10 @@ class FeedResource(ModelResource):
         resource_name = 'feed'
         queryset = Feed.objects.all()
         allowed_methods = ['get']
+    
+    def dehydrate(self, bundle):
+        bundle.data['url'] = bundle.obj.get_absolute_url()
+        return bundle
 
 class FeedItemResource(ModelResource):
     class Meta:
