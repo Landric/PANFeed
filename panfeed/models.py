@@ -66,6 +66,9 @@ class Feed(TimeStampedModel):
     @models.permalink
     def get_modify_url(self):
         return ("managefeed", [str(self.slug)])
+        
+    def __unicode__(self):
+        return self.title
 
 class SpecialIssue(models.Model):
     pass
