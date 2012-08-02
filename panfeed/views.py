@@ -157,6 +157,7 @@ def manageitem(request, feed_slug, item_slug=None):
     if request.method == 'DELETE':
         return ItemDeleteView.as_view()(request=request, slug=item_slug)
     else:
+        print request.POST
         if item_slug:
             return ItemUpdateView.as_view()(request=request, feed=feed_slug, slug=item_slug)
         else:

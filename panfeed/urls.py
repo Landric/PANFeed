@@ -11,7 +11,7 @@ urlpatterns = patterns('panfeed.views',
     url(r'^faq/$',     TemplateView.as_view(template_name="faq.html"), name='faq'),
     
     url(r'^urltoitem$','urltoitem', name='urltoitem'),
-    
+
     url(r'^findnews/$',         FindNews.as_view(),     name='findnews'),
     url(r'^findnews/allfeeds$', FeedListView.as_view(), name='allfeeds'),
     url(r'^publishnews/$',      PublishNews.as_view(),  name='publishnews'),
