@@ -121,7 +121,20 @@ class ItemCRUDMixin(LoginRequiredMixin, FeedMixin):
         #Only operate on items that belong to feeds the current user owns
         #"""
         #return self.model.objects.filter(feed__owner=self.request.user)
-        
+    
+    def get_success_url(self):
+        """
+        Whenever a feed is created or updated successfully this will
+        return the user to the publishnews page with the feed they just
+        messed with highlighted
+        """
+        item = getattr(self,"object",False)
+        if item:
+            return item.feed.get_modify_url() + '#item-{item_id}'.format(item_id = item.id)
+        else:
+            return reverse('publishnews')
+    
+    
     def get_context_data(self, **kwargs):
         context = super(ItemCRUDMixin, self).get_context_data(**kwargs)
         context["feed"] = self.kwargs["feed"]
