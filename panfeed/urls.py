@@ -22,7 +22,7 @@ urlpatterns = patterns('panfeed.views',
     url(r'^managefeed/(?P<feed_slug>[\w-]+)/manageissue/$','manageissue', name='newissue'),
     url(r'^managefeed/(?P<feed_slug>[\w-]+)/manageissue/(?P<issue_slug>[\w-]+)$','manageissue', name='manageissue'),
 
-    url(r'^managefeed/new/$','managefeed', name='newfeed'),
+    url(r'^managefeed/$','managefeed', name='newfeed'),
     url(r'^managefeed/(?P<feed_slug>[\w-]+)$','managefeed', name='managefeed'),
 
 
