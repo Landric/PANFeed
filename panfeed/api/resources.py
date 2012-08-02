@@ -1,7 +1,7 @@
 from django.contrib.auth.models import User
 from tastypie.resources import ModelResource
-from panfeed.auth import CustomAuthentication, CustomAuthorization
-from panfeed.models import Feed, FeedItem, SpecialIssue
+from tastypie.constants import ALL, ALL_WITH_RELATIONS
+from panfeed.models import Feed, FeedItem
 
 class FeedResource(ModelResource):
     class Meta:
@@ -15,16 +15,9 @@ class FeedResource(ModelResource):
 
 class FeedItemResource(ModelResource):
     class Meta:
-        resource_name = 'feed_item'
+        resource_name = 'feeditem'
         queryset = FeedItem.objects.all()
-        authentication = CustomAuthentication()
-        authorization = CustomAuthorization()
         allowed_methods = ['get']
-
-class SpecialIssueResource(ModelResource):
-    class Meta:
-        resource_name = 'special_issue'
-        queryset = SpecialIssue.objects.all()
-        authentication = CustomAuthentication()
-        authorization = CustomAuthorization()
-        allowed_methods = ['get']
+        filtering = {
+            "id": ALL,
+        }

@@ -13,6 +13,7 @@
 <div ng:app="panfeedModule" ng:csp ng:controller="PublishItemCtrl">
     <form action="#" method="post" class="form-horizontal">
         {% csrf_token %}
+        <input type="hidden" ng:model="id" value="{{object.id}}"/>
         <fieldset>
             <div class="control-group">
                 <div class="controls">
@@ -22,16 +23,11 @@
                 </div>
             </div>
 
-            <div ng:cloak ng:show="loading">
-                <img src="{{ STATIC_URL }}images/load.gif" alt="Loading..."/>
-            </div>
-
-            
             <div ng:cloak ng:show="loaded" class="well" id="items">
                 <div class='control-group'>
                     <label class='control-label'>URL:</label>
                     <div class='controls'>
-                        <input class="disabled" type='text' name='url' disabled="" value='[[item.url]]'/>
+                        <input class="disabled" type='text' name='url' value='[[item.url]]'/>
                     </div>
                 </div>
 
@@ -45,7 +41,7 @@
                 <div class='control-group'>
                     <label class='control-label'>Description:</label>
                     <div class='controls'>
-                        <textarea name='description'>[[item.description]]</textarea>
+                        <textarea name='content'>[[item.description]]</textarea>
                     </div>
                 </div>
 
@@ -59,13 +55,14 @@
                 <div class='control-group'>
                     <label class='control-label'>Image Preview:</label>
                     <div class='controls'>
-                        <img src='[[item.image]]' alt='URL does not resolve to image.' /><br />
+                        <img src='[[item.image]]' alt='URL does not resolve to an image.' /><br />
                     </div>
                 </div>
             </div>
+
             <div class="control-group">
                 <div class="controls">
-                    {% if form.is_bound %}
+                    {% if object %}
                         <input type="submit" value="Save" class="btn btn-primary"/>&nbsp;&nbsp;
                     {% else %}
                         <input type="submit" value="Publish" class="btn btn-primary"/>&nbsp;&nbsp;

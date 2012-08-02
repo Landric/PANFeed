@@ -132,6 +132,10 @@ class ItemDetailView(ItemCRUDMixin, DetailView):
 class ItemCreateView(ItemCRUDMixin, CreateView):
     template_name = "panfeed/feeditem_form.html"
     
+    def form_invalid(self,form):
+        print form.errors
+        return super(ItemCreateView, self).form_invalid(form)
+
     def form_valid(self,form):
         print "form valid"
         self.object = form.save(commit=False)
@@ -192,7 +196,6 @@ class IssueCreateView(IssueCRUDMixin, CreateView):
     template_name = "panfeed/specialissue_form.html"
     
     def form_valid(self,form):
-        print "form valid"
         self.object = form.save(commit=False)
         self.object.feed_id = Feed.objects.get(slug=self.kwargs["feed"]).id
         self.object.save()

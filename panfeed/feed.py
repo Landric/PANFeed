@@ -123,7 +123,7 @@ class UserFeed(Feed):
         return item.url
 
     def item_pubdate(self,item):
-        return item.date
+        return item.created
 
     def get_object(self,request,feed_slug):
         return get_object_or_404(MFeed, slug=feed_slug);

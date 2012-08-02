@@ -76,10 +76,9 @@ class FeedItem(TimeStampedModel):
     content = models.TextField(help_text='This content will be displayed in the viewer\'s Feed Reader. They can still click the link to view the full article')
     url = models.URLField("URL", max_length=6249)
     img = models.URLField("image", max_length=6249, blank=True)
-    date = models.DateTimeField(default=datetime.now, blank=True)
     feed = models.ForeignKey(Feed)
-    special_issue = models.ForeignKey(SpecialIssue, null=True)
-    issue_position = models.IntegerField(null=True, db_index=True)
+    special_issue = models.ForeignKey(SpecialIssue, null=True, blank=True)
+    issue_position = models.IntegerField(null=True, db_index=True, blank=True)
     
     @models.permalink
     def get_modify_url(self):

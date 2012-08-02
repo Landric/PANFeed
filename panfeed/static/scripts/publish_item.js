@@ -25,6 +25,27 @@ function PublishItemCtrl($scope)
                 $scope.loading = false;
             }
         });
-        console.log($scope.item);
     };
+
+    $scope.fetch = function(item_id)
+    {
+        $http(
+        {
+            method: "GET",
+            url: '/api/v2/feeditem/?format=json&limit=1&id='+item_id,
+            cache: $templateCache,
+            transformResponse: function(data,headersGetter)
+            {
+                return JSON.parse(data).objects;
+            }
+        }).success(function(data,status)
+        {
+            $scope.item = data;
+        });
+     }
+    
+    if($scope.id != undefined)
+    {
+        $scope.fetch($scope.id);
+    }
 }
