@@ -134,7 +134,7 @@ class ItemCreateView(ItemCRUDMixin, CreateView):
     
     def form_valid(self,form):
         self.object = form.save(commit=False)
-        self.object.feed_id = Feed.objects.get(slug=self.kwargs["feed"]).id
+        self.object.feed = self.kwargs["feed"]
         self.object.save()
         return super(ItemCreateView, self).form_valid(form)
         
