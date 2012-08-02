@@ -111,7 +111,7 @@ class ItemMixin(object):
 class ItemListView(ItemMixin, ListView):
     context_object_name = "items"
 
-class ItemCRUDMixin(LoginRequiredMixin, FeedMixin):
+class ItemCRUDMixin(LoginRequiredMixin, ItemMixin):
     form_class = FeedItemForm
     def get_success_url(self):
         return reverse('publishnews')
