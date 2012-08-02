@@ -124,7 +124,7 @@ class ItemCRUDMixin(LoginRequiredMixin, FeedMixin):
         
     def get_context_data(self, **kwargs):
         context = super(ItemCRUDMixin, self).get_context_data(**kwargs)
-        context["feed"] = get_object_or_404(Feed, slug=self.kwargs["feed"])
+        context["feed"] = self.kwargs["feed"]
         return context
 
 class ItemDetailView(ItemCRUDMixin, DetailView):
@@ -132,12 +132,7 @@ class ItemDetailView(ItemCRUDMixin, DetailView):
 class ItemCreateView(ItemCRUDMixin, CreateView):
     template_name = "panfeed/feeditem_form.html"
     
-    def form_invalid(self,form):
-        print form.errors
-        return super(ItemCreateView, self).form_invalid(form)
-
     def form_valid(self,form):
-        print "form valid"
         self.object = form.save(commit=False)
         self.object.feed_id = Feed.objects.get(slug=self.kwargs["feed"]).id
         self.object.save()
@@ -153,19 +148,18 @@ def manageitem(request, feed_slug, item_slug=None):
     Route to the correct view based on Method or the existance of
     item_id.
     """
-    
     feed = get_object_or_404(Feed, slug=feed_slug)
+    
     if feed.owner != request.user:
         return HttpResponseForbidden("You do not have permission to edit this Feed.")
 
     if request.method == 'DELETE':
         return ItemDeleteView.as_view()(request=request, slug=item_slug)
     else:
-        print request.POST
         if item_slug:
-            return ItemUpdateView.as_view()(request=request, feed=feed_slug, slug=item_slug)
+            return ItemUpdateView.as_view()(request=request, feed=feed, slug=item_slug)
         else:
-            return ItemCreateView.as_view()(request=request, feed=feed_slug)
+            return ItemCreateView.as_view()(request=request, feed=feed)
 
 
 class IssueMixin(object):

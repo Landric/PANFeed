@@ -81,8 +81,12 @@ class FeedItem(TimeStampedModel):
     issue_position = models.IntegerField(null=True, db_index=True, blank=True)
     
     @models.permalink
-    def get_modify_url(self):
+    def get_absolute_url(self):
         return ("manageitem", [str(self.feed.slug), str(self.slug)])
-    
+
+    @models.permalink
+    def get_modify_url(self):
+        return ("manageitem", [str(self.feed.slug), str(self.slug)])    
+
     def __unicode__(self):
         return self.title

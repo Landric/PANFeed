@@ -42,7 +42,7 @@
                                 <tr>
                                     <td>{{item.title}}</td>
                                     <td>{{item.created}}</td>
-                                    <td><input type="submit" value="Edit" class="btn"/></td>
+                                    <td><a href="{{ item.get_modify_url }}" class="btn">Edit</a></td>
                                     <td><input type="submit" value="Delete" class="btn"/></td>
                                 </tr>
                             {% endfor %}
