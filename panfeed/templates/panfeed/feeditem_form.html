@@ -4,7 +4,7 @@
 {% block title %}Publish Item{% endblock title %}
 {% block publish_nav %}active{% endblock publish_nav %}
 {% block content %}
-{% if form.is_bound %}
+{% if object %}
     <h2>Edit Item in "{{feed.title}}"</h2>
 {% else %}
     <h2>Publish Item to "{{feed.title}}"</h2>
@@ -13,7 +13,9 @@
 <div ng:app="panfeedModule" ng:csp ng:controller="PublishItemCtrl">
     <form action="#" method="post" class="form-horizontal">
         {% csrf_token %}
-        <input type="hidden" ng:model="id" value="{{object.id}}"/>
+        {% if object %}
+            <input type="hidden" ng:model="id" value="{{object.id}}"/>
+        {% endif %}
         <fieldset>
             <div class="control-group">
                 <div class="controls">
