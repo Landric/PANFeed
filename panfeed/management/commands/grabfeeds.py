@@ -1,5 +1,7 @@
 from django.core.management.base import BaseCommand
 from panfeed.models import AcademicFeeds, Corpus
+from xml.sax import SAXException
+from contextlib import closing
 
 import feedparser
 import urllib2
@@ -20,26 +22,28 @@ def build_corpus():
 
     for feed in PB()(AcademicFeeds.objects.all()):
         try:
-            page = urllib2.urlopen(feed.url)
-            parsedfeed = feedparser.parse(page)
-            for item in parsedfeed.entries:
-                if hasattr(item,"date_parsed"):
-                    d = datetime.datetime(*(item.date_parsed[0:6]))
-                else:
-                    d=datetime.datetime.now()
-                try:
-                    defaults = dict(
-                        title=item.title,
-                        description=item.description,
-                        date=d
-                    )
-                    corpus, created = Corpus.objects.get_or_create(url=item.link, feed=feed, defaults=defaults)
-                    if not created:
-                        corpus.title=item.title
-                        corpus.description=item.description
-                        corpus.date=d
-                        corpus.save()
-                except Exception as e:
-                    print(e)
+            with closing(urllib2.urlopen(feed.url)) as page:
+                parsedfeed = feedparser.parse(page)
+                for item in parsedfeed.entries:
+                    if hasattr(item,"date_parsed"):
+                        d = datetime.datetime(*(item.date_parsed[0:6]))
+                    else:
+                        d=datetime.datetime.now()
+                    try:
+                        defaults = dict(
+                            title=item.title,
+                            description=item.description,
+                            date=d
+                        )
+                        corpus, created = Corpus.objects.get_or_create(url=item.link, feed=feed, defaults=defaults)
+                        if not created:
+                            corpus.title=item.title
+                            corpus.description=item.description
+                            corpus.date=d
+                            corpus.save()
+                    except Exception as e:
+                        print(e)
         except urllib2.URLError:
             print "Error getting page: ", feed.url
+        except SAXException:
+            print "Error parsing page: ", feed.url
