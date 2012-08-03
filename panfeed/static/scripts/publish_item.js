@@ -43,7 +43,7 @@ function PublishItemCtrl($scope)
             $scope.item = data;
         });
      }
-    
+    console.log($scope.id);
     if($scope.id != undefined)
     {
         $scope.fetch($scope.id);
