@@ -76,9 +76,9 @@ class SpecialIssue(models.Model):
 class FeedItem(TimeStampedModel):
     title = models.CharField(max_length=60)
     slug = AutoSlugField(_('slug'), populate_from='title')
-    content = models.TextField(help_text='This content will be displayed in the viewer\'s Feed Reader. They can still click the link to view the full article')
+    description = models.TextField(help_text='This content will be displayed in the viewer\'s Feed Reader. They can still click the link to view the full article')
     url = models.URLField("URL", max_length=6249)
-    img = models.URLField("image", max_length=6249, blank=True)
+    image = models.URLField("image", max_length=6249, blank=True)
     feed = models.ForeignKey(Feed)
     special_issue = models.ForeignKey(SpecialIssue, null=True, blank=True)
     issue_position = models.IntegerField(null=True, db_index=True, blank=True)

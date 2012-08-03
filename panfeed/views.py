@@ -1,4 +1,3 @@
-# Create your views here.
 from django.http import HttpResponse,HttpResponseRedirect,HttpResponseForbidden, Http404
 import feedparser
 import json
@@ -116,11 +115,9 @@ class ItemCRUDMixin(LoginRequiredMixin, ItemMixin):
     def get_success_url(self):
         return reverse('publishnews')
     
-    #def get_queryset(self):
-        #"""
+    def get_queryset(self):
         #Only operate on items that belong to feeds the current user owns
-        #"""
-        #return self.model.objects.filter(feed__owner=self.request.user)
+        return self.model.objects.filter(feed__owner=self.request.user)
     
     def get_success_url(self):
         """

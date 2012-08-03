@@ -1,5 +1,6 @@
-function PublishItemCtrl($scope)
+function PublishItemCtrl($scope, $http, $templateCache)
 {
+    //$scope.id = 1;
     $scope.item;
     $scope.loading = false;
     $scope.loaded = false;
@@ -36,11 +37,14 @@ function PublishItemCtrl($scope)
             cache: $templateCache,
             transformResponse: function(data,headersGetter)
             {
+                $scope.loading = true;
                 return JSON.parse(data).objects;
             }
         }).success(function(data,status)
         {
-            $scope.item = data;
+            $scope.item = data[0];
+            $scope.loaded = true;
+            $scope.loading = false;
         });
      }
     console.log($scope.id);

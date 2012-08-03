@@ -117,7 +117,7 @@ class UserFeed(Feed):
         return item.title
 
     def item_description(self,item):
-        return "<img src='"+item.img+"' /> " + item.content
+        return "<img src='"+item.image+"' /> " + item.description
 
     def item_link(self,item):
         return item.url
