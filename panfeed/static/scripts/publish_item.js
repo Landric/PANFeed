@@ -33,9 +33,8 @@ function PublishItemCtrl($scope, $http, $templateCache)
         {
             method: "GET",
             url: '/api/v2/feeditem/',
-            data:
+            params:
             {
-                format:'json',
                 limit:1,
                 id:item_id,
             },
