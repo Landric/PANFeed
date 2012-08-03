@@ -69,7 +69,8 @@
             </div>
         {% endfor %}
         {% if object %}
-                <a class="btn btn-primary" href="{% url 'newitem' object.slug %}">Create an item</a>
+                <a class="btn btn-primary" href="{% url 'newitem' object.slug %}">Publish an item</a>
+                <a class="btn btn-primary" href="{% url 'newissue' object.slug %}">Publish a Special Issue</a>
         {% endif %}
     </div>
 {% endblock content %}
