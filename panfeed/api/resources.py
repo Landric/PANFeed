@@ -20,4 +20,5 @@ class FeedItemResource(ModelResource):
         allowed_methods = ['get']
         filtering = {
             "id": ALL,
+            "special_issue": ALL,
         }
