@@ -181,7 +181,7 @@ class IssueMixin(object):
 class IssueListView(IssueMixin, ListView):
     context_object_name = "issues"
 
-class IssueCRUDMixin(LoginRequiredMixin, FeedMixin):
+class IssueCRUDMixin(LoginRequiredMixin, IssueMixin):
     form_class = SpecialIssueForm
     def get_success_url(self):
         return reverse('publishnews')
