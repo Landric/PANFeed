@@ -10,12 +10,9 @@
     <h2>Publish Item to "{{feed.title}}"</h2>
 {% endif %}
 <br/>
-<div ng:app="panfeedModule" ng:csp ng:controller="PublishItemCtrl">
+<div ng:app="panfeedModule" ng:csp ng:controller="PublishItemCtrl" {% if object %} ng:init="fetch({{object.id}})" {% endif %}>
     <form action="#" method="post" class="form-horizontal">
         {% csrf_token %}
-        {% if object %}
-            <input type="hidden" ng:model="id" value="{{object.id}}"/>
-        {% endif %}
         <fieldset>
             <div class="control-group">
                 <div class="controls">
@@ -44,7 +41,7 @@
                     <label class='control-label'>Description:</label>
                     <div class='controls'>
                         <textarea name='description'>[[item.description]]</textarea>
-                        <span class="help-inline">This should contain a brief summary of the item - the reader can still click through to view the whole resource.</span>
+                        <span class="help-block">This should contain a brief summary of the item - the reader can still click through to view the whole resource.</span>
                     </div>
                 </div>
 

@@ -1,6 +1,5 @@
 function PublishItemCtrl($scope, $http, $templateCache)
 {
-    //$scope.id = 1;
     $scope.item;
     $scope.loading = false;
     $scope.loaded = false;
@@ -33,7 +32,13 @@ function PublishItemCtrl($scope, $http, $templateCache)
         $http(
         {
             method: "GET",
-            url: '/api/v2/feeditem/?format=json&limit=1&id='+item_id,
+            url: '/api/v2/feeditem/',
+            data:
+            {
+                format:'json',
+                limit:1,
+                id:item_id,
+            },
             cache: $templateCache,
             transformResponse: function(data,headersGetter)
             {
@@ -47,9 +52,4 @@ function PublishItemCtrl($scope, $http, $templateCache)
             $scope.loading = false;
         });
      }
-    console.log($scope.id);
-    if($scope.id != undefined)
-    {
-        $scope.fetch($scope.id);
-    }
 }
