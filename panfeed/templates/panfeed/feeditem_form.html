@@ -14,6 +14,10 @@
     <form action="#" method="post" class="form-horizontal">
         {% csrf_token %}
         <fieldset>
+        {%if form.errors %}
+            {{form.errors}}
+        {% endif %}
+
             <div class="control-group">
                 <div class="controls">
                     <div class=input-append">
