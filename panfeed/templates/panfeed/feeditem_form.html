@@ -14,7 +14,7 @@
     <form action="#" method="post" class="form-horizontal">
         {% csrf_token %}
         <fieldset>
-        {%if form.errors %}
+        {% if form.errors %}
             {{form.errors}}
         {% endif %}
 

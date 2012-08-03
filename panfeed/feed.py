@@ -88,10 +88,10 @@ class UserFeed(Feed):
 
     def items(self,feed):
         if(feed.displayAll):
-            return FeedItem.objects.filter(feed=feed).order_by("-date")
+            return FeedItem.objects.filter(feed=feed).order_by("-created")
 
         else:  
-            latest_item = FeedItem.objects.filter(feed=feed).order_by("-date")[:1]
+            latest_item = FeedItem.objects.filter(feed=feed).order_by("-created")[:1]
             if latest_item:
                 latest_item = latest_item.select_related().get()
 
