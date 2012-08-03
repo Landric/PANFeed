@@ -3,66 +3,59 @@ function PublishIssueCtrl($scope)
     $scope.items;
     $scope.loading = false;
     $scope.loaded = false;
-    
-    function addURLsAsItems(from_id, to_id) 
-    {
-        var issueUrls = $("#"+from_id).val().split("\n");
-
-        // alert(issueUrls[0]);
-        $("#"+from_id).val("");
-
-        for(var url in issueUrls)
-        {
-            // setTimeout stops the ajax hammering the server. django was having a tantrum so i thought this seemed like the simplest fix
-            // if anyone has time to work out whats up please let me know
-            setTimeout("doAjax('"+issueUrls[url]+"', '"+from_id+"', '"+to_id+"')", url*2000);
-        }
-    }
 
     $scope.convertURL = function()
     {
+        var issue_urls = $scope.urls.split("\n");
         var converter_url = "/urltoitem";
-        jQuery.ajax(
-        { 
-            url:converter_url,
-            data: { url:$scope.url },
-            dataType:"json",
-            async: false,
-            beforeSend: function(xhr, status) 
-            {
-                $scope.loading = true;
-            },
-            success: function(data, status,request)
-            {
-                data.url = $scope.url;
-                $scope.item = data;
-                $scope.loaded = true;
-                $scope.loading = false;
-            }
-        });
-        console.log($scope.item);
+
+        for(var url in issue_urls)
+        {
+            jQuery.ajax(
+            { 
+                url:converter_url,
+                data: { url:$scope.url },
+                dataType:"json",
+                async: false,
+                beforeSend: function(xhr, status) 
+                {
+                    $scope.loading = true;
+                },
+                success: function(data, status,request)
+                {
+                    data.url = $scope.url;
+                    $scope.items = $scope.items + data;
+                    $scope.loaded = true;
+                    $scope.loading = false;
+                }
+            });
+        }
     };
 
-    function loadIssueItems(issueid, dom_id)
+    $scope.fetch = function(issue_id)
     {
-        jQuery.ajax(
+        $http(
         {
-            url:"/issueitems/"+issueid,
-            dataType:"json",
-            success: function(data, status,request)
+            method: "GET",
+            url: '/api/v2/feeditem/',
+            params:
             {
-                for(var i=0; i<data.length; i++)
-                {
-                    document.itemCounter++;
-                    $('#'+dom_id).append("<div class='item loading'><img src='/static/images/load.gif' alt='' /></div>");
-                    var div = $('.item.loading').first();
-                    div.removeClass('loading');
-                    div.html(renderIssueItem(data[i]));
-                }
+                limit:0,
+                special_issue:issue_id,
+            },
+            cache: $templateCache,
+            transformResponse: function(data,headersGetter)
+            {
+                $scope.loading = true;
+                return JSON.parse(data).objects;
             }
+        }).success(function(data,status)
+        {
+            $scope.items = data;
+            $scope.loaded = true;
+            $scope.loading = false;
         });
-
-    }
+     }
 
     function moveUpItem(itemId)
     {

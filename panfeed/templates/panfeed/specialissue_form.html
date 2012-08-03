@@ -10,7 +10,7 @@
     <h2>Publish Special Issue to "{{feed.title}}"</h2>
 {% endif %}
 <br/>
-<div ng:app="panfeedModule" ng:csp ng:controller="PublishCtrl">
+<div ng:app="panfeedModule" ng:csp ng:controller="PublishIssueCtrl" {% if object %} ng:init="fetch({{object.id}})" {% endif %}>
     <form action="#" method="post" class="form-horizontal">
         {% csrf_token %}
         <fieldset>
