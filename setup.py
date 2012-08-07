@@ -24,7 +24,7 @@ setup(
         "Django",
         "feedparser",
         "django-jquery",
-        "django-respite",
+        "django-respite >= 1.2.0",
         "django-registration",
         "django-csp",
         "django-browserid",
