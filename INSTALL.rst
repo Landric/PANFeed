@@ -3,7 +3,7 @@ Install
 =======
 
 1. Install dependencies using setup.py
-2. Edit local_settings.py in this directory and set up your server specific details::
+2. Create local_settings.py in this directory and set up your server specific details::
 
     DATABASES = {
         'default': {
@@ -16,12 +16,18 @@ Install
         }
     }
 
-    SECRET_KEY = '{{generated secret key}}'
+    ADMINS = (
+        ('{{Your Name}}', '{{Your Email}}'),
+    )
+
+    MANAGERS = ADMINS
+
+    SECRET_KEY = '{{Generated secret key}}'
 
     DEBUG = False
     TEMPLATE_DEBUG = DEBUG
     
-    SITE_URL = '{{ your site url}}'
+    SITE_URL = '{{Your site url}}'
 
 3. Install the database schema and fixtures using::
 
