@@ -34,8 +34,9 @@
                     <button ng:click="convertURLs()" class="btn" type="button">Add URLs</button>
                 </div>
             </div>
+            <img src="{{STATIC_URL}}images/load.gif" ng:cloak ng:show="loading"/>
 
-            <div ng:repeat="item in items|orderBy:item.issuePosition">
+            <div ng:cloak ng:show="loaded" ng:repeat="item in items|orderBy:item.issuePosition">
                 <div ng:cloak class="well">
                     <div class='control-group'>
                         <div class='controls'>
@@ -50,7 +51,7 @@
                     <div class='control-group'>
                         <label class='control-label'>URL:</label>
                         <div class='controls'>
-                            <input class="disabled" type='text' name='item-url' value='[[item.url]]'/>
+                            <input type='text' name='url' value='[[item.url]]'/>
                         </div>
                     </div>
 

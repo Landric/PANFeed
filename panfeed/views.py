@@ -235,17 +235,20 @@ def manageissue(request, feed_slug, issue_slug=None):
 
 def urltoitem(request):
     try:
-        url = (request.GET["url"])
+        urls = request.GET.getlist("url")
     except:
         raise Http404
     
-    og = ogp.OpenGraph(
-        url=url,
-        required_attrs = ("title", "description", "image"),
-        scrape=True,
-    )
+    items = []
+    for url in urls:
+        og = ogp.OpenGraph(
+            url=url,
+            required_attrs = ("title", "description", "image", "url"),
+            scrape=True,
+        )
+        items.append(og.items)
 
-    return HttpResponse(json.dumps(og.items), mimetype="application/json")
+    return HttpResponse(json.dumps(items), mimetype="application/json")
 
 def submit(request):
     if request.method == 'POST':
