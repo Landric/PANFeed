@@ -48,7 +48,7 @@
                         </div>
                     </div>
 
-                    <input type='hidden' ng:model="item.issuePosition" name='issuePosition' {% if object %}value='item.issuePosition'{% else %}value='[[$index+1]]'{% endif %}/>
+                    <input type='hidden' ng:model="items[ [[$index]] ].issuePosition" name='issuePosition' {% if object %}value='item.issuePosition'{% else %}value='[[$index+1]]'{% endif %}/>
 
                     <div class='control-group'>
                         <label class='control-label'>URL:</label>
