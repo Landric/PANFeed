@@ -1,20 +1,20 @@
 function PublishIssueCtrl($scope)
 {
-    $scope.items;
+    $scope.items = [];
     $scope.loading = false;
     $scope.loaded = false;
 
-    $scope.convertURL = function()
+    $scope.convertURLs = function()
     {
         var issue_urls = $scope.urls.split("\n");
         var converter_url = "/urltoitem";
 
-        for(var url in issue_urls)
+        for(var item_url in issue_urls)
         {
             jQuery.ajax(
             { 
                 url:converter_url,
-                data: { url:$scope.url },
+                data: { url:issue_urls[item_url] },
                 dataType:"json",
                 async: false,
                 beforeSend: function(xhr, status) 
@@ -24,7 +24,7 @@ function PublishIssueCtrl($scope)
                 success: function(data, status,request)
                 {
                     data.url = $scope.url;
-                    $scope.items = $scope.items + data;
+                    $scope.items.push(data);
                     $scope.loaded = true;
                     $scope.loading = false;
                 }
@@ -51,7 +51,7 @@ function PublishIssueCtrl($scope)
             }
         }).success(function(data,status)
         {
-            $scope.items = data;
+            $scope.items = $scope.items + data;
             $scope.loaded = true;
             $scope.loading = false;
         });
