@@ -1,6 +1,6 @@
 function PublishIssueCtrl($scope)
 {
-    $scope.items = [];
+    $scope.items;
     $scope.loading = false;
     $scope.loaded = false;
 
@@ -8,32 +8,27 @@ function PublishIssueCtrl($scope)
     {
         var issue_urls = $scope.urls.split("\n");
         var converter_url = "/urltoitem";
+        $scope.loading = true;
 
-        for(var item_url in issue_urls)
-        {
-            jQuery.ajax(
-            { 
-                url:converter_url,
-                data: { url:issue_urls[item_url] },
-                dataType:"json",
-                async: false,
-                beforeSend: function(xhr, status) 
-                {
-                    $scope.loading = true;
-                },
-                success: function(data, status,request)
-                {
-                    data.url = $scope.url;
-                    $scope.items.push(data);
-                    $scope.loaded = true;
-                    $scope.loading = false;
-                }
-            });
-        }
+        jQuery.ajax(
+        { 
+            url:converter_url,
+            data: { url:issue_urls },
+            traditional: true,
+            dataType:"json",
+            success: function(data, status,request)
+            {
+                $scope.items = data;
+                $scope.loaded = true;
+                $scope.loading = false;
+                $scope.$apply();
+            }
+        });
     };
 
     $scope.fetch = function(issue_id)
     {
+        $scope.loading = true;
         $http(
         {
             method: "GET",
@@ -46,12 +41,11 @@ function PublishIssueCtrl($scope)
             cache: $templateCache,
             transformResponse: function(data,headersGetter)
             {
-                $scope.loading = true;
                 return JSON.parse(data).objects;
             }
         }).success(function(data,status)
         {
-            $scope.items = $scope.items + data;
+            $scope.items = data;
             $scope.loaded = true;
             $scope.loading = false;
         });

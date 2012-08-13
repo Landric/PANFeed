@@ -7,28 +7,26 @@ function PublishItemCtrl($scope, $http, $templateCache)
     $scope.convertURL = function()
     {
         var converter_url = "/urltoitem";
+        $scope.loading = true;
         jQuery.ajax(
         { 
             url:converter_url,
             data: { url:$scope.url },
             dataType:"json",
-            async: false,
-            beforeSend: function(xhr, status) 
-            {
-                $scope.loading = true;
-            },
+            traditional: true,
             success: function(data, status,request)
             {
-                data.url = $scope.url;
-                $scope.item = data;
+                $scope.item = data[0];
                 $scope.loaded = true;
                 $scope.loading = false;
+                $scope.$apply();
             }
         });
     };
 
     $scope.fetch = function(item_id)
     {
+        $scope.loading = true;
         $http(
         {
             method: "GET",
@@ -41,7 +39,6 @@ function PublishItemCtrl($scope, $http, $templateCache)
             cache: $templateCache,
             transformResponse: function(data,headersGetter)
             {
-                $scope.loading = true;
                 return JSON.parse(data).objects;
             }
         }).success(function(data,status)
