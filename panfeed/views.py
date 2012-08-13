@@ -187,12 +187,6 @@ class IssueCRUDMixin(LoginRequiredMixin, IssueMixin):
     def get_success_url(self):
         return reverse('publishnews')
     
-    #def get_queryset(self):
-        #"""
-        #Only operate on issues that belong to feeds the current user owns
-        #"""
-        #return self.model.objects.filter(feed__owner=self.request.user)
-        
     def get_context_data(self, **kwargs):
         context = super(IssueCRUDMixin, self).get_context_data(**kwargs)
         context["feed"] = get_object_or_404(Feed, slug=self.kwargs["feed"])

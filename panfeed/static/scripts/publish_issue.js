@@ -76,9 +76,4 @@ function PublishIssueCtrl($scope)
             $("#"+itemId).parent().remove();
         });
     }
-
-    function changeImg(imgId, urlId)
-    {
-        $('#'+imgId).attr('src', $('#'+urlId).val());
-    }
 }
