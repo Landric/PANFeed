@@ -49,31 +49,25 @@ function PublishIssueCtrl($scope)
             $scope.loaded = true;
             $scope.loading = false;
         });
-     }
+     };
 
-    function moveUpItem(itemId)
+    $scope.moveUp = function(itemId)
     {
-        var boxToMove = $('#'+itemId).parent();
-        var prevBox = boxToMove.prev();
-        boxToMove.detach();
-        boxToMove.insertBefore(prevBox);
-        $(window).scrollTop(boxToMove.offset().top);
-    }
-
-    function moveDownItem(itemId)
-    {
-        var boxToMove = $('#'+itemId).parent();
-        var nextBox = boxToMove.next();
-        boxToMove.detach();
-        boxToMove.insertAfter(nextBox);
-        $(window).scrollTop(boxToMove.offset().top);
-    }
-
-    function deleteItem(itemId)
-    {
-        $("#"+itemId).parent().slideUp('400', function() 
+        if($scope.items[itemId].issuePosition > 1)
         {
-            $("#"+itemId).parent().remove();
-        });
-    }
+            $scope.items[itemId].issuePosition = $scope.items[itemId].issuePosition - 1;
+            $scope.items[itemId-1].issuePosition = $scope.items[itemId].issuePosition + 1;
+        }
+    };
+
+    $scope.moveDown = function(itemId)
+    {
+        $scope.items[itemId].issuePosition = $scope.items[itemId].issuePosition + 1;
+        $scope.items[itemId+1].issuePosition = $scope.items[itemId].issuePosition - 1;
+    };
+
+    $scope.remove = function(itemId)
+    {
+        $scope.items.splice(itemId, 1);
+    };
 }

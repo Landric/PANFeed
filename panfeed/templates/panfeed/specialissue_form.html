@@ -41,14 +41,14 @@
                     <div class='control-group'>
                         <div class='controls'>
                             <div class='btn-group'>
-                                <button type='button' class='btn' title='Move this item up' alt='Move this item up'><i class='icon-arrow-up'></i></button>
-                                <button type='button' class='btn' title='Move this item down' alt='Move this item down'><i class='icon-arrow-down'></i></button>
-                                <button type='button' class='btn' title='Delete this item' alt='Delete this item'><i class='icon-trash'></i></button>
+                                <button ng:click="moveUp($index)" type='button' class='btn' title='Move this item up' alt='Move this item up'><i class='icon-arrow-up'></i></button>
+                                <button ng:click="moveDown($index)" type='button' class='btn' title='Move this item down' alt='Move this item down'><i class='icon-arrow-down'></i></button>
+                                <button ng:click="remove($index)" type='button' class='btn' title='Delete this item' alt='Delete this item'><i class='icon-trash'></i></button>
                             </div>
                         </div>
                     </div>
 
-                    <input type='hidden' name='order' value='[[$index+1]]'/>
+                    <input type='hidden' ng:model="item.issuePosition" name='issuePosition' {% if object %}value='item.issuePosition'{% else %}value='[[$index+1]]'{% endif %}/>
 
                     <div class='control-group'>
                         <label class='control-label'>URL:</label>
@@ -75,7 +75,7 @@
                         <label class='control-label'>Image URL:</label>
                         <div class='controls'>
                             <div class='input-append'>
-                                <input type='text' ng:model="item.image" name='image' value='[[item.image]]'/><input type='button' class='btn' value='Update Image' />
+                                <input type='text' ng:model="item.image" name='image' value='[[item.image]]'/>
                             </div>
                         </div>
                     </div>
