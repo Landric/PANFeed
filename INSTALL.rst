@@ -16,18 +16,14 @@ Install
         }
     }
 
-    ADMINS = (
-        ('{{Your Name}}', '{{Your Email}}'),
-    )
-
-    MANAGERS = ADMINS
-
     SECRET_KEY = '{{Generated secret key}}'
 
     DEBUG = False
     TEMPLATE_DEBUG = DEBUG
     
     SITE_URL = '{{Your site url}}'
+
+    {{Any other local settings, e.g. ADMINS, TIME_ZONE, etc.}}
 
 3. Install the database schema and fixtures using::
 
