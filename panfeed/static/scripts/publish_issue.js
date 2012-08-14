@@ -1,5 +1,7 @@
 function PublishIssueCtrl($scope)
 {
+    $scope.title = '';
+    $scope.editorial = '';
     $scope.items;
     $scope.loading = false;
     $scope.loaded = false;
@@ -48,11 +50,13 @@ function PublishIssueCtrl($scope)
             $scope.items = data;
             $scope.loaded = true;
             $scope.loading = false;
+            $scope.$apply();
         });
      };
 
     $scope.moveUp = function(itemId)
     {
+        console.log($scope.items[itemId]);
         if(itemId > 0)
         {
             var item = $scope.items[itemId];
@@ -75,4 +79,81 @@ function PublishIssueCtrl($scope)
     {
         $scope.items.splice(itemId, 1);
     };
+
+    $scope.publish = function()
+    {
+        if($scope.title == '')
+        {
+            alert("Need a title");
+        }
+        if($scope.editorial == '')
+        {
+            alert("Need a description");
+        }
+        if($scope.items.length == 0)
+        {
+            alert("Need items");
+        }
+
+        var item = {title:$scope.title, description:$scope.editorial, url:"", image:""};
+        $scope.items.unshift(item);
+
+        var issue = publishIssue();
+
+        for(var item in $scope.items)
+        {
+            $scope.items[item].issue_position = item;
+            $scope.items[item].feed = $scope.feed;
+            $scope.items[item].special_issue = issue;
+            publishIssue($scope.items[item]);
+        }
+    };
+
+    function publishIssue()
+    {
+        $http(
+        {
+            method: "GET",
+            url: '/api/v2/feeditem/',
+            params:
+            {
+                limit:0,
+                special_issue:issue_id,
+            },
+            cache: $templateCache,
+            transformResponse: function(data,headersGetter)
+            {
+                return JSON.parse(data).objects;
+            }
+        }).success(function(data,status)
+        {
+            $scope.items = data;
+            $scope.loaded = true;
+            $scope.loading = false;
+        });
+    }
+
+    function publishItem(item)
+    {
+        $http(
+        {
+            method: "GET",
+            url: '/api/v2/feeditem/',
+            params:
+            {
+                limit:0,
+                special_issue:issue_id,
+            },
+            cache: $templateCache,
+            transformResponse: function(data,headersGetter)
+            {
+                return JSON.parse(data).objects;
+            }
+        }).success(function(data,status)
+        {
+            $scope.items = data;
+            $scope.loaded = true;
+            $scope.loading = false;
+        });
+    }
 }

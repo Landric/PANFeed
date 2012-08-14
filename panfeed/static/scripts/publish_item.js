@@ -46,6 +46,7 @@ function PublishItemCtrl($scope, $http, $templateCache)
             $scope.item = data[0];
             $scope.loaded = true;
             $scope.loading = false;
+            $scope.$apply();
         });
      }
 }

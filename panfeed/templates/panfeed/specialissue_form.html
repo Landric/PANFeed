@@ -14,17 +14,18 @@
     <form action="#" method="post" class="form-horizontal">
         {% csrf_token %}
         <fieldset>
+            <input type="hidden" ng:model="feed" value="{{feed.id}}"/>
             <div class='control-group'>
                <label class='control-label'>Special Issue title:</label>
                 <div class='controls'>
-                    <input type='text' name='issue-title' value=''/>
+                    <input ng:model="title" type='text' name='issue-title' value=''/>
                 </div>
             </div>
 
             <div class='control-group'>
                 <label class='control-label'>Editorial:</label>
                 <div class='controls'>
-                   <textarea name='issue-editorial'></textarea>
+                   <textarea ng:model="editorial" name='issue-editorial'></textarea>
                 </div>
             </div>
 
@@ -90,9 +91,9 @@
             <div class="control-group">
                 <div class="controls">
                     {% if object %}
-                        <input type="submit" value="Save" class="btn btn-primary"/>&nbsp;&nbsp;
+                        <input type="button" ng:click="update()" value="Save" class="btn btn-primary"/>&nbsp;&nbsp;
                     {% else %}
-                        <input type="submit" value="Publish" class="btn btn-primary"/>&nbsp;&nbsp;
+                        <input type="button" ng:click="publish()" value="Publish" class="btn btn-primary"/>&nbsp;&nbsp;
                     {% endif %}
                         <a href="{% url 'publishnews' %}" class="btn">Cancel</a>
                 </div>
