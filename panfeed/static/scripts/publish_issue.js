@@ -53,17 +53,22 @@ function PublishIssueCtrl($scope)
 
     $scope.moveUp = function(itemId)
     {
-        if($scope.items[itemId].issuePosition > 1)
+        if(itemId > 0)
         {
-            $scope.items[itemId].issuePosition = $scope.items[itemId].issuePosition - 1;
-            $scope.items[itemId-1].issuePosition = $scope.items[itemId].issuePosition + 1;
+            var item = $scope.items[itemId];
+            $scope.items[itemId] = $scope.items[itemId-1];
+            $scope.items[itemId-1] = item;
         }
     };
 
     $scope.moveDown = function(itemId)
     {
-        $scope.items[itemId].issuePosition = $scope.items[itemId].issuePosition + 1;
-        $scope.items[itemId+1].issuePosition = $scope.items[itemId].issuePosition - 1;
+        if(itemId < $scope.items.length-1)
+        {
+            var item = $scope.items[itemId];
+            $scope.items[itemId] = $scope.items[itemId+1];
+            $scope.items[itemId+1] = item;
+        }
     };
 
     $scope.remove = function(itemId)
