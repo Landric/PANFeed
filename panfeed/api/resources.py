@@ -31,10 +31,8 @@ class SpecialIssueAuthorization(Authorization):
     def apply_limits(self, request, object_list):
         if request and request.method == 'GET':
             return object_list.all()
-
-        if isinstance(object_list, Bundle):
-            if object_list.exists(feed__owner=request.user):
-                return object_list
+            
+        return object_list.filter(feed__owner=request.user)
 
         print "Issue"
         return object_list.none()
