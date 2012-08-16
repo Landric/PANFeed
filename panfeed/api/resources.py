@@ -2,19 +2,20 @@ from django.contrib.auth.models import User
 from tastypie import fields
 from tastypie.resources import ModelResource
 from tastypie.constants import ALL, ALL_WITH_RELATIONS
-from tastypie.authentication import Authentication
+from tastypie.authentication import SessionAuthentication
 from tastypie.authorization import Authorization
 from tastypie.validation import FormValidation
 from tastypie.bundle import Bundle
 from panfeed.models import Feed, FeedItem, SpecialIssue
 from panfeed.forms import FeedItemForm, SpecialIssueForm
 
-class DjangoAuthentication(Authentication):
+class WriteAuthentication(SessionAuthentication):
     def is_authenticated(self, request, **kwargs):
-        if request.method == 'GET' or request.user.is_authenticated:
+        if request.method == 'GET':
           return True
 
-        return False
+        else:
+            return super(WriteAuthentication, self).is_authenticated(self, request, **kwargs);
 
 class FeedItemAuthorization(Authorization):
     def apply_limits(self, request, object_list):
@@ -71,7 +72,7 @@ class FeedItemResource(ModelResource):
     class Meta:
         resource_name = 'feeditem'
         queryset = FeedItem.objects.all()
-        allowed_methods = ['get', 'post', 'put']
+        allowed_methods = ['get', 'patch']
         filtering = {
             "id": ALL,
             "special_issue": ALL,

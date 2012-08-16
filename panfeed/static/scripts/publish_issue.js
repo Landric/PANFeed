@@ -124,29 +124,35 @@ function PublishIssueCtrl($scope)
             {
                 var issue_id =  request.getResponseHeader("Location");
                 editorial.special_issue = URI(issue_id).path().toString();
-                publishItem(editorial);
+
+                var batch_items = [];
+                batch_items.push(editorial);
+
                 for(var item in issue_items)
                 {
                     issue_items[item].special_issue = URI(issue_id).path().toString();
-                    publishItem(issue_items[item]); //These could be bundled into a single PATCH request if performance becomes an issue. AUTHORIZATION WILL NEED TO BE UPDATED IF YOU DO THIS
+                    batch_items.push(issue_items[item]);
                 }
+
+                publishItems(batch_items);
             }
         });
     }
 
-    function publishItem(item)
+    function publishItems(items)
     {
+        var objects = {'objects':items};
         $.ajax(
         {
             url: '/api/v2/feeditem/',
-            type: 'POST',
+            type: 'PATCH',
             contentType: 'application/json',
-            data: JSON.stringify(item),
+            data: JSON.stringify(objects),
             dataType: 'json',
             processData: false,
             success: function(data, status, request)
             {
-                //window.location = "/publishnews";
+                window.location = "/publishnews";
             }
         });
     }
