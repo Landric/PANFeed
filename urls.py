@@ -7,11 +7,12 @@ from django.contrib import admin
 admin.autodiscover()
 
 from tastypie.api import Api
-from panfeed.api.resources import FeedResource, FeedItemResource
+from panfeed.api.resources import FeedResource, FeedItemResource, SpecialIssueResource
 
 v2_api = Api(api_name='v2')
 v2_api.register(FeedResource())
 v2_api.register(FeedItemResource())
+v2_api.register(SpecialIssueResource())
 
 urlpatterns = patterns('',
     url(

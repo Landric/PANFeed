@@ -2,7 +2,7 @@ function PublishIssueCtrl($scope)
 {
     $scope.title = '';
     $scope.editorial = '';
-    $scope.items;
+    $scope.items = [];
     $scope.loading = false;
     $scope.loaded = false;
 
@@ -12,15 +12,15 @@ function PublishIssueCtrl($scope)
         var converter_url = "/urltoitem";
         $scope.loading = true;
 
-        jQuery.ajax(
+        $.ajax(
         { 
             url:converter_url,
             data: { url:issue_urls },
             traditional: true,
             dataType:"json",
-            success: function(data, status,request)
+            success: function(data, status, request)
             {
-                $scope.items = data;
+                $scope.items = $scope.items.concat(data);
                 $scope.loaded = true;
                 $scope.loading = false;
                 $scope.$apply();
@@ -56,7 +56,6 @@ function PublishIssueCtrl($scope)
 
     $scope.moveUp = function(itemId)
     {
-        console.log($scope.items[itemId]);
         if(itemId > 0)
         {
             var item = $scope.items[itemId];
@@ -95,65 +94,53 @@ function PublishIssueCtrl($scope)
             alert("Need items");
         }
 
-        var item = {title:$scope.title, description:$scope.editorial, url:"", image:""};
-        $scope.items.unshift(item);
+        var feed = '/api/v2/feed/'.concat($scope.feed, '/');
 
-        var issue = publishIssue();
+        var item = {'title':$scope.title, 'description':$scope.editorial, 'url':'', 'image':''};
+        $scope.items.unshift(item);
 
         for(var item in $scope.items)
         {
             $scope.items[item].issue_position = item;
-            $scope.items[item].feed = $scope.feed;
-            $scope.items[item].special_issue = issue;
-            publishIssue($scope.items[item]);
+            $scope.items[item].feed = feed;
         }
+
+        var issue = {'title':$scope.title, 'description':$scope.editorial, 'feed':feed};
+        publishIssue(issue, $scope.items);
     };
 
-    function publishIssue()
+    function publishIssue(issue, items)
     {
-        $http(
+        $.ajax(
         {
-            method: "GET",
-            url: '/api/v2/feeditem/',
-            params:
+            url: '/api/v2/specialissue/',
+            type: 'POST',
+            contentType: 'application/json',
+            dataType: 'json',
+            data: JSON.stringify(issue),
+            processData: false,
+            success: function(data, status, request)
             {
-                limit:0,
-                special_issue:issue_id,
-            },
-            cache: $templateCache,
-            transformResponse: function(data,headersGetter)
-            {
-                return JSON.parse(data).objects;
+                var issue_id =  request.getResponseHeader("Location");
+                for(var item in $scope.items)
+                {
+                    $scope.items[item].special_issue = URI(issue_id).path().toString();
+                    publishItem($scope.items[item]); //These could be bundled into a single PATCH request if performance becomes an issue. AUTHORIZATION WILL NEED TO BE UPDATED IF YOU DO THIS
+                }
             }
-        }).success(function(data,status)
-        {
-            $scope.items = data;
-            $scope.loaded = true;
-            $scope.loading = false;
         });
     }
 
     function publishItem(item)
     {
-        $http(
+        $.ajax(
         {
-            method: "GET",
-            url: '/api/v2/feeditem/',
-            params:
-            {
-                limit:0,
-                special_issue:issue_id,
-            },
-            cache: $templateCache,
-            transformResponse: function(data,headersGetter)
-            {
-                return JSON.parse(data).objects;
-            }
-        }).success(function(data,status)
-        {
-            $scope.items = data;
-            $scope.loaded = true;
-            $scope.loading = false;
+          url: '/api/v2/feeditem/',
+          type: 'POST',
+          contentType: 'application/json',
+          data: JSON.stringify(item),
+          dataType: 'json',
+          processData: false
         });
     }
 }

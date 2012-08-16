@@ -71,7 +71,9 @@ class Feed(TimeStampedModel):
         return self.title
 
 class SpecialIssue(models.Model):
-    pass
+    title = models.CharField(max_length=60)
+    description = models.TextField()
+    feed = models.ForeignKey(Feed)
 
 class FeedItem(TimeStampedModel):
     title = models.CharField(max_length=60)
