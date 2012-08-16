@@ -15,7 +15,7 @@ class WriteAuthentication(SessionAuthentication):
           return True
 
         else:
-            return super(WriteAuthentication, self).is_authenticated(self, request, **kwargs);
+            return super(WriteAuthentication, self).is_authenticated(request, **kwargs);
 
 class FeedItemAuthorization(Authorization):
     def apply_limits(self, request, object_list):
