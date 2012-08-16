@@ -2,7 +2,7 @@ from django.contrib.auth.models import User
 from tastypie import fields
 from tastypie.resources import ModelResource
 from tastypie.constants import ALL, ALL_WITH_RELATIONS
-from tastypie.authentication import SessionAuthentication
+from .authentication import SessionAuthentication
 from tastypie.authorization import Authorization
 from tastypie.validation import FormValidation
 from tastypie.bundle import Bundle
@@ -40,7 +40,7 @@ class FeedResource(ModelResource):
         resource_name = 'feed'
         queryset = Feed.objects.all()
         allowed_methods = ['get']
-        authentication = DjangoAuthentication()
+        authentication = WriteAuthentication()
 
     def dehydrate(self, bundle):
         bundle.data['url'] = bundle.obj.get_absolute_url()
@@ -53,7 +53,7 @@ class SpecialIssueResource(ModelResource):
         resource_name = 'specialissue'
         queryset = SpecialIssue.objects.all()
         allowed_methods = ['get', 'put', 'post']
-        authentication = DjangoAuthentication()
+        authentication = WriteAuthentication()
         authorization = SpecialIssueAuthorization()
 
         def obj_create(self, bundle, request, **kwargs):
@@ -77,7 +77,7 @@ class FeedItemResource(ModelResource):
             "id": ALL,
             "special_issue": ALL,
         }
-        authentication = DjangoAuthentication()
+        authentication = WriteAuthentication()
         authorization = FeedItemAuthorization()
         validation = FormValidation(form_class=FeedItemForm)
         
