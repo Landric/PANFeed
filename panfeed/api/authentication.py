@@ -4,6 +4,9 @@ try:
         pass
 except ImportError:
     from tastypie.authentication import Authentication
+    from django.middleware.csrf import _sanitize_token, constant_time_compare
+    from django.utils.http import same_origin
+    
     class SessionAuthentication(Authentication):
         """
         An authentication mechanism that piggy-backs on Django sessions.
