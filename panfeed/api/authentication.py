@@ -6,6 +6,7 @@ except ImportError:
     from tastypie.authentication import Authentication
     from django.middleware.csrf import _sanitize_token, constant_time_compare
     from django.utils.http import same_origin
+    from django.conf import settings
     
     class SessionAuthentication(Authentication):
         """
