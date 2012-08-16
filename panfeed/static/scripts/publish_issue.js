@@ -96,20 +96,21 @@ function PublishIssueCtrl($scope)
 
         var feed = '/api/v2/feed/'.concat($scope.feed, '/');
 
-        var item = {'title':$scope.title, 'description':$scope.editorial, 'url':'', 'image':''};
-        $scope.items.unshift(item);
+        var editorial = {'title':$scope.title, 'description':$scope.editorial, 'feed':feed, 'issue_position':0, 'url':'', 'image':''};
 
         for(var item in $scope.items)
         {
-            $scope.items[item].issue_position = item;
+            $scope.items[item].title = $scope.items[item].title + " - " + $scope.title;
+            $scope.items[item].issue_position = parseInt(item)+1;
             $scope.items[item].feed = feed;
         }
 
         var issue = {'title':$scope.title, 'description':$scope.editorial, 'feed':feed};
-        publishIssue(issue, $scope.items);
+
+        publishIssue(issue, editorial, $scope.items);
     };
 
-    function publishIssue(issue, items)
+    function publishIssue(issue, editorial, issue_items)
     {
         $.ajax(
         {
@@ -122,10 +123,12 @@ function PublishIssueCtrl($scope)
             success: function(data, status, request)
             {
                 var issue_id =  request.getResponseHeader("Location");
-                for(var item in $scope.items)
+                editorial.special_issue = URI(issue_id).path().toString();
+                publishItem(editorial);
+                for(var item in issue_items)
                 {
-                    $scope.items[item].special_issue = URI(issue_id).path().toString();
-                    publishItem($scope.items[item]); //These could be bundled into a single PATCH request if performance becomes an issue. AUTHORIZATION WILL NEED TO BE UPDATED IF YOU DO THIS
+                    issue_items[item].special_issue = URI(issue_id).path().toString();
+                    publishItem(issue_items[item]); //These could be bundled into a single PATCH request if performance becomes an issue. AUTHORIZATION WILL NEED TO BE UPDATED IF YOU DO THIS
                 }
             }
         });
@@ -135,12 +138,16 @@ function PublishIssueCtrl($scope)
     {
         $.ajax(
         {
-          url: '/api/v2/feeditem/',
-          type: 'POST',
-          contentType: 'application/json',
-          data: JSON.stringify(item),
-          dataType: 'json',
-          processData: false
+            url: '/api/v2/feeditem/',
+            type: 'POST',
+            contentType: 'application/json',
+            data: JSON.stringify(item),
+            dataType: 'json',
+            processData: false,
+            success: function(data, status, request)
+            {
+                //window.location = "/publishnews";
+            }
         });
     }
 }

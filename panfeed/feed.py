@@ -88,7 +88,7 @@ class UserFeed(Feed):
 
     def items(self,feed):
         if(feed.displayAll):
-            return FeedItem.objects.filter(feed=feed).order_by("-created")
+            return FeedItem.objects.filter(feed=feed).order_by("-created", "issue_position")
 
         else:  
             latest_item = FeedItem.objects.filter(feed=feed).order_by("-created")[:1]
@@ -114,9 +114,6 @@ class UserFeed(Feed):
         return feed.get_absolute_url()
 
     def item_title(self,item):
-        if item.special_issue:
-            return item.title + " - " + item.special_issue.title
-            
         return item.title
 
     def item_description(self,item):
