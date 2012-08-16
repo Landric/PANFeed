@@ -19,23 +19,20 @@ class DjangoAuthentication(Authentication):
 class FeedItemAuthorization(Authorization):
     def apply_limits(self, request, object_list):
         if request and request.method == 'GET':
+            print "Item GET"
             return object_list.all()
  
-        if isinstance(object_list, Bundle):
-            if object_list.exists(feed__owner=request.user):
-                return object_list
-        print "FeedItem"
-        return object_list.none()
+        print "Item filter"
+        return object_list.filter(feed__owner=request.user)
 
 class SpecialIssueAuthorization(Authorization):
     def apply_limits(self, request, object_list):
         if request and request.method == 'GET':
+            print "Issue GET"
             return object_list.all()
             
+        print "Issue filter"
         return object_list.filter(feed__owner=request.user)
-
-        print "Issue"
-        return object_list.none()
 
 class FeedResource(ModelResource):
     class Meta:
@@ -60,11 +57,12 @@ class SpecialIssueResource(ModelResource):
 
         def obj_create(self, bundle, request, **kwargs):
             bundle = self._meta.authorization.apply_limits(request, bundle)
-            return super(FeedItemResource, self).obj_create(bundle, request, **kwargs)
+            print "issue create"
+            return super(SpecialIssueResource, self).obj_create(bundle, request, **kwargs)
  
         def obj_update(self, bundle, request, **kwargs):
             bundle = self._meta.authorization.apply_limits(request, bundle)
-            return super(FeedItemResource, self).obj_update(bundle, request, **kwargs)
+            return super(SpecialIssueResource, self).obj_update(bundle, request, **kwargs)
 
 class FeedItemResource(ModelResource):
     feed = fields.ForeignKey(FeedResource, 'feed')
@@ -84,6 +82,7 @@ class FeedItemResource(ModelResource):
         
         def obj_create(self, bundle, request, **kwargs):
             bundle = self._meta.authorization.apply_limits(request, bundle)
+            print "item create"
             return super(FeedItemResource, self).obj_create(bundle, request, **kwargs)
  
         def obj_update(self, bundle, request, **kwargs):

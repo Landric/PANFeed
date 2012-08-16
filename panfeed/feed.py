@@ -114,6 +114,9 @@ class UserFeed(Feed):
         return feed.get_absolute_url()
 
     def item_title(self,item):
+        if item.special_issue:
+            return item.title + " - " + item.special_issue.title
+            
         return item.title
 
     def item_description(self,item):
