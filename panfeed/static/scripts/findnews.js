@@ -1,6 +1,8 @@
 function FindNewsCtrl($scope)
 {
-    $scope.url;
+    "use strict";
+    var documentUrl = URI(document.location);
+
     $scope.searchTerms = "ecs eprints";
 
     $scope.user = function(link)
@@ -16,9 +18,10 @@ function FindNewsCtrl($scope)
     
     $scope.absoluteUrl = function()
     {
-        if($scope.url == undefined)
-            $scope.url= $scope.search();
-        var documentUrl = URI(document.location);
+        if($scope.url === undefined)
+        {
+            $scope.search();
+        }
         return URI($scope.url).authority(documentUrl.authority()).scheme(documentUrl.scheme()).toString();
     };
 

@@ -31,6 +31,7 @@
                             <li><a href='#' ng:click="user('{{feed.get_absolute_url}}')">{{feed.title}}</a></li>
                         {% endfor %}
                         </ul>
+                        <input ng:model="searchText.searchOn" type=text placeholder="Search Feeds...">
                         <a href="{% url 'allfeeds' %}" class ='btn'>Browse all Feeds &raquo;</a>
                     </div>
                     <div class="span2">
