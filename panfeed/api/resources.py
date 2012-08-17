@@ -5,17 +5,16 @@ from tastypie.constants import ALL, ALL_WITH_RELATIONS
 from .authentication import SessionAuthentication
 from tastypie.authorization import Authorization
 from tastypie.validation import FormValidation
-from tastypie.bundle import Bundle
 from panfeed.models import Feed, FeedItem, SpecialIssue
 from panfeed.forms import FeedItemForm, SpecialIssueForm
 
-class WriteAuthentication(SessionAuthentication):
+class ReadAllWriteOwnedAuthentication(SessionAuthentication):
     def is_authenticated(self, request, **kwargs):
         if request.method == 'GET':
           return True
 
         else:
-            return super(WriteAuthentication, self).is_authenticated(request, **kwargs);
+            return super(ReadAllWriteOwnedAuthentication, self).is_authenticated(request, **kwargs);
 
 class FeedItemAuthorization(Authorization):
     def apply_limits(self, request, object_list):
@@ -40,7 +39,7 @@ class FeedResource(ModelResource):
         resource_name = 'feed'
         queryset = Feed.objects.all()
         allowed_methods = ['get']
-        authentication = WriteAuthentication()
+        authentication = ReadAllWriteOwnedAuthentication()
 
     def dehydrate(self, bundle):
         bundle.data['url'] = bundle.obj.get_absolute_url()
@@ -53,7 +52,7 @@ class SpecialIssueResource(ModelResource):
         resource_name = 'specialissue'
         queryset = SpecialIssue.objects.all()
         allowed_methods = ['get', 'put', 'post']
-        authentication = WriteAuthentication()
+        authentication = ReadAllWriteOwnedAuthentication()
         authorization = SpecialIssueAuthorization()
 
         def obj_create(self, bundle, request, **kwargs):
@@ -72,12 +71,12 @@ class FeedItemResource(ModelResource):
     class Meta:
         resource_name = 'feeditem'
         queryset = FeedItem.objects.all()
-        allowed_methods = ['get', 'patch']
+        allowed_methods = ['get', 'put', 'post']
         filtering = {
             "id": ALL,
             "special_issue": ALL,
         }
-        authentication = WriteAuthentication()
+        authentication = ReadAllWriteOwnedAuthentication()
         authorization = FeedItemAuthorization()
         validation = FormValidation(form_class=FeedItemForm)
         

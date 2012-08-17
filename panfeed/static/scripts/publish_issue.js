@@ -125,34 +125,36 @@ function PublishIssueCtrl($scope)
                 var issue_id =  request.getResponseHeader("Location");
                 editorial.special_issue = URI(issue_id).path().toString();
 
-                var batch_items = [];
-                batch_items.push(editorial);
+                //var batch_items = [];
+                //batch_items.push(editorial);
+                publishItem(editorial);
 
                 for(var item in issue_items)
                 {
                     issue_items[item].special_issue = URI(issue_id).path().toString();
-                    batch_items.push(issue_items[item]);
+                    //batch_items.push(issue_items[item]);
+                    publishItem(issue_items[item]);
                 }
 
-                publishItems(batch_items);
+                //publishItems(batch_items);
             }
         });
     }
 
-    function publishItems(items)
+    function publishItem(item)//s)
     {
-        var objects = {'objects':items};
+        //var objects = {'objects':items};
         $.ajax(
         {
             url: '/api/v2/feeditem/',
-            type: 'PATCH',
+            type: 'POST',
             contentType: 'application/json',
-            data: JSON.stringify(objects),
+            data: JSON.stringify(item),//objects),
             dataType: 'json',
             processData: false,
             success: function(data, status, request)
             {
-                window.location = "/publishnews";
+                //window.location = "/publishnews";
             }
         });
     }
