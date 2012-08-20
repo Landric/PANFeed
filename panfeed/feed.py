@@ -2,6 +2,8 @@ from django.contrib.syndication.views import Feed
 from django.shortcuts import get_object_or_404
 from django.core.urlresolvers import reverse
 from django.http import Http404
+from django.template import Context, Template, loader
+
 import datetime
 from panfeed.models import Corpus, Feed as MFeed, FeedItem, SpecialIssue
 import urllib
@@ -125,8 +127,13 @@ class UserFeed(Feed):
         return item.title
 
     def item_description(self,item):
-        image = getattr(item, "image", None)
-        return ("<img src='"+image+"' /> " if image else "") + item.description
+        return loader.get_template(
+            "panfeed/rss_feed_item_description.html"
+        ).render(
+            Context({
+            "item" : item,
+            })
+        )
 
     def item_link(self,item):
         return getattr(item, "url", "#")
