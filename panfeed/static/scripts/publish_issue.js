@@ -110,14 +110,17 @@ function PublishIssueCtrl($scope, $http, $templateCache)
         if($scope.title == '')
         {
             alert("Need a title");
+            return;
         }
         if($scope.editorial == '')
         {
             alert("Need a description");
+            return;
         }
         if($scope.items.length == 0)
         {
             alert("Need items");
+            return;
         }
 
         var feed = '/api/v2/feed/'.concat($scope.feed, '/');
@@ -176,7 +179,7 @@ function PublishIssueCtrl($scope, $http, $templateCache)
             processData: false,
             success: function(data, status, request)
             {
-                var issue_id = '/api/v2/specialissue/'+id
+                var issue_id = '/api/v2/specialissue/'+id+'/';
                 submitted_items = issue_items.length;
                 for(var item in issue_items)
                 {
