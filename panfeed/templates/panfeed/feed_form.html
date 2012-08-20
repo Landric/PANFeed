@@ -50,12 +50,12 @@
                                     <tr class="item" id="item-{{item.id}}">
                                         <td>{{item.title}}</td>
                                         <td>{{item.created}}</td>
-                                        <td><a href="{{ item.get_modify_url }}" class="btn">Edit</a></td>
+                                        <td><a href="{{ item.get_modify_url }}" class="btn"><i class="icon-edit"></i> Edit</a></td>
                                         <td>
                                             <form action="{{item.get_modify_url}}" method="post">
                                                 {% csrf_token %}
                                                 <input type="hidden" name="_method" value="DELETE" />
-                                                <input type="submit" value="Delete" class="btn"/>
+                                                <button type="submit" class="btn btn-danger"><i class="icon-trash icon-white"></i> Delete</button>
                                             </form>
                                         </td>
                                     </tr>
