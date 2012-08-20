@@ -70,7 +70,7 @@ class Feed(TimeStampedModel):
     def __unicode__(self):
         return self.title
 
-class SpecialIssue(models.Model):
+class SpecialIssue(TimeStampedModel):
     title = models.CharField(max_length=120)
     description = models.TextField()
     feed = models.ForeignKey(Feed)
