@@ -1,4 +1,4 @@
-function PublishIssueCtrl($scope)
+function PublishIssueCtrl($scope, $http, $templateCache)
 {
     $scope.title = '';
     $scope.editorial = '';
@@ -34,11 +34,11 @@ function PublishIssueCtrl($scope)
         $http(
         {
             method: "GET",
-            url: '/api/v2/feeditem/',
+            url: '/api/v2/specialissue/',
             params:
             {
-                limit:0,
-                special_issue:issue_id,
+                limit:1,
+                id:issue_id,
             },
             cache: $templateCache,
             transformResponse: function(data,headersGetter)
@@ -47,10 +47,28 @@ function PublishIssueCtrl($scope)
             }
         }).success(function(data,status)
         {
-            $scope.items = data;
-            $scope.loaded = true;
-            $scope.loading = false;
-            $scope.$apply();
+            console.log(data);
+            $http(
+            {
+                method: "GET",
+                url: '/api/v2/feeditem/',
+                params:
+                {
+                    limit:0,
+                    special_issue:issue_id,
+                },
+                cache: $templateCache,
+                transformResponse: function(data,headersGetter)
+                {
+                    return JSON.parse(data).objects;
+                }
+            }).success(function(data,status)
+            {
+                $scope.items = data;
+                $scope.loaded = true;
+                $scope.loading = false;
+                $scope.$apply();
+            });
         });
      };
 
