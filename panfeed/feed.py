@@ -101,6 +101,10 @@ class UserFeed(Feed):
             reverse=True
         )
         
+        #If set to only display the latest item, throw away all others
+        if not feed.displayAll:
+            plain_items = plain_items[:1]
+
         #take each item in the union, if it has subitems add those too.
         for item_issue in items_issues:
             yield item_issue
@@ -109,8 +113,6 @@ class UserFeed(Feed):
                 for issue_item in issue_items:
                     issue_item.title += " - " + item_issue.title
                     yield issue_item
-            if not feed.displayAll:
-                break
 
     def title(self,feed):
         return feed.title 
