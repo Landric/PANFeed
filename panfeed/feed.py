@@ -99,19 +99,16 @@ class UserFeed(Feed):
             key = lambda obj: obj.created,
             reverse=True
         )
-
-        items = []
+        
         for item_issue in items_issues:
-            items.append(item_issue)
+            yield item_issue
             if hasattr(item_issue, "feeditem_set"):
                 issue_items = item_issue.feeditem_set.order_by('issue_position')
                 for issue_item in issue_items:
                     issue_item.title += " - " + item_issue.title
-                    items.append(issue_item)
+                    yield issue_item
             if not feed.displayAll:
                 break
-
-        return items
 
     def title(self,feed):
         return feed.title 
