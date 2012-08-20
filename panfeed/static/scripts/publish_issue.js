@@ -5,6 +5,8 @@ function PublishIssueCtrl($scope, $http, $templateCache)
     $scope.items = [];
     $scope.loading = false;
     $scope.loaded = false;
+    var submitted_items = 0;
+
 
     $scope.convertURLs = function()
     {
@@ -142,7 +144,7 @@ function PublishIssueCtrl($scope, $http, $templateCache)
 
                 //var batch_items = [];
                 //batch_items.push(editorial);
-
+                submitted_items = issue_items.length;
                 for(var item in issue_items)
                 {
                     issue_items[item].special_issue = URI(issue_id).path().toString();
@@ -168,7 +170,11 @@ function PublishIssueCtrl($scope, $http, $templateCache)
             processData: false,
             success: function(data, status, request)
             {
-                //window.location = "/publishnews";
+                submitted_items = submitted_items - 1;
+                if (submitted_items == 0)
+                {
+                    window.location = "/publishnews";
+                }
             }
         });
     }
