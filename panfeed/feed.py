@@ -87,18 +87,26 @@ class PersonalFeed(Feed):
 class UserFeed(Feed):
 
     def items(self,feed):
-        objects = list(FeedItem.objects.filter(feed=feed, special_issue__isnull=True))
-        issues = list(SpecialIssue.objects.filter(feed=feed))
-        objects.extend(issues)
-        objects = sorted(objects, key=lambda obj: obj.created, reverse=True)
+        plain_items = feed.feeditem_set.filter(special_issue__isnull=True).order_by("-created")
+        special_issues = feed.specialissue_set.all().order_by("-created")
+        
+        if not feed.displayAll:
+            plain_items = plain_items[:1]
+            special_issues = special_issues[:1]
+        
+        items_issues = sorted(
+            list(plain_items) + list(special_issues),
+            key = lambda obj: obj.created,
+            reverse=True
+        )
 
         items = []
-        for obj in objects:
-            items.append(obj)
-            if isinstance(obj, SpecialIssue):
-                issue_items = obj.feeditem_set.order_by('issue_position')
+        for item_issue in items_issues:
+            items.append(item_issue)
+            if hasattr(item_issue, "feeditem_set"):
+                issue_items = item_issue.feeditem_set.order_by('issue_position')
                 for issue_item in issue_items:
-                    issue_item.title += " - " + obj.title
+                    issue_item.title += " - " + item_issue.title
                     items.append(issue_item)
             if not feed.displayAll:
                 break
