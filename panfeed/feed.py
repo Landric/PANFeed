@@ -87,23 +87,30 @@ class PersonalFeed(Feed):
 class UserFeed(Feed):
 
     def items(self,feed):
-        objects = list(FeedItem.objects.filter(feed=feed, special_issue__isnull=True))
-        issues = list(SpecialIssue.objects.filter(feed=feed))
-        objects.extend(issues)
-        objects = sorted(objects, key=lambda obj: obj.created, reverse=True)
-
-        items = []
-        for obj in objects:
-            items.append(obj)
-            if isinstance(obj, SpecialIssue):
-                issue_items = obj.feeditem_set.order_by('issue_position')
+        plain_items = feed.feeditem_set.filter(special_issue__isnull=True).order_by("-created")
+        special_issues = feed.specialissue_set.all().order_by("-created")
+        
+        if not feed.displayAll:
+            plain_items = plain_items[:1]
+            special_issues = special_issues[:1]
+        
+        #union and sort the items from plain_items and special_issues
+        items_issues = sorted(
+            list(plain_items) + list(special_issues),
+            key = lambda obj: obj.created,
+            reverse=True
+        )
+        
+        #take each item in the union, if it has subitems add those too.
+        for item_issue in items_issues:
+            yield item_issue
+            if hasattr(item_issue, "feeditem_set"):
+                issue_items = item_issue.feeditem_set.order_by('issue_position')
                 for issue_item in issue_items:
-                    issue_item.title += " - " + obj.title
-                    items.append(issue_item)
+                    issue_item.title += " - " + item_issue.title
+                    yield issue_item
             if not feed.displayAll:
                 break
-
-        return items
 
     def title(self,feed):
         return feed.title 
