@@ -74,7 +74,7 @@ class FeedItemResource(ModelResource):
     class Meta:
         resource_name = 'feeditem'
         queryset = FeedItem.objects.all()
-        allowed_methods = ['get', 'put', 'post']
+        allowed_methods = ['get', 'put', 'post', 'delete']
         filtering = {
             "id": ALL,
             "special_issue": ALL,

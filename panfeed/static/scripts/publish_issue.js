@@ -6,6 +6,8 @@ function PublishIssueCtrl($scope, $http, $templateCache)
     $scope.loading = false;
     $scope.loaded = false;
     var submitted_items = 0;
+    var deleted_items = 0;
+    var id = 0;
 
 
     $scope.convertURLs = function()
@@ -32,6 +34,8 @@ function PublishIssueCtrl($scope, $http, $templateCache)
 
     $scope.fetch = function(issue_id)
     {
+        id = issue_id;
+
         $scope.loading = true;
         $http(
         {
@@ -68,6 +72,7 @@ function PublishIssueCtrl($scope, $http, $templateCache)
             }).success(function(data,status)
             {
                 $scope.items = data;
+                $scope.original_items = data;
                 $scope.loaded = true;
                 $scope.loading = false;
                 $scope.$apply();
@@ -100,7 +105,7 @@ function PublishIssueCtrl($scope, $http, $templateCache)
         $scope.items.splice(itemId, 1);
     };
 
-    $scope.publish = function()
+    $scope.publish = function(update)
     {
         if($scope.title == '')
         {
@@ -125,8 +130,62 @@ function PublishIssueCtrl($scope, $http, $templateCache)
 
         var issue = {'title':$scope.title, 'description':$scope.editorial, 'feed':feed};
 
-        publishIssue(issue, $scope.items);
+        if(update)
+        {
+           removeItems(issue, $scope.original_items, $scope.items);
+        }
+        else
+        {
+           publishIssue(issue, $scope.items);
+        }
     };
+
+    function removeItems(issue, original_items, issue_items)
+    {
+        deleted_items = original_items.length;
+        for(var item in original_items)
+        {
+            $.ajax(
+            {
+                url: original_items[item].resource_uri,
+                type: 'DELETE',
+                contentType: 'application/json',
+                dataType: 'json',
+                processData: false,
+                success: function(data, status, request)
+                {
+                    deleted_items = deleted_items - 1;
+                    if (deleted_items == 0)
+                    {
+                      updateIssue(issue, issue_items)  
+                    }
+                }
+            });
+        }
+    }
+
+    function updateIssue(issue, issue_items)
+    {
+        $.ajax(
+        {
+            url: '/api/v2/specialissue/'+id,
+            type: 'PUT',
+            contentType: 'application/json',
+            dataType: 'json',
+            data: JSON.stringify(issue),
+            processData: false,
+            success: function(data, status, request)
+            {
+                var issue_id = '/api/v2/specialissue/'+id
+                submitted_items = issue_items.length;
+                for(var item in issue_items)
+                {
+                    issue_items[item].special_issue = issue_id;
+                    publishItem(issue_items[item]);
+                }
+            }
+        });
+    }
 
     function publishIssue(issue, issue_items)
     {
@@ -142,30 +201,24 @@ function PublishIssueCtrl($scope, $http, $templateCache)
             {
                 var issue_id =  request.getResponseHeader("Location");
 
-                //var batch_items = [];
-                //batch_items.push(editorial);
                 submitted_items = issue_items.length;
                 for(var item in issue_items)
                 {
                     issue_items[item].special_issue = URI(issue_id).path().toString();
-                    //batch_items.push(issue_items[item]);
                     publishItem(issue_items[item]);
                 }
-
-                //publishItems(batch_items);
             }
         });
     }
 
-    function publishItem(item)//s)
+    function publishItem(item)
     {
-        //var objects = {'objects':items};
         $.ajax(
         {
             url: '/api/v2/feeditem/',
             type: 'POST',
             contentType: 'application/json',
-            data: JSON.stringify(item),//objects),
+            data: JSON.stringify(item),
             dataType: 'json',
             processData: false,
             success: function(data, status, request)

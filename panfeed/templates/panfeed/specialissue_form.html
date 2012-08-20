@@ -94,9 +94,9 @@
             <div class="control-group">
                 <div class="controls">
                     {% if object %}
-                        <input type="button" ng:click="update()" value="Save" class="btn btn-primary"/>&nbsp;&nbsp;
+                        <input type="button" ng:click="publish(true)" value="Save" class="btn btn-primary"/>&nbsp;&nbsp;
                     {% else %}
-                        <input type="button" ng:click="publish()" value="Publish" class="btn btn-primary"/>&nbsp;&nbsp;
+                        <input type="button" ng:click="publish(false)" value="Publish" class="btn btn-primary"/>&nbsp;&nbsp;
                     {% endif %}
                         <a href="{% url 'publishnews' %}" class="btn">Cancel</a>
                 </div>
