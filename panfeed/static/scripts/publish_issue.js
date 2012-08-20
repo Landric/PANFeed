@@ -96,21 +96,18 @@ function PublishIssueCtrl($scope)
 
         var feed = '/api/v2/feed/'.concat($scope.feed, '/');
 
-        var editorial = {'title':$scope.title, 'description':$scope.editorial, 'feed':feed, 'issue_position':0, 'url':'', 'image':''};
-
         for(var item in $scope.items)
         {
-            $scope.items[item].title = $scope.items[item].title + " - " + $scope.title;
             $scope.items[item].issue_position = parseInt(item)+1;
             $scope.items[item].feed = feed;
         }
 
         var issue = {'title':$scope.title, 'description':$scope.editorial, 'feed':feed};
 
-        publishIssue(issue, editorial, $scope.items);
+        publishIssue(issue, $scope.items);
     };
 
-    function publishIssue(issue, editorial, issue_items)
+    function publishIssue(issue, issue_items)
     {
         $.ajax(
         {
@@ -123,11 +120,9 @@ function PublishIssueCtrl($scope)
             success: function(data, status, request)
             {
                 var issue_id =  request.getResponseHeader("Location");
-                editorial.special_issue = URI(issue_id).path().toString();
 
                 //var batch_items = [];
                 //batch_items.push(editorial);
-                publishItem(editorial);
 
                 for(var item in issue_items)
                 {
