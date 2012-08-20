@@ -47,7 +47,8 @@ function PublishIssueCtrl($scope, $http, $templateCache)
             }
         }).success(function(data,status)
         {
-            console.log(data);
+            $scope.title = data[0].title;
+            $scope.editorial = data[0].description;
             $http(
             {
                 method: "GET",

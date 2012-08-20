@@ -52,6 +52,9 @@ class SpecialIssueResource(ModelResource):
         resource_name = 'specialissue'
         queryset = SpecialIssue.objects.all()
         allowed_methods = ['get', 'put', 'post']
+        filtering = {
+            "id": ALL,
+        }
         authentication = ReadAllWriteOwnedAuthentication()
         authorization = SpecialIssueAuthorization()
 
