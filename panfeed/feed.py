@@ -94,12 +94,14 @@ class UserFeed(Feed):
             plain_items = plain_items[:1]
             special_issues = special_issues[:1]
         
+        #union and sort the items from plain_items and special_issues
         items_issues = sorted(
             list(plain_items) + list(special_issues),
             key = lambda obj: obj.created,
             reverse=True
         )
         
+        #take each item in the union, if it has subitems add those too.
         for item_issue in items_issues:
             yield item_issue
             if hasattr(item_issue, "feeditem_set"):
