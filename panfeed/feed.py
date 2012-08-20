@@ -87,22 +87,23 @@ class PersonalFeed(Feed):
 class UserFeed(Feed):
 
     def items(self,feed):
-        if(feed.displayAll):
-            return FeedItem.objects.filter(feed=feed).order_by("-created", "issue_position")
+        objects = list(FeedItem.objects.filter(feed=feed, special_issue__isnull=True))
+        issues = list(SpecialIssue.objects.filter(feed=feed))
+        objects.extend(issues)
+        objects = sorted(objects, key=lambda obj: obj.created, reverse=True)
 
-        else:  
-            latest_item = FeedItem.objects.filter(feed=feed).order_by("-created")[:1]
-            if latest_item:
-                latest_item = latest_item.select_related().get()
+        items = []
+        for obj in objects:
+            items.append(obj)
+            if isinstance(obj, SpecialIssue):
+                issue_items = obj.feeditem_set.order_by('issue_position')
+                for issue_item in issue_items:
+                    issue_item.title += " - " + obj.title
+                    items.append(issue_item)
+            if not feed.displayAll:
+                break
 
-                if (latest_item.special_issue):
-                    issue_items = list(FeedItem.objects.filter(feed=feed, special_issue=latest_item.special_issue).order_by("issue_position"))
-                    return issue_items
-                else:
-                    return latest_item
-
-            else:
-                return latest_item
+        return items
 
     def title(self,feed):
         return feed.title 
@@ -117,13 +118,15 @@ class UserFeed(Feed):
         return item.title
 
     def item_description(self,item):
-        return "<img src='"+item.image+"' /> " + item.description
+        image = getattr(item, "image", None)
+        return ("<img src='"+image+"' /> " if image else "") + item.description
 
     def item_link(self,item):
-        return item.url
+        return getattr(item, "url", "#")
 
     def item_pubdate(self,item):
         return item.created
 
     def get_object(self,request,feed_slug):
         return get_object_or_404(MFeed, slug=feed_slug);
+

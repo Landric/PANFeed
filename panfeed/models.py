@@ -70,10 +70,15 @@ class Feed(TimeStampedModel):
     def __unicode__(self):
         return self.title
 
-class SpecialIssue(models.Model):
+class SpecialIssue(TimeStampedModel):
     title = models.CharField(max_length=120)
+    slug = AutoSlugField(_('slug'), populate_from='title')
     description = models.TextField()
     feed = models.ForeignKey(Feed)
+
+    @models.permalink
+    def get_modify_url(self):
+        return ("manageissue", (self.feed.slug, self.slug))
 
 class FeedItem(TimeStampedModel):
     title = models.CharField(max_length=120)
@@ -87,11 +92,14 @@ class FeedItem(TimeStampedModel):
     
     @models.permalink
     def get_absolute_url(self):
-        return ("manageitem", [str(self.feed.slug), str(self.slug)])
+        return ("manageitem", (self.feed.slug, self.slug))
 
     @models.permalink
     def get_modify_url(self):
-        return ("manageitem", [str(self.feed.slug), str(self.slug)])    
-
+        if self.special_issue:
+            return ("manageissue", (self.feed.slug, self.special_issue.slug))
+        else:
+            return ("manageitem", (self.feed.slug, self.slug))
+            
     def __unicode__(self):
         return self.title
