@@ -26,7 +26,10 @@
                 </div>
             </div>
 
-            <img src="{{STATIC_URL}}images/load.gif" ng:cloak ng:show="loading"/>
+            <div ng:cloak ng:show="loading" class="progress progress-striped active">
+                <div class="bar" style="width: 80%;">
+                </div>
+            </div>
 
             <div ng:cloak ng:show="loaded" class="well" id="item">
                 <div class='control-group'>
