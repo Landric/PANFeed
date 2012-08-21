@@ -31,48 +31,51 @@
     {% if object %}
         <div class="control-group">
             <label class="control-label">Published items and Special Issues:</label>
-                </div>
-        {% for item in feed_items %}
-            {% if forloop.first %}
-                    <div class="control-group">
-                        <div class="controls">
-                            <table class="table table-striped table-bordered">
-                                <thead>
-                                    <tr>
-                                        <th>Title</th>
-                                        <th>Date Published</th>
-                                        <th>Edit</th>
-                                        <th>Delete</th>
-                                    </tr>
-                                </thead>
-                                <tbody>
-            {% endif %}
-                                    <tr class="item" id="item-{{item.id}}">
-                                        <td>{{item.title}}</td>
-                                        <td>{{item.created}}</td>
-                                        <td><a href="{{ item.get_modify_url }}" class="btn"><i class="icon-edit"></i> Edit</a></td>
-                                        <td>
-                                            <form action="{{item.get_modify_url}}" method="post">
-                                                {% csrf_token %}
-                                                <input type="hidden" name="_method" value="DELETE" />
-                                                <button type="submit" class="btn btn-danger"><i class="icon-trash icon-white"></i> Delete</button>
-                                            </form>
-                                        </td>
-                                    </tr>
-            {% if forloop.last %}
-                                </tbody>
-                            </table>
-                        </div>
-            {% endif %}
-            {% empty %}
-                <div class="controls">
-                    <p>There are currently no published items or Special Issues in this Feed</p>
-                </div>
+        </div>
+        {% for table in table_list %}
+            {% for item in table %}
+            
+                {% if forloop.first %}
+                        <div class="control-group">
+                            <div class="controls">
+                                <table class="table table-striped table-bordered">
+                                    <thead>
+                                        <tr>
+                                            <th>Title</th>
+                                            <th>Date Published</th>
+                                            <th>Edit</th>
+                                            <th>Delete</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                {% endif %}
+                                        <tr class="item" id="item-{{item.id}}">
+                                            <td>{{item.title}}</td>
+                                            <td>{{item.created}}</td>
+                                            <td><a href="{{ item.get_modify_url }}" class="btn"><i class="icon-edit"></i> Edit</a></td>
+                                            <td>
+                                                <form action="{{item.get_modify_url}}" method="post">
+                                                    {% csrf_token %}
+                                                    <input type="hidden" name="_method" value="DELETE" />
+                                                    <button type="submit" class="btn btn-danger"><i class="icon-trash icon-white"></i> Delete</button>
+                                                </form>
+                                            </td>
+                                        </tr>
+                {% if forloop.last %}
+                                    </tbody>
+                                </table>
+                            </div>
+                {% endif %}
             {% endfor %}
-            {% if object %}
-                    <a class="btn btn-primary" href="{% url 'newitem' object.slug %}">Publish an item</a>
-                    <a class="btn btn-primary" href="{% url 'newissue' object.slug %}">Publish a Special Issue</a>
-            {% endif %}
+        {% empty %}
+            <div class="controls">
+                <p>There are currently no published items or Special Issues in this Feed</p>
+            </div>
+        {% endfor %}
+        {% if object %}
+                <a class="btn btn-primary" href="{% url 'newitem' object.slug %}">Publish an item</a>
+                <a class="btn btn-primary" href="{% url 'newissue' object.slug %}">Publish a Special Issue</a>
+        {% endif %}
         </div>
     {% endif %}
 {% endblock content %}

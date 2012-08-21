@@ -91,18 +91,31 @@ class FeedUpdateView(FeedCRUDMixin, UpdateView):
             key = lambda obj: obj.created,
             reverse=True
         )
-        
+        table_list = []
+        item_list = []
         #take each item in the union, if it has subitems add those too.
         for item_issue in items_issues:
-            yield item_issue
             if hasattr(item_issue, "feeditem_set"):
+                if item_list:
+                    table_list.append(item_list)
+                    item_list = []
+                item_list.append(item_issue)
+
                 issue_items = item_issue.feeditem_set.order_by('issue_position')
                 for issue_item in issue_items:
-                    yield issue_item
+                    item_list.append(issue_item)
+
+                table_list.append(item_list)
+                item_list = []
+
+            else:
+                item_list.append(item_issue)
+
+        return table_list
 
     def get_context_data(self, **kwargs):
         context = super(UpdateView, self).get_context_data(**kwargs)
-        context['feed_items'] = self.get_feed_items(self.object)
+        context['table_list'] = self.get_feed_items(self.object)
         return context
 
 class PublishNews(FeedCRUDMixin, ListView):
