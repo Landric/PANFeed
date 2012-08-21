@@ -81,7 +81,29 @@ class FeedCreateView(FeedCRUDMixin, OwnerModelFormMixin, CreateView):
 class FeedDeleteView(FeedCRUDMixin, DeleteView):
     pass
 class FeedUpdateView(FeedCRUDMixin, UpdateView):
-    pass
+    def get_feed_items(self, feed):
+        plain_items = feed.feeditem_set.filter(special_issue__isnull=True)
+        special_issues = feed.specialissue_set.all()
+        
+        #union and sort the items from plain_items and special_issues
+        items_issues = sorted(
+            list(plain_items) + list(special_issues),
+            key = lambda obj: obj.created,
+            reverse=True
+        )
+        
+        #take each item in the union, if it has subitems add those too.
+        for item_issue in items_issues:
+            yield item_issue
+            if hasattr(item_issue, "feeditem_set"):
+                issue_items = item_issue.feeditem_set.order_by('issue_position')
+                for issue_item in issue_items:
+                    yield issue_item
+
+    def get_context_data(self, **kwargs):
+        context = super(UpdateView, self).get_context_data(**kwargs)
+        context['feed_items'] = self.get_feed_items(self.object)
+        return context
 
 class PublishNews(FeedCRUDMixin, ListView):
     context_object_name = "feeds"

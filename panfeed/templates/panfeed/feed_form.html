@@ -30,9 +30,9 @@
     <br/>
     {% if object %}
         <div class="control-group">
-            <label class="control-label">Items:</label>
+            <label class="control-label">Published items and Special Issues:</label>
                 </div>
-        {% for item in object.feeditem_set.all %}
+        {% for item in feed_items %}
             {% if forloop.first %}
                     <div class="control-group">
                         <div class="controls">
@@ -66,7 +66,7 @@
             {% endif %}
             {% empty %}
                 <div class="controls">
-                    <p>There are currently no items in this Feed</p>
+                    <p>There are currently no published items or Special Issues in this Feed</p>
                 </div>
             {% endfor %}
             {% if object %}
