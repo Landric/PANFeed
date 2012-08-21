@@ -96,10 +96,7 @@ class FeedItem(TimeStampedModel):
 
     @models.permalink
     def get_modify_url(self):
-        if self.special_issue:
-            return ("manageissue", (self.feed.slug, self.special_issue.slug))
-        else:
-            return ("manageitem", (self.feed.slug, self.slug))
+        return ("manageitem", (self.feed.slug, self.slug))
             
     def __unicode__(self):
         return self.title
