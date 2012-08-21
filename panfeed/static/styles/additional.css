@@ -18,3 +18,19 @@ tr:target td {
     */
     background-color:#FFFFCC !important; 
 }
+
+table.items {
+    table-layout:fixed;
+}
+
+table.items th.title {
+    width: 60%;
+}
+
+table.items th.date {
+    width: 20%;
+}
+
+table.items th.edit, th.delete {
+    width: 10%;
+}
