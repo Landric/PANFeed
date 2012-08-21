@@ -39,23 +39,34 @@
                     <div class="control-group">
                         <div class="controls">
                             <table class="table table-striped table-bordered items">
-                                {% if item.feeditem_set %}
-                                    <caption class="title">Special Issue: {{item.title}}</caption>
-                                {% endif %}
                                 <thead>
                                     <tr>
+                                    {% if item.feeditem_set %}
+                                        <th class="title">{{item.title}}</th>
+                                        <th class="date">Date Published</th>
+                                        <th class="edit"><a href="{{ item.get_modify_url }}" class="btn"><i class="icon-edit"></i> Edit</a></th>
+                                        <th class="delete">
+                                            <form action="{{item.get_modify_url}}" method="post">
+                                                {% csrf_token %}
+                                                <input type="hidden" name="_method" value="DELETE" />
+                                                <button type="submit" class="btn btn-danger"><i class="icon-trash icon-white"></i> Delete</button>
+                                            </form>
+                                        </th>
+                                    {% else %}
                                         <th class="title">Title</th>
-                                        <th class="data">Date Published</th>
+                                        <th class="date">Date Published</th>
                                         <th class="edit">Edit</th>
                                         <th class="delete">Delete</th>
+                                    {% endif %}
                                     </tr>
                                 </thead>
                                 <tbody>
                 {% endif %}
+                {% if not item.feeditem_set %}
                                         <tr class="item" id="item-{{item.id}}">
                                             <td>{{item.title}}</td>
-                                            {% if forloop.first and item.feeditem_set %}
-                                                <td rowspan="{{table|length}}">{{item.created}}</td>
+                                            {% if forloop.counter == 2 and item.special_issue %}
+                                                <td rowspan="{{ table|length|add:"-1" }}">{{item.created}}</td>
                                             {% elif not item.special_issue %}
                                                 <td>{{item.created}}</td>
                                             {% endif %}
@@ -68,6 +79,7 @@
                                                 </form>
                                             </td>
                                         </tr>
+                {% endif %}
                 {% if forloop.last %}
                                     </tbody>
                                 </table>
