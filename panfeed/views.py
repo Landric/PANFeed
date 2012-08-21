@@ -111,6 +111,9 @@ class FeedUpdateView(FeedCRUDMixin, UpdateView):
             else:
                 item_list.append(item_issue)
 
+        if item_list:
+            table_list.append(item_list)
+
         return table_list
 
     def get_context_data(self, **kwargs):
