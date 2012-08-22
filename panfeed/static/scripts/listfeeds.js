@@ -1,5 +1,6 @@
 function ListFeedsCtrl($scope, $http, $templateCache) 
 {
+    "use strict";
     $scope.fetch = function()
     {
         $http(

@@ -1,5 +1,6 @@
 function PublishIssueCtrl($scope, $http, $templateCache)
 {
+    "use strict";
     $scope.title = '';
     $scope.editorial = '';
     $scope.items = [];

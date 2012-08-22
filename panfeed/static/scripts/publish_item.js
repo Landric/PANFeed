@@ -1,5 +1,6 @@
 function PublishItemCtrl($scope, $http, $templateCache)
 {
+    "use strict";
     $scope.item;
     $scope.loading = false;
     $scope.loaded = false;
