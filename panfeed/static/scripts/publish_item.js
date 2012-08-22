@@ -20,6 +20,14 @@ function PublishItemCtrl($scope, $http, $templateCache)
                 $scope.item = data[0];
                 $scope.loaded = true;
                 $scope.loading = false;
+                $('#urls').removeClass('error');
+                $scope.$apply();
+            },
+            error: function(data, status, request)
+            {
+                $scope.loaded = true;
+                $scope.loading = false;
+                $('#urls').addClass('error');
                 $scope.$apply();
             }
         });
@@ -49,5 +57,5 @@ function PublishItemCtrl($scope, $http, $templateCache)
             $scope.loading = false;
             $scope.$apply();
         });
-     }
+    }
 }

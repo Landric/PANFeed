@@ -18,7 +18,7 @@
             {{form.errors}}
         {% endif %}
 
-            <div class="control-group">
+            <div class="control-group" id="urls">
                 <div class="controls">
                     <div class=input-append">
                         <input ng:model="url" type="text" placeholder="Enter URL..."><button ng:click="convertURL()" class="btn" type="button">Add URL</button>
@@ -31,7 +31,7 @@
                 </div>
             </div>
 
-            <div ng:cloak ng:show="loaded" class="well" id="item">
+            <div ng:cloak ng:show="loaded && item" class="well" id="item">
                 <div class='control-group'>
                     <label class='control-label'>URL:</label>
                     <div class='controls'>
