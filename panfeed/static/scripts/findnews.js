@@ -1,10 +1,11 @@
-function FindNewsCtrl($scope)
+function FindNewsCtrl($scope, $http, $templateCache)
 {
     "use strict";
     var documentUrl = URI(document.location);
 
     $scope.searchTerms = "ecs eprints";
-
+    $scope.searchText = '';
+    
     $scope.user = function(link)
     {
         $scope.url = link;
@@ -51,4 +52,47 @@ function FindNewsCtrl($scope)
             }
         ).toString();
     };
+
+    $scope.fetch = function()
+    {
+        $http(
+        {
+            method: "GET",
+            url: '/api/v2/feed/?format=json&limit=0',
+            cache: $templateCache,
+            transformResponse: function(data,headersGetter)
+            {
+                var objects = JSON.parse(data).objects;
+                angular.forEach(objects, function(object)
+                {
+                    object["searchOn"] = object.title + object.description;
+                });
+                return objects
+            }
+        }).success(function(data,status)
+        {
+            $scope.feeds = arrayShuffle(data);
+        });
+    }
+
+    /* 
+        Modified implementation of Fisher-Yates shuffling algorithm, from:
+        http://www.hardcode.nl/subcategory_1/article_317-array-shuffle-function
+    */
+    function arrayShuffle(oldArray)
+    {
+        var newArray = oldArray.slice();
+        var len = newArray.length;
+        var i = len;
+        while (i--) 
+        {
+            var p = parseInt(Math.random()*len);
+            var t = newArray[i];
+            newArray[i] = newArray[p];
+            newArray[p] = t;
+        }
+        return newArray; 
+    }
+
+    $scope.fetch();
 }
