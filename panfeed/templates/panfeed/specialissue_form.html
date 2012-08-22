@@ -14,21 +14,21 @@
     <form action="#" method="post" class="form-horizontal">
         {% csrf_token %}
         <fieldset>
-            <div class='control-group'>
+            <div class='control-group' id='title'>
                <label class='control-label'>Special Issue title:</label>
                 <div class='controls'>
-                    <input ng:model="title" type='text' name='issue-title' value=''/>
+                    <input ng:model="title" type='text' value=''/>
                 </div>
             </div>
 
-            <div class='control-group'>
+            <div class='control-group' id='editorial'>
                 <label class='control-label'>Editorial:</label>
                 <div class='controls'>
-                   <textarea ng:model="editorial" name='issue-editorial'></textarea>
+                   <textarea ng:model="editorial"></textarea>
                 </div>
             </div>
 
-            <div class="control-group">
+            <div class="control-group" id='urls'>
                 <div class="controls">
                     <textarea ng:model="urls" placeholder="Enter URLs..."></textarea>
                     <button ng:click="convertURLs()" class="btn" type="button">Add URLs</button>

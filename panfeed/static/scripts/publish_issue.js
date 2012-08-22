@@ -28,6 +28,13 @@ function PublishIssueCtrl($scope, $http, $templateCache)
                 $scope.loaded = true;
                 $scope.loading = false;
                 $scope.$apply();
+            },
+            error: function(data, status, request)
+            {
+                $scope.loaded = true;
+                $scope.loading = false;
+                urlError();
+                $scope.$apply();
             }
         });
     };
@@ -107,19 +114,27 @@ function PublishIssueCtrl($scope, $http, $templateCache)
 
     $scope.publish = function(update)
     {
+        clearErrors();
+        var die = false;
+
         if($scope.title == '')
         {
-            alert("Need a title");
-            return;
+            titleError();
+            die = true;
         }
         if($scope.editorial == '')
         {
-            alert("Need a description");
-            return;
+            editorialError();
+            die = true;
         }
         if($scope.items.length == 0)
         {
-            alert("Need items");
+            urlError();
+            die = true;
+        }
+
+        if(die)
+        {
             return;
         }
 
@@ -233,5 +248,27 @@ function PublishIssueCtrl($scope, $http, $templateCache)
                 }
             }
         });
+    }
+
+    function clearErrors()
+    {
+        $('#title').removeClass('error');
+        $('#editorial').removeClass('error');
+        $('#urls').removeClass('error');
+    }
+
+    function titleError()
+    {
+        $('#title').addClass('error');
+    }
+
+    function editorialError()
+    {
+        $('#editorial').addClass('error');
+    }
+
+    function urlError()
+    {
+        $('#urls').addClass('error');
     }
 }
