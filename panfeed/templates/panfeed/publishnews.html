@@ -30,7 +30,7 @@
                 <tbody>
                     {% for feed in feeds %}
                         <tr class="feed" id="{{feed.get_fragment_id}}">
-                            <td>{{feed.title}} ({{feed.feeditem_set.count}} items)</td>
+                            <td>{{feed.title}} ({{feed.feeditem_set.count}} item{%if feed.feeditem_set.count != 1%}s{%endif%})</td>
                             <td>
                             <form action="{{feed.get_modify_url}}" method="post">
                                 {% csrf_token %}
