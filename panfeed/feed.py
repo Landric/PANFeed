@@ -1,3 +1,6 @@
+from operator import attrgetter
+from itertools import chain
+
 from django.contrib.syndication.views import Feed
 from django.shortcuts import get_object_or_404
 from django.core.urlresolvers import reverse
@@ -98,8 +101,8 @@ class UserFeed(Feed):
         
         #union and sort the items from plain_items and special_issues
         items_issues = sorted(
-            list(plain_items) + list(special_issues),
-            key = lambda obj: obj.created,
+            chain(plain_items, special_issues),
+            key = attrgetter("created"),
             reverse=True
         )
         
