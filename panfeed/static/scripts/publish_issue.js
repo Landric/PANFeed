@@ -29,6 +29,7 @@ function PublishIssueCtrl($scope, $http, $templateCache)
                 $scope.loaded = true;
                 $scope.loading = false;
                 $('#urls').removeClass('error');
+                $scope.urls = "";
                 $scope.$apply();
             },
             error: function(data, status, request)
