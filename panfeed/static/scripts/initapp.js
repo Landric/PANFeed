@@ -45,3 +45,26 @@ jQuery(document).ajaxSend(function(event, xhr, settings) {
         xhr.setRequestHeader("X-CSRFToken", getCookie('csrftoken'));
     }
 });
+
+$(function()
+{
+    $('#confirmDeleteModal .button-close').click(function()
+    {
+        $('#confirmDeleteModal').modal("hide");
+    });
+
+    $("input[name=_method][value=DELETE] + button[type=submit]").click(function(event)
+    {
+        event.preventDefault();
+        var button = $(this);
+        
+
+        $('#confirmDeleteModal .button-delete').unbind("click").click(function()
+        {
+            button.parent("div").parent("form").submit();
+            $('#confirmDeleteModal').modal("hide");
+        });
+        
+        $('#confirmDeleteModal').modal("show");
+    });
+});
