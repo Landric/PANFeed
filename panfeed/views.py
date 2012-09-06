@@ -324,7 +324,7 @@ class UserCRUDMixin(UserMixin):
 
 class UserDetailView(UserCRUDMixin, DetailView):
     pass
-class IssueDeleteView(UserCRUDMixin, DeleteView):
+class UserDeleteView(UserCRUDMixin, DeleteView):
     pass
 class UserUpdateView(UserCRUDMixin, UpdateView):
     def form_valid(self, form):
