@@ -40,6 +40,9 @@ class FeedResource(ModelResource):
         queryset = Feed.objects.all()
         allowed_methods = ['get']
         authentication = ReadAllWriteOwnedAuthentication()
+        filtering = {
+            "id": ALL,
+        }
 
     def dehydrate(self, bundle):
         bundle.data['url'] = bundle.obj.get_absolute_url()

@@ -247,7 +247,24 @@ function PublishIssueCtrl($scope, $http, $templateCache)
                 submitted_items = submitted_items - 1;
                 if (submitted_items == 0)
                 {
-                    window.location = "/publishnews";
+                    $http(
+                    {
+                        method: "GET",
+                        url: '/api/v2/feed/',
+                        params:
+                        {
+                            limit:1,
+                            id:$scope.feed,
+                        },
+                        cache: $templateCache,
+                        transformResponse: function(data,headersGetter)
+                        {
+                            return JSON.parse(data).objects;
+                        }
+                    }).success(function(data,status)
+                    {
+                        window.location = "/managefeed/"+data[0].slug;
+                    });
                 }
             }
         });
