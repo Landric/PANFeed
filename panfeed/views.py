@@ -281,6 +281,7 @@ def urltoitem(request):
     return HttpResponse(json.dumps(items), mimetype="application/json")
 
 def submit(request):
+    success = False
     if request.method == 'POST':
         feeds = str(request.POST['urls']).splitlines()
         invalid_feeds = []
@@ -298,31 +299,33 @@ def submit(request):
             except ValidationError, e:
                 invalid_feeds.append(url)
         
-
         if invalid_feeds:
-            content = 'The following feeds are invalid, or do not resolve to an academic domain, and could not be added to the PANFeed database. Please check they exist, and try again.'
-            return render(
-                request=request,
-                template_name = 'panfeed/error.html',
-                dictionary = {'title':'Error', 'header':'Invalid Feeds', 'content':content, 'data':invalid_feeds},
-            )
+            dictionary = {
+                "title" : 'Error',
+                "header": 'Invalid Feeds',
+                "content" : "The following feeds are invalid, or do not resolve to an academic domain, and could not be added to the PANFeed database. Please check they exist, and try again.",
+                "data" : invalid_feeds,
+            }
         else:
-            content = 'Your feeds have been sucessfully added to PANFeed!'
-            return render(
-                request=request,
-                template_name = 'panfeed/success.html',
-                dictionary = {'title':'Crawl Me', 'header':'Success!', 'content':content},
-            )
+            success = True
+            dictionary = {
+                'title':'Crawl Me',
+                'header':'Success!',
+                'content':'Your feeds have been sucessfully added to PANFeed!'
+            }
 
     else:
-        content = 'Your data was not submitted - please retry sending the form. If you have reached this page in error, please go back and try again. If the problem persists, inform an administrator.'
-        
-        return render(
-            request = request,
-            template_name = 'panfeed/error.html',
-            dictionary = {'title':'Error', 'header':'No data recieved', 'content':content},
-        )
-        
+        dictionary = {
+            'title':'Error',
+            'header':'No data recieved',
+            'content':'Your data was not submitted - please retry sending the form. If you have reached this page in error, please go back and try again. If the problem persists, inform an administrator.'
+        }
+    
+    return render (
+        request = request,
+        template_name = 'panfeed/success.html' if success else 'panfeed/error.html',
+        dictionary = dictionary
+    )
 
 class UserMixin(object):
     model = UserProfile
