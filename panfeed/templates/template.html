@@ -33,61 +33,60 @@
     <!-- Navbar
     ================================================== -->
     <div class="navbar navbar-fixed-top navbar-inverse">
-      <div class="navbar-inner">
-        <div class="container">
-          <button type="button"class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-            <span class="icon-bar"></span>
-          </button>
-          <a class="brand" href="{% url 'home' %}">PANFeed</a>
-          <div class="nav-collapse collapse">
-            <ul class="nav">
-        <li class="{% block findnews_nav %}{% endblock %}">
-            <a href="{% url 'findnews' %}">Find News</a>
-        </li>
-
-        <li class="{% block publish_nav %}{% endblock %}">
-            <a href="{% url 'publishnews' %}">Publish News</a>
-        </li>
-
-        <li class="{% block faq_nav %}{% endblock %}">
-            <a href="{% url 'faq' %}">FAQ</a>
-        </li>
-
-        <li class="{% block about_nav %}{% endblock %}">
-            <a href="{% url 'about' %}">About</a>
-        </li>
-        </ul>
-            <ul class="nav pull-right">
-                <li class="divider-vertical"></li>
-                {% if user.is_authenticated %}
-                    <li id="session" class="dropdown">
-                        <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                        {# <img class="avatar" src="{{user.get_profile.gravatar_url}}" /> #}
-                        <span class="username">{{user.email}}</span> <b class="caret"></b></a>
-                        <ul class="dropdown-menu">
-                            <li class="disabled"><a href="#">Account settings (coming soon)</a></li>
-                            <li><a href="{% url 'logout' %}">Sign out</a></li>
-                        </ul>
-                    </li>
-                {% else %}
-                    {% block browserid %}
-                        <li id="login">
-                            <a id="browserid" href="">
-                                <img src="{{ STATIC_URL }}images/persona-login.png" alt="Sign In" />
-                            </a>
-                            <form hidden="hidden" method="POST" action="{% url 'browserid_verify' %}{% if request.path %}?next={{ request.path }}{% endif %}">
-                                {% csrf_token %}
-                                {{ browserid_form.as_p }}
-                            </form>
+        <div class="navbar-inner">
+            <div class="container">
+                <button type="button"class="btn btn-navbar" data-toggle="collapse" data-target=".nav-collapse">
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="brand" href="{% url 'home' %}">PANFeed</a>
+                <div class="nav-collapse collapse">
+                    <ul class="nav">
+                        <li class="{% block findnews_nav %}{% endblock %}">
+                            <a href="{% url 'findnews' %}">Find News</a>
                         </li>
-                    {% endblock browserid %}
-                {% endif %}
-            </ul>
-          </div>
+
+                        <li class="{% block publish_nav %}{% endblock %}">
+                            <a href="{% url 'publishnews' %}">Publish News</a>
+                        </li>
+
+                        <li class="{% block faq_nav %}{% endblock %}">
+                            <a href="{% url 'faq' %}">FAQ</a>
+                        </li>
+
+                        <li class="{% block about_nav %}{% endblock %}">
+                            <a href="{% url 'about' %}">About</a>
+                        </li>
+                    </ul>
+                    <ul class="nav pull-right">
+                        <li class="divider-vertical"></li>
+                        {% if user.is_authenticated %}
+                            <li id="session" class="dropdown">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">
+                                <span class="username">{{user.email}}</span> <b class="caret"></b></a>
+                                <ul class="dropdown-menu">
+                                    <li class="disabled"><a href="#">Account settings (coming soon)</a></li>
+                                    <li><a href="{% url 'logout' %}">Sign out</a></li>
+                                </ul>
+                            </li>
+                        {% else %}
+                            {% block browserid %}
+                                <li id="login">
+                                    <a id="browserid" href="">
+                                        <img src="{{ STATIC_URL }}images/persona-login.png" alt="Sign In" />
+                                    </a>
+                                    <form hidden="hidden" method="POST" action="{% url 'browserid_verify' %}{% if request.path %}?next={{ request.path }}{% endif %}">
+                                        {% csrf_token %}
+                                        {{ browserid_form.as_p }}
+                                    </form>
+                                </li>
+                            {% endblock browserid %}
+                        {% endif %}
+                    </ul>
+                </div>
+            </div>
         </div>
-      </div>
     </div>
     <!-- End Navbar
     ============================================================================-->
@@ -101,14 +100,9 @@
     
 
     <hr>
-    <div class="container">
-    <div class="span12 pagination-centered">
-        <footer>
-             <p>Copyright &copy; <a href="http://www.southampton.ac.uk/">University of Southampton</a> | Made with <a target="_blank" href="http://getbootstrap.com">Bootstrap</a> | PANFeed is an output of the <a href="http://jisc.ac.uk">JISC</a> funded <a href="http://www.campus-roar.ecs.soton.ac.uk">CampusROAR</a> project | View more <a href="http://www.wais.ecs.soton.ac.uk/">WAIS</a> projects at our <a href="http://blogs.ecs.soton.ac.uk/oneshare/">OneShare Blog</a></p>
+    <footer class="pagination-centered">
+         <p>Copyright &copy; <a href="http://www.southampton.ac.uk/">University of Southampton</a> | Made with <a target="_blank" href="http://getbootstrap.com">Bootstrap</a> | PANFeed is an output of the <a href="http://jisc.ac.uk">JISC</a> funded <a href="http://www.campus-roar.ecs.soton.ac.uk">CampusROAR</a> project | View more <a href="http://www.wais.ecs.soton.ac.uk/">WAIS</a> projects at our <a href="http://blogs.ecs.soton.ac.uk/oneshare/">OneShare Blog</a></p>
     </footer>
-    </div>
-    </div>
-  </div>
   
     <!-- Javascript
     ================================================== -->

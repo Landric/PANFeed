@@ -181,7 +181,6 @@ class ItemCreateView(ItemCRUDMixin, CreateView):
     template_name = "panfeed/feeditem_form.html"
     
     def form_invalid(self,form):
-        print form.errors
         return super(ItemCreateView, self).form_invalid(form)
 
     def form_valid(self,form):
