@@ -3,9 +3,9 @@ import feedparser
 import json
 from urlparse import urlparse
 
-from panfeed.models import AcademicFeeds,Feed,FeedItem,SpecialIssue
+from panfeed.models import AcademicFeeds,Feed,FeedItem,SpecialIssue, UserProfile
 
-from django.shortcuts import render_to_response, get_object_or_404, redirect
+from django.shortcuts import render_to_response, get_object_or_404, redirect, render
 
 from django.template import RequestContext
 
@@ -310,3 +310,31 @@ def submit(request):
         content = 'Your data was not submitted - please retry sending the form. If you have reached this page in error, please go back and try again. If the problem persists, inform an administrator.'
         
         return render_to_response('error.html', {'title':'Error', 'header':'No data recieved', 'content':content}, context_instance=RequestContext(request))
+        
+
+class UserMixin(object):
+    model = UserProfile
+
+class UserListView(UserMixin, ListView):
+    context_object_name = "users"
+
+class UserCRUDMixin(UserMixin):
+    def get_success_url(self):
+        return self.object.get_absolute_url()
+
+class UserDetailView(UserCRUDMixin, DetailView):
+    pass
+class IssueDeleteView(UserCRUDMixin, DeleteView):
+    pass
+class UserUpdateView(UserCRUDMixin, UpdateView):
+    def form_valid(self, form):
+        self.object = form.save(commit=False)
+        if not self.object.user == self.request.user:
+            return render(
+                request = self.request,
+                template_name='error.html',
+                dictionary = {'title':'Unauthorized', 'header':"Can't edit that user",},
+                status=401
+            )
+        else:
+            return super(UserUpdateView, self).form_valid(form)

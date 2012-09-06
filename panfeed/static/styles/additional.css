@@ -6,6 +6,12 @@
 	padding:2px 0px;
 }
 
+#session .avatar {
+	width: 18px;
+	height: 18px;
+	margin-right: 3px;
+}
+
 #login a#browserid {
     padding: 7px 0px 6px;
 }

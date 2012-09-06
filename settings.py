@@ -155,7 +155,9 @@ AUTHENTICATION_BACKENDS = (
     'django_browserid.auth.BrowserIDBackend',
 )
 
+AUTH_PROFILE_MODULE = "panfeed.UserProfile"
 BROWSERID_CREATE_USER = True
+
 SITE_URL="http://localhost:8000"
 
 LOGIN_REDIRECT_URL = '/'

@@ -8,12 +8,16 @@
 # into your database.
 
 from django.db import models
+from django.db.models import signals
 from django.contrib.auth.models import User
 from django.utils.translation import ugettext_lazy as _
 
 from datetime import datetime
 from django_extensions.db.models import TimeStampedModel, TitleSlugDescriptionModel
 from django_extensions.db.fields import AutoSlugField
+
+import urllib
+import hashlib
 
 class Domains(models.Model):
     toplevel = models.URLField(max_length=255) #https://tools.ietf.org/html/rfc3986
@@ -100,3 +104,36 @@ class FeedItem(TimeStampedModel):
             
     def __unicode__(self):
         return self.title
+        
+class UserProfile(TimeStampedModel, TitleSlugDescriptionModel):
+    user = models.OneToOneField(User, editable=False)
+    gravatar_hash = models.CharField(max_length=32, editable=False)
+        
+    #https://en.gravatar.com/site/implement/images/python/
+    def gravatar_url(self, size=80):
+        gravatar_url = "https://secure.gravatar.com/avatar/" + self.gravatar_hash + "?"
+        gravatar_url += urllib.urlencode({'d':"retro", 's':str(size)})
+        return gravatar_url
+    
+    def big_gravatar_url(self):
+        return self.gravatar_url(size=512)
+    
+    def __unicode__(self):
+        return "{title}({email})".format(
+            nickname = self.title,
+            email = self.user.email
+        )
+    
+    @models.permalink
+    def get_absolute_url(self):
+        return('profile', (), {"slug" : self.slug})
+
+def create_user_profile(sender, instance, created, **kwargs):
+    if created:
+        UserProfile.objects.create(
+            user = instance,
+            title = instance.email.rsplit("@",1)[0][:30],
+            gravatar_hash = hashlib.md5(instance.email.lstrip().lower()).hexdigest()
+        )
+
+signals.post_save.connect(create_user_profile, sender=User)
