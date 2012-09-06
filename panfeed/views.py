@@ -150,8 +150,6 @@ class ItemListView(ItemMixin, ListView):
 
 class ItemCRUDMixin(LoginRequiredMixin, ItemMixin):
     form_class = FeedItemForm
-    def get_success_url(self):
-        return reverse('publishnews')
     
     def get_queryset(self):
         #Only operate on items that belong to feeds the current user owns
