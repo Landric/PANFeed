@@ -101,7 +101,7 @@ class UserFeed(Feed):
         
         #union and sort the items from plain_items and special_issues
         items_issues = sorted(
-            chain(plain_items, special_issues),
+            chain.from_iterable((plain_items, special_issues)),
             key = attrgetter("created"),
             reverse=True
         )
