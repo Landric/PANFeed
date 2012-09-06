@@ -242,6 +242,7 @@ class IssueCreateView(IssueCRUDMixin, CreateView):
         
 class IssueDeleteView(IssueCRUDMixin, DeleteView):
     pass
+
 class IssueUpdateView(IssueCRUDMixin, UpdateView):
     template_name = "panfeed/specialissue_form.html"
 
