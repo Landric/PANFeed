@@ -5,10 +5,10 @@ from panfeed.models import AcademicFeeds,Feed,FeedItem
 from panfeed.views import FindNews, FeedListView, PublishNews, UserUpdateView
 
 urlpatterns = patterns('panfeed.views',
-    url(r'^$',         TemplateView.as_view(template_name="index.html"),name='home'),
-    url(r'^about/$',   TemplateView.as_view(template_name="about.html"),name='about'),
-    url(r'^crawlme/$', TemplateView.as_view(template_name="crawlme.html"),name='crawlme'),
-    url(r'^faq/$',     TemplateView.as_view(template_name="faq.html"), name='faq'),
+    url(r'^$',         TemplateView.as_view(template_name="panfeed/index.html"),name='home'),
+    url(r'^about/$',   TemplateView.as_view(template_name="panfeed/about.html"),name='about'),
+    url(r'^crawlme/$', TemplateView.as_view(template_name="panfeed/crawlme.html"),name='crawlme'),
+    url(r'^faq/$',     TemplateView.as_view(template_name="panfeed/faq.html"), name='faq'),
     
     url(r'^urltoitem$','urltoitem', name='urltoitem'),
 

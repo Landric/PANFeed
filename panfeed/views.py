@@ -301,15 +301,27 @@ def submit(request):
 
         if invalid_feeds:
             content = 'The following feeds are invalid, or do not resolve to an academic domain, and could not be added to the PANFeed database. Please check they exist, and try again.'
-            return render_to_response('error.html', {'title':'Error', 'header':'Invalid Feeds', 'content':content, 'data':invalid_feeds}, context_instance=RequestContext(request))
+            return render(
+                request=request,
+                template_name = 'panfeed/error.html',
+                dictionary = {'title':'Error', 'header':'Invalid Feeds', 'content':content, 'data':invalid_feeds},
+            )
         else:
             content = 'Your feeds have been sucessfully added to PANFeed!'
-            return render_to_response('success.html', {'title':'Crawl Me', 'header':'Success!', 'content':content}, context_instance=RequestContext(request))
+            return render(
+                request=request,
+                template_name = 'panfeed/success.html',
+                dictionary = {'title':'Crawl Me', 'header':'Success!', 'content':content},
+            )
 
     else:
         content = 'Your data was not submitted - please retry sending the form. If you have reached this page in error, please go back and try again. If the problem persists, inform an administrator.'
         
-        return render_to_response('error.html', {'title':'Error', 'header':'No data recieved', 'content':content}, context_instance=RequestContext(request))
+        return render(
+            request = request,
+            template_name = 'panfeed/error.html',
+            dictionary = {'title':'Error', 'header':'No data recieved', 'content':content},
+        )
         
 
 class UserMixin(object):
@@ -332,7 +344,7 @@ class UserUpdateView(UserCRUDMixin, UpdateView):
         if not self.object.user == self.request.user:
             return render(
                 request = self.request,
-                template_name='error.html',
+                template_name='panfeed/error.html',
                 dictionary = {'title':'Unauthorized', 'header':"Can't edit that user",},
                 status=401
             )
