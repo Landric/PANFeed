@@ -22,9 +22,12 @@
     </h2>
     
     <div class="row">
-        <figure class="thumbnail span4 offset4 profile">
-            <img class="avatar" src="{{ object.big_gravatar_url }}" />
-            <figcaption class="nickname caption">
+        <div class="span6">
+            <figure class="thumbnail profile">
+                <img class="avatar" src="{{ object.big_gravatar_url }}" />
+            </figure>
+        </div>
+        <div class="span6">
             {% if object.user == request.user %}
                 <form method="post">
                     {% csrf_token %}
@@ -35,8 +38,7 @@
                 <span>{{ object.title }}</span>
                 <p>{{object.description}}</p>
             {% endif %}
-            </figcaption>
-        </figure>
+        </div>
     </div>
     
 
