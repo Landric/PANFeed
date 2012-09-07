@@ -116,8 +116,8 @@
     ============================================================================-->
 
         {% if object %}
-                <a class="btn btn-primary" href="{% url 'newitem' object.slug %}">Publish an item</a>
-                <a class="btn btn-primary" href="{% url 'newissue' object.slug %}">Publish a Special Issue</a>
+                <a class="btn btn-primary" href="{% url 'manageitem' object.slug %}">Publish an item</a>
+                <a class="btn btn-primary" href="{% url 'manageissue' object.slug %}">Publish a Special Issue</a>
         {% endif %}
     {% endif %}
 {% endblock content %}
