@@ -31,12 +31,13 @@ urlpatterns = patterns('',
 
     # Uncomment the admin/doc line below to enable admin documentation:
     # url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
-    (r'^csp', include('csp.urls')),
+    url(r'^csp', include('csp.urls')),
     # Uncomment the next line to enable the admin:
     url(r'^admin/', include(admin.site.urls)),
     url(r'', include('django_browserid.urls')),
     #url(r'^(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.MEDIA_ROOT}),
     url(r'^sign-out/$', 'django.contrib.auth.views.logout', name="logout"),
     url(r'^sign-in/$', 'django.contrib.auth.views.login', name="login"),
-    (r'^api/', include(v2_api.urls)),
+    url(r'^api/', include(v2_api.urls)),
+    url(r'^jsurls.js$', 'django_js_utils.views.jsurls', name="jsurls"),
 )
