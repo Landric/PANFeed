@@ -7,7 +7,7 @@ function PublishItemCtrl($scope, $http, $templateCache)
 
     $scope.convertURL = function()
     {
-        var converter_url = "/urltoitem";
+        var converter_url = django_js_utils.urls.resolve('urltoitem');
         $scope.loading = true;
         jQuery.ajax(
         { 

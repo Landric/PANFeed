@@ -14,7 +14,7 @@ function PublishIssueCtrl($scope, $http, $templateCache)
     $scope.convertURLs = function()
     {
         var issue_urls = $scope.urls.split("\n");
-        var converter_url = "/urltoitem";
+        var converter_url = django_js_utils.urls.resolve('urltoitem');
         $scope.loading = true;
 
         $.ajax(
@@ -263,7 +263,7 @@ function PublishIssueCtrl($scope, $http, $templateCache)
                         }
                     }).success(function(data,status)
                     {
-                        window.location = "/managefeed/"+data[0].slug;
+                        window.location = django_js_utils.urls.resolve('managefeed', {"feed_slug":data[0].slug});
                     });
                 }
             }
