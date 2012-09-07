@@ -2,6 +2,10 @@
     display: none;
 }
 
+form.unstyled {
+    margin: 0;
+}
+
 .feed-list {
 	padding:2px 0px;
 }

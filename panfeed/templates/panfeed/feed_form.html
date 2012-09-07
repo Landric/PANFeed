@@ -44,21 +44,20 @@
                                     {% if item.feeditem_set %}
                                         <th class="title">{{item.title}}</th>
                                         <th class="date">Date Published</th>
-                                        <th class="edit"><a href="{{ item.get_modify_url }}" class="btn"><i class="icon-edit"></i> Edit</a></th>
-                                        <th class="delete">
-                                            <form action="{{item.get_modify_url}}" method="post">
+                                        <td class="manage">
+                                            <form class="unstyled" action="{{item.get_modify_url}}" method="post">
                                                 {% csrf_token %}
-                                                <div>
+                                                <div class="btn-group">
+                                                    <a href="{{ item.get_modify_url }}" class="btn"><i class="icon-edit"></i> Edit</a>
                                                     <input type="hidden" name="_method" value="DELETE" />
                                                     <button type="submit" class="btn btn-danger"><i class="icon-trash icon-white"></i> Delete</button>
                                                 </div>
                                             </form>
-                                        </th>
+                                        </td>
                                     {% else %}
                                         <th class="title">Title</th>
                                         <th class="date">Date Published</th>
-                                        <th class="edit">Edit</th>
-                                        <th class="delete">Delete</th>
+                                        <th class="manage">Manage Item</th>
                                     {% endif %}
                                     </tr>
                                 </thead>
@@ -68,15 +67,15 @@
                                         <tr class="item" id="item-{{item.id}}">
                                             <td>{{item.title}}</td>
                                             {% if forloop.counter == 2 and item.special_issue %}
-                                                <td rowspan="{{ table|length|add:"-1" }}">{{item.created}}</td>
+                                                <td rowspan="{{ table|length|add:'-1' }}">{{item.created}}</td>
                                             {% elif not item.special_issue %}
                                                 <td>{{item.created}}</td>
                                             {% endif %}
-                                            <td><a href="{{ item.get_modify_url }}" class="btn"><i class="icon-edit"></i> Edit</a></td>
                                             <td>
-                                                <form action="{{item.get_modify_url}}" method="post">
+                                                <form class="unstyled" action="{{item.get_modify_url}}" method="post">
                                                     {% csrf_token %}
-                                                    <div>
+                                                    <div class="btn-group">
+                                                        <a href="{{ item.get_modify_url }}" class="btn"><i class="icon-edit"></i> Edit</a>
                                                         <input type="hidden" name="_method" value="DELETE" />
                                                         <button type="submit" class="btn btn-danger"><i class="icon-trash icon-white"></i> Delete</button>
                                                     </div>
