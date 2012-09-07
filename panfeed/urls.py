@@ -12,13 +12,13 @@ urlpatterns = patterns('panfeed.views',
     
     url(r'^urltoitem$','urltoitem', name='urltoitem'),
 
-    url(r'^findnews/$',         FindNews.as_view(),     name='findnews'),
-    url(r'^findnews/allfeeds$', FeedListView.as_view(), name='allfeeds'),
-    url(r'^publishnews/$',      PublishNews.as_view(),  name='publishnews'),
+    url(r'^news/$',         FindNews.as_view(),     name='findnews'),
+    url(r'^news/allfeeds/$', FeedListView.as_view(), name='allfeeds'),
 
-    url(r'^manageitem/(?P<feed_slug>[\w-]+)/(?P<item_slug>[\w-]+)?$','manageitem', name='manageitem'),
-    url(r'^managefeed/(?P<feed_slug>[\w-]+)/manageissue/(?P<issue_slug>[\w-]+)?$','manageissue', name='manageissue'),
-    url(r'^managefeed/(?P<feed_slug>[\w-]+)?$','managefeed', name='managefeed'),
+    url(r'^feed/(?P<feed_slug>[\w-]+)/item/(?P<item_slug>[\w-]+)?$','manageitem', name='manageitem'),
+    url(r'^feed/(?P<feed_slug>[\w-]+)/issue/(?P<issue_slug>[\w-]+)?$','manageissue', name='manageissue'),
+    url(r'^feed/$',      PublishNews.as_view(),  name='publishnews'),
+    url(r'^feed/(?P<feed_slug>[\w-]+)?$','managefeed', name='managefeed'),
 
     url(r'^user/(?P<slug>[\w-]+)$', UserUpdateView.as_view(), name='profile'),
 
@@ -26,6 +26,6 @@ urlpatterns = patterns('panfeed.views',
 )
 
 urlpatterns += patterns('',
-    url(r'^feed/(?P<feed_slug>[\w-]+)$', UserFeed(), name='viewfeed'),
+    url(r'^rssfeed/(?P<feed_slug>[\w-]+)$', UserFeed(), name='viewfeed'),
     url(r'^find$', PersonalFeed(), name="find"),
 )
