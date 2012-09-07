@@ -3,9 +3,9 @@ import feedparser
 import json
 from urlparse import urlparse
 
-from panfeed.models import AcademicFeeds,Feed,FeedItem,SpecialIssue
+from panfeed.models import AcademicFeeds,Feed,FeedItem,SpecialIssue, UserProfile
 
-from django.shortcuts import render_to_response, get_object_or_404, redirect
+from django.shortcuts import render_to_response, get_object_or_404, redirect, render
 
 from django.template import RequestContext
 
@@ -150,8 +150,6 @@ class ItemListView(ItemMixin, ListView):
 
 class ItemCRUDMixin(LoginRequiredMixin, ItemMixin):
     form_class = FeedItemForm
-    def get_success_url(self):
-        return reverse('publishnews')
     
     def get_queryset(self):
         #Only operate on items that belong to feeds the current user owns
@@ -283,6 +281,7 @@ def urltoitem(request):
     return HttpResponse(json.dumps(items), mimetype="application/json")
 
 def submit(request):
+    success = False
     if request.method == 'POST':
         feeds = str(request.POST['urls']).splitlines()
         invalid_feeds = []
@@ -300,15 +299,57 @@ def submit(request):
             except ValidationError, e:
                 invalid_feeds.append(url)
         
-
         if invalid_feeds:
-            content = 'The following feeds are invalid, or do not resolve to an academic domain, and could not be added to the PANFeed database. Please check they exist, and try again.'
-            return render_to_response('error.html', {'title':'Error', 'header':'Invalid Feeds', 'content':content, 'data':invalid_feeds}, context_instance=RequestContext(request))
+            dictionary = {
+                "title" : 'Error',
+                "header": 'Invalid Feeds',
+                "content" : "The following feeds are invalid, or do not resolve to an academic domain, and could not be added to the PANFeed database. Please check they exist, and try again.",
+                "data" : invalid_feeds,
+            }
         else:
-            content = 'Your feeds have been sucessfully added to PANFeed!'
-            return render_to_response('success.html', {'title':'Crawl Me', 'header':'Success!', 'content':content}, context_instance=RequestContext(request))
+            success = True
+            dictionary = {
+                'title':'Crawl Me',
+                'header':'Success!',
+                'content':'Your feeds have been sucessfully added to PANFeed!'
+            }
 
     else:
-        content = 'Your data was not submitted - please retry sending the form. If you have reached this page in error, please go back and try again. If the problem persists, inform an administrator.'
-        
-        return render_to_response('error.html', {'title':'Error', 'header':'No data recieved', 'content':content}, context_instance=RequestContext(request))
+        dictionary = {
+            'title':'Error',
+            'header':'No data recieved',
+            'content':'Your data was not submitted - please retry sending the form. If you have reached this page in error, please go back and try again. If the problem persists, inform an administrator.'
+        }
+    
+    return render (
+        request = request,
+        template_name = 'panfeed/success.html' if success else 'panfeed/error.html',
+        dictionary = dictionary
+    )
+
+class UserMixin(object):
+    model = UserProfile
+
+class UserListView(UserMixin, ListView):
+    context_object_name = "users"
+
+class UserCRUDMixin(UserMixin):
+    def get_success_url(self):
+        return self.object.get_absolute_url()
+
+class UserDetailView(UserCRUDMixin, DetailView):
+    pass
+class UserDeleteView(UserCRUDMixin, DeleteView):
+    pass
+class UserUpdateView(UserCRUDMixin, UpdateView):
+    def form_valid(self, form):
+        self.object = form.save(commit=False)
+        if not self.object.user == self.request.user:
+            return render(
+                request = self.request,
+                template_name='panfeed/error.html',
+                dictionary = {'title':'Unauthorized', 'header':"Can't edit that user",},
+                status=401
+            )
+        else:
+            return super(UserUpdateView, self).form_valid(form)

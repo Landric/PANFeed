@@ -119,6 +119,15 @@ class UserFeed(Feed):
                     issue_item.title += " - " + item_issue.title
                     yield issue_item
 
+    def author_name(self, feed):
+        return feed.owner.get_profile().title
+    
+    def author_email(self, feed):
+        return feed.owner.email
+    
+    def author_link(self, feed):
+        return feed.owner.get_profile().get_absolute_url()
+    
     def title(self,feed):
         return feed.title 
 
@@ -145,7 +154,7 @@ class UserFeed(Feed):
 
     def item_pubdate(self,item):
         return item.created
-
+    
     def get_object(self,request,feed_slug):
         return get_object_or_404(MFeed, slug=feed_slug);
 

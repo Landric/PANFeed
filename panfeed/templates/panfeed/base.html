@@ -64,9 +64,11 @@
                         {% if user.is_authenticated %}
                             <li id="session" class="dropdown">
                                 <a href="#" class="dropdown-toggle" data-toggle="dropdown">
-                                <span class="username">{{user.email}}</span> <b class="caret"></b></a>
+                                <img class="avatar" src="{{user.get_profile.gravatar_url}}" />
+                                <span class="nickname">{{user.get_profile.title}}</span>
+                                <small>(<span class="email">{{user.email}}</span>)</small> <b class="caret"></b></a>
                                 <ul class="dropdown-menu">
-                                    <li class="disabled"><a href="#">Account settings (coming soon)</a></li>
+                                    <li><a href="{{user.get_profile.get_absolute_url}}">Account settings</a></li>
                                     <li><a href="{% url 'logout' %}">Sign out</a></li>
                                 </ul>
                             </li>
@@ -111,11 +113,11 @@
         <script type="text/javascript" src="{{ STATIC_URL }}js/jquery.js"></script>
         <script type="text/javascript" src="{{ STATIC_URL }}js/URI.min.js"></script>
         <script type="text/javascript" src="{{ STATIC_URL }}bootstrap/js/bootstrap.min.js"></script>
-        <script type="text/javascript" src="{{ STATIC_URL }}scripts/listfeeds.js"></script>
-        <script type="text/javascript" src="{{ STATIC_URL }}scripts/findnews.js"></script>
-        <script type="text/javascript" src="{{ STATIC_URL }}scripts/publish_item.js"></script>
-        <script type="text/javascript" src="{{ STATIC_URL }}scripts/publish_issue.js"></script>
-        <script type="text/javascript" src="{{ STATIC_URL }}scripts/initapp.js"></script>
+        <script type="text/javascript" src="{{ STATIC_URL }}panfeed/scripts/listfeeds.js"></script>
+        <script type="text/javascript" src="{{ STATIC_URL }}panfeed/scripts/findnews.js"></script>
+        <script type="text/javascript" src="{{ STATIC_URL }}panfeed/scripts/publish_item.js"></script>
+        <script type="text/javascript" src="{{ STATIC_URL }}panfeed/scripts/publish_issue.js"></script>
+        <script type="text/javascript" src="{{ STATIC_URL }}panfeed/scripts/initapp.js"></script>
     {% endcompress %}
     {{ browserid_form.media.js }}
     {% block scripts %}

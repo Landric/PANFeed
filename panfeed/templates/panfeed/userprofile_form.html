@@ -1,0 +1,43 @@
+{% extends "panfeed/base.html" %}
+{% load url from future %}
+{% load crispy_forms_tags %}
+
+{% block title %}
+        {% if object.user == request.user %}
+            Edit User
+        {% else %}
+            View User
+        {% endif %}
+        "{{object.title}}"
+{% endblock title %}
+
+{% block content %}
+    <h2>
+        {% if object.user == request.user %}
+            Edit user
+        {% else %}
+            View user
+        {% endif %}
+        "{{object.title}}"
+    </h2>
+    
+    <div class="row">
+        <figure class="thumbnail span4 offset4 profile">
+            <img class="avatar" src="{{ object.big_gravatar_url }}" />
+            <figcaption class="nickname caption">
+            {% if object.user == request.user %}
+                <form method="post">
+                    {% csrf_token %}
+                    {{form|crispy}}
+                    <input type="submit" value="Submit" />
+                </form>
+            {% else %}
+                <span>{{ object.title }}</span>
+                <p>{{object.description}}</p>
+            {% endif %}
+            </figcaption>
+        </figure>
+    </div>
+    
+
+{% endblock content %}
