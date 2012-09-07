@@ -116,7 +116,7 @@ class UserProfile(TimeStampedModel, TitleSlugDescriptionModel):
         return gravatar_url
     
     def big_gravatar_url(self):
-        return self.gravatar_url(size=512)
+        return self.gravatar_url(size=256)
     
     def __unicode__(self):
         return "{title}({email})".format(
