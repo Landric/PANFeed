@@ -16,7 +16,7 @@
         <div class="span4 offset1">
             <h2>Select a custom Feed</h2>
             <p>Enter some keywords separated by spaces into the box below to create a custom news feed.</p>
-        <input class="search-query" ng:model="searchTerms" ng:change="search()" ng:click="search()" ng:focus="search()" class="span2" size="16" type="text" pattern="[\w ]*">
+        <input ng:model="searchTerms" ng:change="search()" ng:click="search()" ng:focus="search()" class="span2" size="16" type="text" pattern="[\w ]*">
             <br/>
             <p>If you represent an institution and want to see your feeds appearing in this search, <a href="{% url 'crawlme' %}">click here to find out how to get your feeds added</a>.</p>
         </div>
