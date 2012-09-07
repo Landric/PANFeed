@@ -109,10 +109,12 @@
     <!-- Placed at the end of the document so the pages load faster -->
     <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.0.1/angular.min.js"></script>
     
+    <script type="text/javascript" src="{% url 'jsurls' %}"></script>
     {% compress js %}
         <script type="text/javascript" src="{{ STATIC_URL }}js/jquery.js"></script>
         <script type="text/javascript" src="{{ STATIC_URL }}js/URI.min.js"></script>
         <script type="text/javascript" src="{{ STATIC_URL }}bootstrap/js/bootstrap.min.js"></script>
+        <script type="text/javascript" src="{{ STATIC_URL }}django_js_utils.js"></script>
         <script type="text/javascript" src="{{ STATIC_URL }}panfeed/scripts/listfeeds.js"></script>
         <script type="text/javascript" src="{{ STATIC_URL }}panfeed/scripts/findnews.js"></script>
         <script type="text/javascript" src="{{ STATIC_URL }}panfeed/scripts/publish_item.js"></script>
@@ -121,7 +123,7 @@
     {% endcompress %}
     
     {{ browserid_form.media.js }}
-    
+
     {% block scripts %}
     {% endblock scripts %}
 </body>
