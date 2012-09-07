@@ -10,14 +10,30 @@
     <h2>Publish Item to "{{feed.title}}"</h2>
 {% endif %}
 <br/>
-<div ng:app="panfeedModule" ng:csp ng:controller="PublishItemCtrl" {% if object %} ng:init="fetch({{object.id}})" {% endif %}>
+<div ng:app="panfeedModule" ng:csp ng:controller="PublishItemCtrl" {% if object %}ng:init="fetch({{object.id}})"
+        {% elif form.errors %}
+            ng:init="
+            loading = true;
+            {% for field in form %}
+                {% if field.label == "Title" %}
+                    item.title='{{field.value}}'; 
+                {% elif field.label == "Description" %}
+                    item.description='{{field.value}}'; 
+                {% elif field.label == "URL" %}
+                    item.url='{{field.value}}'; 
+                {% elif field.lable == "Image" %}
+                    item.image='{{field.value}}'; 
+                {% endif %}
+            {% endfor %}
+            loading = false;
+            loaded = true;"
+        {% endif %}>            
     <form action="#" method="post" class="form-horizontal">
         {% csrf_token %}
         <fieldset>
         {% if form.errors %}
             {{form.errors}}
         {% endif %}
-
             <div class="control-group" id="urls">
                 <div class="controls">
                     <div class=input-append">
