@@ -106,11 +106,10 @@
   
     <!-- Javascript
     ================================================== -->
-    <!-- Placed at the end of the document so the pages load faster -->
-    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/angular.js/1.0.1/angular.min.js"></script>
-    
+    <!-- Placed at the end of the document so the pages load faster -->    
     <script type="text/javascript" src="{% url 'jsurls' %}"></script>
     {% compress js %}
+        <script type="text/javascript" src="{{ STATIC_URL }}lib/angularjs/angular.js"></script>
         <script type="text/javascript" src="{{ STATIC_URL }}js/jquery.js"></script>
         <script type="text/javascript" src="{{ STATIC_URL }}js/URI.min.js"></script>
         <script type="text/javascript" src="{{ STATIC_URL }}bootstrap/js/bootstrap.min.js"></script>
