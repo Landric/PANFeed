@@ -17,7 +17,14 @@
             }
         </style>
         <link rel="stylesheet" href="{{ STATIC_URL }}bootstrap/css/bootstrap-responsive.css" type="text/css">
-        <link rel="stylesheet" href="{{ STATIC_URL }}panfeed/styles/additional.css" type="text/css">
+        <style type="text/css">
+            [ng\:cloak],[ng-cloak],[data-ng-cloak],[x-ng-cloak],.ng-cloak,.x-ng-cloak{
+                display:none;
+            }ng\:form, ng-form{
+                display:block;
+            }
+        </style>
+        <link rel="stylesheet" href="{{ STATIC_URL }}panfeed/styles/additional.less" type="text/less">
     {% endcompress %}
     
     <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
