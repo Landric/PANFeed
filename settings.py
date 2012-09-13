@@ -125,6 +125,7 @@ INSTALLED_APPS = (
     'csp',
     'jquery',
     'angularjs',
+    'bootstrap',
     'panfeed',
     'respite',
     # Uncomment the next line to enable the admin:

@@ -10,13 +10,16 @@
     <meta property="og:description" content="The purpose of PANFeed is to make academic news more accessible to all, whether you represent an individual, or an institution. We want to make it easier to find the news you're interested in, and to simplify creating and publishing your own news feed. " />
   <!-- **** Bootstrap Styles **** -->
     {% compress css %}
-        <link rel="stylesheet" href="{{ STATIC_URL }}bootstrap/css/bootstrap.css" >
+        <script>
+            alert('foo');
+        </script>
+        <link rel="stylesheet" href="{{ STATIC_URL }}lib/bootstrap/less/bootstrap.less" type="text/less">
         <style type="text/css">
             body {
                 padding-top: 60px;
             }
         </style>
-        <link rel="stylesheet" href="{{ STATIC_URL }}bootstrap/css/bootstrap-responsive.css" type="text/css">
+        <link rel="stylesheet" href="{{ STATIC_URL }}lib/bootstrap/less/responsive.less" type="text/less">
         <style type="text/css">
             [ng\:cloak],[ng-cloak],[data-ng-cloak],[x-ng-cloak],.ng-cloak,.x-ng-cloak{
                 display:none;
@@ -119,7 +122,12 @@
         <script type="text/javascript" src="{{ STATIC_URL }}lib/angularjs/angular.js"></script>
         <script type="text/javascript" src="{{ STATIC_URL }}js/jquery.js"></script>
         <script type="text/javascript" src="{{ STATIC_URL }}js/URI.min.js"></script>
-        <script type="text/javascript" src="{{ STATIC_URL }}bootstrap/js/bootstrap.min.js"></script>
+        
+        <script type="text/javascript" src="{{ STATIC_URL }}lib/bootstrap/js/bootstrap-transition.js"></script>
+        <script type="text/javascript" src="{{ STATIC_URL }}lib/bootstrap/js/bootstrap-modal.js"></script>
+        <script type="text/javascript" src="{{ STATIC_URL }}lib/bootstrap/js/bootstrap-modal.js"></script>
+        <script type="text/javascript" src="{{ STATIC_URL }}lib/bootstrap/js/bootstrap-dropdown.js"></script>
+
         <script type="text/javascript" src="{{ STATIC_URL }}django_js_utils.js"></script>
         <script type="text/javascript" src="{{ STATIC_URL }}panfeed/scripts/listfeeds.js"></script>
         <script type="text/javascript" src="{{ STATIC_URL }}panfeed/scripts/findnews.js"></script>

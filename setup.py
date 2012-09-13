@@ -25,6 +25,7 @@ setup(
         "feedparser",
         "django-jquery",
         "django-angularjs",
+        "django-bootstrap-less",
         "django-respite >= 1.2.0",
         "django-registration",
         "django-csp",
