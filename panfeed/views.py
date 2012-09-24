@@ -220,7 +220,11 @@ class IssueListView(IssueMixin, ListView):
 class IssueCRUDMixin(LoginRequiredMixin, IssueMixin):
     form_class = SpecialIssueForm
     def get_success_url(self):
-        return reverse('publishnews')
+        issue = getattr(self,"object",False)
+        if issue:
+            return issue.feed.get_modify_url() + '#issue-{issue_id}'.format(issue_id = issue.id)
+        else:
+            return reverse('publishnews')
     
     def get_context_data(self, **kwargs):
         context = super(IssueCRUDMixin, self).get_context_data(**kwargs)
@@ -249,7 +253,6 @@ def manageissue(request, feed_slug, issue_slug=None):
     Route to the correct view based on Method or the existance of
     issue_id.
     """
-    
     feed = get_object_or_404(Feed, slug=feed_slug)
     if feed.owner != request.user:
         return HttpResponseForbidden("You do not have permission to edit this Feed.")
