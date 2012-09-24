@@ -32,15 +32,15 @@
                         <tr class="feed" id="{{feed.get_fragment_id}}">
                             <td>{{feed.title}} <small>(<span class="items">{{feed.feeditem_set.count}}</span> item{{ feed.feeditem_set.count|pluralize }})</small></td>
                             <td>
-                            <form action="{{feed.get_modify_url}}" method="post">
-                                {% csrf_token %}
-                                <div class="btn-group">
-                                    <a href="{{feed.get_absolute_url}}" class="btn">View</a>
-                                    <a href="{{feed.get_modify_url}}" class="btn">Edit</a>
-                                    <input name="_method" value="DELETE" type="hidden">
-                                    <button type="submit" class="btn btn-danger" title="Delete this Feed">Delete</button>
-                                </div>
-                            </form>
+                                <form class="unstyled" action="{{feed.get_modify_url}}" method="post">
+                                    {% csrf_token %}
+                                    <div class="btn-group">
+                                        <a href="{{feed.get_absolute_url}}" class="btn">View</a>
+                                        <a href="{{feed.get_modify_url}}" class="btn">Edit</a>
+                                        <input name="_method" value="DELETE" type="hidden">
+                                        <button type="submit" class="btn btn-danger" title="Delete this Feed">Delete</button>
+                                    </div>
+                                </form>
                             </td>
                             <td>
                                 <div class="btn-group">

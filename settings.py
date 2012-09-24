@@ -124,6 +124,8 @@ INSTALLED_APPS = (
     'haystack',
     'csp',
     'jquery',
+    'angularjs',
+    'bootstrap',
     'panfeed',
     'respite',
     # Uncomment the next line to enable the admin:
@@ -174,7 +176,7 @@ DEFAULT_FROM_EMAIL = 'panfeed.ecs.soton.ac.uk <noreply@panfeed.ecs.soton.ac.uk>'
 CSP_REPORT_URI = '/csp/report'
 
 CSP_IMG_SRC = ('*',)
-CSP_SCRIPT_SRC = ("'self'", 'https://login.persona.org', 'https://browserid.org', "https://cdnjs.cloudflare.com",)
+CSP_SCRIPT_SRC = ("'self'", 'https://login.persona.org', 'https://browserid.org',)
 CSP_FRAME_SRC = ("'self'", 'https://login.persona.org', 'https://browserid.org',)
 
 CSP_EXCLUDE_URL_PREFIXES = ('/admin',)
@@ -212,6 +214,15 @@ HAYSTACK_CONNECTIONS = {
 HAYSTACK_SITECONF = 'search_sites'
 HAYSTACK_SEARCH_ENGINE = 'xapian'
 HAYSTACK_XAPIAN_PATH = HAYSTACK_CONNECTIONS["default"]["PATH"]
+
+
+
+COMPRESS_PRECOMPILERS = (
+    ('text/coffeescript', 'coffee --compile --stdio'),
+    ('text/less', 'lessc {infile} {outfile}'),
+    ('text/x-sass', 'sass {infile} {outfile}'),
+    ('text/x-scss', 'sass --scss {infile} {outfile}'),
+)
 
 try:
     from local_settings import *
