@@ -26,7 +26,7 @@ class Domains(models.Model):
         return self.toplevel
 
 class AcademicFeeds(models.Model):
-    url = models.URLField(verify_exists=True, unique=True)
+    url = models.URLField(unique=True)
     toplevel = models.URLField(max_length=255) #https://tools.ietf.org/html/rfc3986
 
     def __unicode__(self):
@@ -34,7 +34,7 @@ class AcademicFeeds(models.Model):
 
 class Corpus(TimeStampedModel, TitleSlugDescriptionModel):
     feed = models.ForeignKey(AcademicFeeds)
-    url = models.URLField(verify_exists=True, max_length=6249)
+    url = models.URLField(max_length=6249)
     date = models.DateTimeField()
         
     def __unicode__(self):

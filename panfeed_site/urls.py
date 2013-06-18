@@ -1,4 +1,4 @@
-from django.conf.urls.defaults import patterns, include, url
+from django.conf.urls import patterns, include, url
 from django.conf import settings
 from django.views.generic import RedirectView
 
@@ -31,10 +31,9 @@ urlpatterns = patterns('',
 
     # Uncomment the admin/doc line below to enable admin documentation:
     # url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
-    url(r'^csp', include('csp.urls')),
     # Uncomment the next line to enable the admin:
     url(r'^admin/', include(admin.site.urls)),
-    url(r'', include('django_browserid.urls')),
+    url(r'^browserid/', include('django_browserid.urls')),
     #url(r'^(?P<path>.*)$', 'django.views.static.serve', {'document_root': settings.MEDIA_ROOT}),
     url(r'^sign-out/$', 'django.contrib.auth.views.logout', name="logout"),
     url(r'^sign-in/$', 'django.contrib.auth.views.login', name="login"),

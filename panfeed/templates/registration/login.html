@@ -1,5 +1,6 @@
 {% extends "panfeed/base.html" %}
 {% load url from future %}
+{% load browserid %}
 {% block browserid %}{% endblock browserid %}
 {% block title %}Sign-in{% endblock title %}
 {% block content %}
@@ -13,14 +14,11 @@
         <p>Why do sites need to be able to read your Tweets or post on your
         Facebook wall just to log you in?</p>
 <br/>
-<button class="btn btn-primary btn-large" id="browserid" href="">
-<img src="{{ STATIC_URL }}images/persona-login.png" alt="Sign In" />
-</button>
-
-<form method="POST" action="{% url 'browserid_verify' %}">
-{% csrf_token %}
-{{ browserid_form.as_p }}
-</form>
+        {% if user.is_authenticated %}
+          {% browserid_logout text='Logout' %}
+        {% else %}
+          {% browserid_login text='Login' %}
+        {% endif %}
       </div>
 
 {% endblock content %}
