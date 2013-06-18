@@ -28,6 +28,8 @@ class Domains(models.Model):
 class AcademicFeeds(models.Model):
     url = models.URLField(unique=True)
     toplevel = models.URLField(max_length=255) #https://tools.ietf.org/html/rfc3986
+    etag = models.CharField(max_length=255, blank=True, null=True)
+    modified = models.DateTimeField(blank=True, null=True)
 
     def __unicode__(self):
         return self.url;
