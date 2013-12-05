@@ -1,4 +1,5 @@
 import os
+import warnings
 
 DEBUG = True #Override in local_settings.py when you deploy
 TEMPLATE_DEBUG = DEBUG
@@ -83,6 +84,7 @@ STATICFILES_FINDERS = (
 # Make this unique, and don't share it with anybody.
 #Secret key replaced in local_settings
 
+SECRET_KEY="not_secret"
 # Password for password_required.
 #PASSWORD_REQUIRED_PASSWORD = 'wais'
 
@@ -105,7 +107,7 @@ MIDDLEWARE_CLASSES = (
     'respite.middleware.HttpPatchMiddleware',
 )
 
-ROOT_URLCONF = 'urls'
+ROOT_URLCONF = 'panfeed_site.urls'
 
 TEMPLATE_DIRS = (
     # Put strings here, like "/home/html/django_templates" or "C:/www/django/templates".
@@ -146,11 +148,11 @@ TEMPLATE_CONTEXT_PROCESSORS =(
 	"django.core.context_processors.i18n",
 	"django.core.context_processors.media",
 	"django.core.context_processors.static",
-	"django.contrib.messages.context_processors.messages"
+	"django.contrib.messages.context_processors.messages",
 )
 
 TEMPLATE_CONTEXT_PROCESSORS += (
-    'django_browserid.context_processors.browserid_form',
+    'django_browserid.context_processors.browserid',
     'django.core.context_processors.request'
 )
 
@@ -206,14 +208,11 @@ LOGGING = {
 
 HAYSTACK_CONNECTIONS = {
     'default': {
-        'ENGINE': 'haystack.backends.xapian_backend.XapianEngine',
-        'PATH': os.path.join(HOME_ROOT, 'xapian_index'),
+        'ENGINE': 'haystack.backends.whoosh_backend.WhooshEngine',
+        'PATH': os.path.join(HOME_ROOT, 'whoosh_backend'),
+        'INCLUDE_SPELLING': True,
     },
 }
-
-HAYSTACK_SITECONF = 'search_sites'
-HAYSTACK_SEARCH_ENGINE = 'xapian'
-HAYSTACK_XAPIAN_PATH = HAYSTACK_CONNECTIONS["default"]["PATH"]
 
 
 
@@ -228,3 +227,6 @@ try:
     from local_settings import *
 except ImportError as e:
     pass
+
+if SECRET_KEY == "not_secret":
+    warnings.warn("You have not set a secret SECRET_KEY")

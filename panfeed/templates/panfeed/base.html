@@ -1,5 +1,6 @@
 {% load url from future %}
 {% load compress %}
+{% load browserid %}
 <!DOCTYPE html>
 <html xmlns:og="http://ogp.me/ns#">
 <head>
@@ -25,6 +26,8 @@
             }
         </style>
         <link rel="stylesheet" href="{{ STATIC_URL }}panfeed/styles/additional.less" type="text/less">
+        {% browserid_css %}
+
     {% endcompress %}
     
     <!-- HTML5 shim, for IE6-8 support of HTML5 elements -->
@@ -34,7 +37,7 @@
 </head>
 
 <body>
-
+    {% browserid_info %}
     <!-- Navbar
     ================================================== -->
     <div class="navbar navbar-fixed-top navbar-inverse">
@@ -53,7 +56,7 @@
                         </li>
 
                         <li class="{% block publish_nav %}{% endblock %}">
-                            <a href="{% url 'publishnews' %}">Publish News</a>
+                            <a href="{% url 'managefeed' %}">Publish News</a>
                         </li>
 
                         <li class="{% block faq_nav %}{% endblock %}">
@@ -74,20 +77,12 @@
                                 <small>(<span class="email">{{user.email}}</span>)</small> <b class="caret"></b></a>
                                 <ul class="dropdown-menu">
                                     <li><a href="{{user.get_profile.get_absolute_url}}">Account settings</a></li>
-                                    <li><a href="{% url 'logout' %}">Sign out</a></li>
+                                    <li>{% browserid_logout text='Logout' %}</li>
                                 </ul>
                             </li>
                         {% else %}
                             {% block browserid %}
-                                <li id="login">
-                                    <a id="browserid" href="">
-                                        <img src="{{ STATIC_URL }}panfeed/images/persona-login.png" alt="Sign In" />
-                                    </a>
-                                    <form hidden="hidden" method="POST" action="{% url 'browserid_verify' %}{% if request.path %}?next={{ request.path }}{% endif %}">
-                                        {% csrf_token %}
-                                        {{ browserid_form.as_p }}
-                                    </form>
-                                </li>
+                                {% browserid_login link_class='browserid-login persona-button' %}
                             {% endblock browserid %}
                         {% endif %}
                     </ul>
@@ -133,7 +128,7 @@
         <script type="text/javascript" src="{{ STATIC_URL }}panfeed/scripts/initapp.js"></script>
     {% endcompress %}
     
-    {{ browserid_form.media.js }}
+    {% browserid_js %}
 
     {% block scripts %}
     {% endblock scripts %}

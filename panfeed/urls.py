@@ -1,4 +1,4 @@
-from django.conf.urls.defaults import patterns, url
+from django.conf.urls import patterns, url
 from django.views.generic import TemplateView, ListView
 from panfeed.feed import PersonalFeed, UserFeed
 from panfeed.models import AcademicFeeds,Feed,FeedItem
@@ -17,7 +17,7 @@ urlpatterns = patterns('panfeed.views',
 
     url(r'^feed/(?P<feed_slug>[\w-]+)/item/(?P<item_slug>[\w-]+)?$','manageitem', name='manageitem'),
     url(r'^feed/(?P<feed_slug>[\w-]+)/issue/(?P<issue_slug>[\w-]+)?$','manageissue', name='manageissue'),
-    url(r'^feed/$',      PublishNews.as_view(),  name='publishnews'),
+    url(r'^feed/help.html$',      PublishNews.as_view(),  name='publishnews'),
     url(r'^feed/(?P<feed_slug>[\w-]+)?$','managefeed', name='managefeed'),
 
     url(r'^user/(?P<slug>[\w-]+)$', UserUpdateView.as_view(), name='profile'),

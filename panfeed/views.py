@@ -288,7 +288,7 @@ def submit(request):
     if request.method == 'POST':
         feeds = str(request.POST['urls']).splitlines()
         invalid_feeds = []
-        validate = URLValidator(verify_exists=True)
+        validate = URLValidator()
         for url in feeds:
             try:
                 validate(url)
