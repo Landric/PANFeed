@@ -2,7 +2,8 @@
 Install
 =======
 
-1. Install dependencies using::
+1. Install dependencies using:
+
     python setup.py install
     
 2. Create local_settings.py in this directory and set up your server specific details::
