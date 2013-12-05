@@ -2,7 +2,7 @@
 Install
 =======
 
-1. Install dependencies using:
+1. Install dependencies using::
 
     python setup.py install
     
